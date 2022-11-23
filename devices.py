@@ -1,5 +1,6 @@
 import csv
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -38,5 +39,6 @@ def get_data(file):
     return data
 
 
-a = get_data(work_file)
-print(a)
+df = get_data(work_file)
+print(df)
+

@@ -1,0 +1,4 @@
+add analysis by = ["datetime"].dt.weekday - possibly can find out some days of week with with unusual data
+
+check:
+https://pandas.pydata.org/docs/dev/getting_started/intro_tutorials/09_timeseries.html/
