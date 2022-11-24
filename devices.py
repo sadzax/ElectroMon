@@ -2,6 +2,7 @@ import csv
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import columns
 
 
 class Device:
@@ -33,18 +34,6 @@ work_file_default_encoding = 'WINDOWS-1251'
 work_file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
 
 
-def get_cols(file=work_file, sep=work_file_sep, encoding=work_file_default_encoding, parse_dates=None):
-    if parse_dates is None:
-        parse_dates = work_file_parse_dates
-    col_array = pd.read_csv(file,
-                            sep=sep,
-                            encoding=encoding,
-                            parse_dates=parse_dates,
-                            dayfirst=True,
-                            nrows=1).columns
-    return col_array
-
-
 def get_data(usecols: list = None, file=work_file, sep=work_file_sep, encoding=work_file_default_encoding):
     if usecols is None:
         parse_dates = work_file_parse_dates
@@ -71,3 +60,8 @@ def plot_2d_simple(val_x: str, val_y: str, size_x: int = 14, size_y: int = 4):
     x = df[val_x].tolist()
     y = df[val_y].tolist()
     axs.plot(x, y)
+
+
+def columns_dict(columns_of_file):
+    columns_dict_maker = {k: v for v, k in enumerate(columns_of_file)}
+    return columns_dict_maker
