@@ -33,14 +33,17 @@ work_file_default_encoding = 'WINDOWS-1251'
 work_file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
 
 
-def get_cols(file=work_file, sep=work_file_sep, encoding=work_file_default_encoding, parse_dates=work_file_parse_dates):
-    col_array = pd.read_csv(file=file,
+def get_cols(file=work_file, sep=work_file_sep, encoding=work_file_default_encoding, parse_dates=None):
+    if parse_dates is None:
+        parse_dates = work_file_parse_dates
+    col_array = pd.read_csv(file,
                             sep=sep,
                             encoding=encoding,
                             parse_dates=parse_dates,
                             dayfirst=True,
                             nrows=1).columns
     return col_array
+
 
 def get_data(usecols: list = None, file=work_file, sep=work_file_sep, encoding=work_file_default_encoding):
     if usecols is None:
@@ -51,7 +54,7 @@ def get_data(usecols: list = None, file=work_file, sep=work_file_sep, encoding=w
             if k in work_file_parse_dates:
                 cols.append(k)
         parse_dates = cols
-    data = pd.read_csv(file=file,
+    data = pd.read_csv(file,
                        sep=sep,
                        encoding=encoding,
                        parse_dates=parse_dates,
