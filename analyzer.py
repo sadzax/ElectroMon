@@ -4,7 +4,9 @@ import columns
 import devices
 
 
-def get_data(usecols: list = None, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+def get_data(usecols: list = None,
+             file=devices.nkvv.work_file,
+             sep=devices.nkvv.work_file_sep,
              encoding=devices.nkvv.work_file_default_encoding):
     if usecols is None:
         parse_dates = devices.nkvv.nkvv.work_file_parse_dates
@@ -21,4 +23,3 @@ def get_data(usecols: list = None, file=devices.nkvv.work_file, sep=devices.nkvv
                        usecols=usecols,
                        dayfirst=True)
     return data
-

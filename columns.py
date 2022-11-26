@@ -108,11 +108,17 @@ utf8 = [
 indexer = [x for x in range(len(rus))]
 
 
-def cols_maker(file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
-    return list(pd.read_csv(file, sep=sep, encoding=encoding))
+def cols_maker(file=devices.nkvv.work_file,
+               sep=devices.nkvv.work_file_sep,
+               encoding=devices.nkvv.work_file_default_encoding):
+    return list(pd.read_csv(file,
+                            sep=sep,
+                            encoding=encoding))
 
 
-def dict_maker(list_for_columns=rus):
+def dict_maker(list_for_columns=None):
+    if list_for_columns is None:
+        list_for_columns = cols_maker()
     return {v: [k] for v, k in enumerate(list_for_columns)}
 
 
@@ -127,22 +133,27 @@ types_of_data = {
 }
 
 
-def columns_analyzer(dict=dict_maker()):
+def columns_analyzer(source_dict=None):
+    if source_dict is None:
+        source_dict = dict_maker()
     for i in range(len(rus)):
-        tail = sadzax.Trimmer.right(dict[i][0], 2)
-        head = sadzax.Trimmer.left(dict[i][0], 4)
+        tail = sadzax.Trimmer.right(source_dict[i][0], 2)
+        head = sadzax.Trimmer.left(source_dict[i][0], 4)
         for key in types_of_data:
             if key == tail:
-                dict[i].append(types_of_data[tail])
+                source_dict[i].append(types_of_data[tail])
             elif key == head:
-                dict[i].append(types_of_data[head])
-        if len(dict[i]) < 2:
-            dict[i].append('other')
+                source_dict[i].append(types_of_data[head])
+        if len(source_dict[i]) < 2:
+            source_dict[i].append('other')
     for i in range(len(rus)):
-        if dict[i][0].find("_") == -1:
-            dict[i].append('no_code')
+        if source_dict[i][0].find("_") == -1:
+            source_dict[i].append('no_codename')
         else:
-            dict[i].append(types_of_data[sadzax.Trimmer.left(dict[i][0], dict[i][0].find("_"))])
-    return dict
+            codename = sadzax.Trimmer.right((sadzax.Trimmer.left(source_dict[i][0],
+                                                                 source_dict[i][0].find("_") + 3)), 2)
+            source_dict[i].append(codename)
+    return source_dict
+
 
 print(columns_analyzer())
