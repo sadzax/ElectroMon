@@ -2,5 +2,13 @@ add analysis by = ["datetime"].dt.weekday - possibly can find out some days of w
 
 add dropped values
 
+# percentile groups
+    import numpy as np
+    cut_points = [np.percentile(df[data], i) for i in [50, 80, 95]]
+    df[‘group’] = 1
+    for i in range(3):
+        df[‘group’] = df[‘group’] + (df[data] < cut_points[i])
+    # or <= cut_points[i]
+
 check:
 https://pandas.pydata.org/docs/dev/getting_started/intro_tutorials/09_timeseries.html/

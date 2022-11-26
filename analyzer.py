@@ -1,3 +1,4 @@
+import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import columns
@@ -9,7 +10,7 @@ def get_data(usecols: list = None,
              sep=devices.nkvv.work_file_sep,
              encoding=devices.nkvv.work_file_default_encoding):
     if usecols is None:
-        parse_dates = devices.nkvv.nkvv.work_file_parse_dates
+        parse_dates = devices.nkvv.work_file_parse_dates
     else:
         cols = []
         for k in usecols:
@@ -23,3 +24,13 @@ def get_data(usecols: list = None,
                        usecols=usecols,
                        dayfirst=True)
     return data
+
+
+def total_log_counter(data: pd.core.frame.DataFrame = get_data()):
+    return data.shape[0]
+
+
+def values_checker(data: pd.core.frame.DataFrame = get_data(), col_number=2):
+    return data[columns.columns_analyzer()[col_number][0]].value_counts(normalize=False, sort=False)
+
+print(values_checker(get_data(), 6))
