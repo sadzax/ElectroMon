@@ -136,6 +136,13 @@ def columns_analyzer(dict=dict_maker()):
                 dict[i].append(types_of_data[tail])
             elif key == head:
                 dict[i].append(types_of_data[head])
+        if len(dict[i]) < 2:
+            dict[i].append('other')
+    for i in range(len(rus)):
+        if dict[i][0].find("_") == -1:
+            dict[i].append('no_code')
+        else:
+            dict[i].append(types_of_data[sadzax.Trimmer.left(dict[i][0], dict[i][0].find("_"))])
     return dict
 
 print(columns_analyzer())
