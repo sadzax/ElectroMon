@@ -1,5 +1,6 @@
 import devices
 import pandas as pd
+import sadzax
 
 
 rus = [
@@ -112,11 +113,29 @@ def cols_maker(file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep, enco
 
 
 def dict_maker(list_for_columns=rus):
-    columns_dict_maker = {k: v for v, k in enumerate(list_for_columns)}
-    return columns_dict_maker
+    return {v: [k] for v, k in enumerate(list_for_columns)}
 
 
-a = dict_maker()
+types_of_data = {
+    'кВ': 'voltage',
+    'мА': 'power',
+    ',%': 'percentage',
+    'От': 'deviation',
+    '°С': 'temperature',
+    'Гц': 'frequency',
+    'Дата': 'datetime',
+}
 
-def type_of_col_maker(f):
-    pass
+
+def columns_analyzer(dict=dict_maker()):
+    for i in range(len(rus)):
+        tail = sadzax.Trimmer.right(dict[i][0], 2)
+        head = sadzax.Trimmer.left(dict[i][0], 4)
+        for key in types_of_data:
+            if key == tail:
+                dict[i].append(types_of_data[tail])
+            elif key == head:
+                dict[i].append(types_of_data[head])
+    return dict
+
+print(columns_analyzer())
