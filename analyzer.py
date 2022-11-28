@@ -30,7 +30,7 @@ def total_log_counter(data: pd.core.frame.DataFrame = get_data()):
     return data.shape[0]
 
 
-def values_counter(col_number=0,
+def values_counter(col_number=2,
                    row_numer=None,
                    data: pd.core.frame.DataFrame = get_data()):
     return data[columns.columns_analyzer()[col_number][0]].value_counts[row_numer](normalize=False, sort=False)
@@ -49,6 +49,8 @@ def values_time_analyzer(col_number=0,
                 err = (df[i + 1] - df[i]).astype('timedelta64[D]')
             elif gap > 60:
                 err = (df[i + 1] - df[i]).astype('timedelta64[h]')
+            elif gap < 1:
+                err = (df[i + 1] - df[i]).astype('timedelta64[s]')
             else:
                 err = gap
             print(f"Ошибка измерения времени в данных! Cтрока № {i}:\n"
@@ -62,3 +64,6 @@ def values_time_analyzer(col_number=0,
 
 
 print(values_time_analyzer())
+print(f"\nОбщее число записей в журнале измерений составило {total_log_counter()}")
+
+print(columns.columns_analyzer())
