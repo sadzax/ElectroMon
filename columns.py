@@ -153,4 +153,9 @@ def columns_analyzer(source_dict=None):
             codename = sadzax.Trimmer.right((sadzax.Trimmer.left(source_dict[i][0],
                                                                  source_dict[i][0].find("_") + 3)), 2)
             source_dict[i].append(codename)
+    for i in range(len(rus)):
+        if sadzax.Trimmer.left(source_dict[i][0], 7) == "DeltaTg":
+            source_dict[i].append('∆tgδ')
+        else:
+            source_dict[i].append('no_indicator')
     return source_dict
