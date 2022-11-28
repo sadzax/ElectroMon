@@ -154,5 +154,3 @@ def columns_analyzer(source_dict=None):
                                                                  source_dict[i][0].find("_") + 3)), 2)
             source_dict[i].append(codename)
     return source_dict
-
-print(columns_analyzer())
