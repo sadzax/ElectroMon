@@ -153,6 +153,12 @@ def columns_analyzer(source_dict=None):
             codename = sadzax.Trimmer.right((sadzax.Trimmer.left(source_dict[i][0],
                                                                  source_dict[i][0].find("_") + 3)), 2)
             source_dict[i].append(codename)
+        if sadzax.Trimmer.right(source_dict[i][2], 1) == '1':
+            source_dict[i].append('HV')
+        elif sadzax.Trimmer.right(source_dict[i][2], 1) == '2':
+            source_dict[i].append('MV')
+        else:
+            source_dict[i].append('no_voltage_param')
     for i in range(len(rus)):
         if sadzax.Trimmer.left(source_dict[i][0], 7) == "DeltaTg":
             source_dict[i].append('∆tgδ')
