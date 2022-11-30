@@ -70,17 +70,21 @@ def values_time_analyzer(col_number=0,
 
 
 #  ______ Описать исключения Ia(r) = -300, Tg = -10)
-def pass_the_nan(cl=cols,
-                 data: pd.core = database,
-                 seeking_param='power',
-                 replacing_value='-300'):
+def pass_the_nan(seeking_param='power',
+                 replacing_value=-300.0,
+                 cl=cols,
+                 data: pd.core = database):
     for a_column in range(cols_len):
         for a_param in range(len(cols[0])):
             if cl[a_column][a_param] == seeking_param:
                 for a_row in range(data.shape[0]):
-                    if data[a_column][a_row] == replacing_value:  # ERROR
-                        data.loc[a_row, [a_column]] = np.NaN
+                    if data.iloc[a_row, a_column] == replacing_value:
+                        data.iloc[a_row, a_column] = np.NaN
     return data
+
+
+database = pass_the_nan('power', -300.0)
+database = pass_the_nan('tg', -10.0)
 
 
 #  ______ Корреляция с температурой окружающей среды (п.3.1. отчёта)
@@ -94,7 +98,7 @@ def delta_tg_checker(cl=cols,  # Добавить индексы и оперир
                      exclude_value=-10.0,
                      ):
     df = []
-    for column_name in range(cols_len):  # range(48) заменить на формулу
+    for column_name in range(cols_len):
         if cl[column_name][4] == '∆tgδ' and cl[column_name][3] == 'HV':  # заменить фильтры на формулы
             df.append(data[cl[column_name][0]].tolist())
     list_of_all_values = list(itertools.chain.from_iterable(df))
@@ -144,5 +148,3 @@ print(f"\nСреднее отклонение ∆tgδ стороны ВН сос
 print(f"\nПревышение уровня ∆tgδ ±1% для срабатывания"
       f" предупредительной сигнализации: {len(delta_tg_checker_warning())}"
       f" случая(-ев) \n {delta_tg_checker_warning()}")
-
-print(pass_the_nan())

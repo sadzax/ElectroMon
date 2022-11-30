@@ -214,6 +214,8 @@ def columns_analyzer(source_dict=None):
     for i in range(len(paste_values_rus)):  # заменить фильтры на формулы
         if sadzax.Trimmer.left(source_dict[i][0], 7) == "DeltaTg":
             source_dict[i].append('∆tgδ')
+        elif sadzax.Trimmer.left(source_dict[i][0], 3) == "Tg_":
+            source_dict[i].append('tg')
         else:
             source_dict[i].append('no_indicator')
     return source_dict
