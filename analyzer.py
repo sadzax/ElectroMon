@@ -83,8 +83,9 @@ def pass_the_nan(seeking_param='power',
     return data
 
 
-database = pass_the_nan('power', -300.0)
-database = pass_the_nan('tg', -10.0)
+#database = pass_the_nan('power', -300.0)
+#database = pass_the_nan('tg', -10.0)
+#database = pass_the_nan('∆tgδ', -10.0)
 
 
 #  ______ Корреляция с температурой окружающей среды (п.3.1. отчёта)
@@ -95,17 +96,16 @@ def correlation_temp():
 #  Проверка параметра ∆tgδ для срабатывания предупредительной сигнализации (1%)
 def delta_tg_checker(cl=cols,  # Добавить индексы и оперировать словарём (с датами и временем)
                      data: pd.core = database,
-                     exclude_value=-10.0,
-                     ):
+                     exclude_values=(-10.0, -300.0)):
     df = []
     for column_name in range(cols_len):
         if cl[column_name][4] == '∆tgδ' and cl[column_name][3] == 'HV':  # заменить фильтры на формулы
             df.append(data[cl[column_name][0]].tolist())
     list_of_all_values = list(itertools.chain.from_iterable(df))
     list_of_filtered_values = []
-    for column_name in list_of_all_values:
-        if column_name != exclude_value:
-            list_of_filtered_values.append(column_name)
+    for value in list_of_all_values:
+        if value not in exclude_values:
+            list_of_filtered_values.append(value)
     list_of_filtered_abs_values = [abs(x) for x in list_of_filtered_values]  # уточнить по модулю отклонения
     return list_of_filtered_abs_values
 

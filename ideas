@@ -2,6 +2,8 @@ add analysis by = ["datetime"].dt.weekday - possibly can find out some days of w
 
 add dropped values
 
+U_A2, U_B2, U_C2 don't return nans when all other values are nan
+
 # percentile groups
     import numpy as np
     cut_points = [np.percentile(df[data], i) for i in [50, 80, 95]]
