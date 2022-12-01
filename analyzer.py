@@ -69,7 +69,7 @@ def values_time_analyzer(col_number=0,
                   f", т.е. через {err}\n")
 
 
-#  ______ Описать исключения Ia(r) = -300, Tg = -10)
+#  Перевести исключения (Ia(r) = -300, Tg = -10) в NaN
 def pass_the_nan(seeking_param='power',
                  replacing_value=-300.0,
                  cl=cols,
@@ -93,14 +93,28 @@ def correlation_temp():
     pass
 
 
+#  Вывод максимальных отклонений
+def delta_tg_checker_new(filter_list, data=database, cl=cols):
+    filter_list_indexes = []
+    for a_column in range(cols_len):
+        for a_param in range(len(cols[0])):
+            if cl[a_column][a_param] in filter_list:
+                filter_list_indexes.append(a_column)
+    filter_list_names = [cl[i][0] for i in filter_list_indexes]
+    return data[filter_list_names]
+
+
+database = pass_the_nan('∆tgδ', -10.0)
+delta_tg_checker_new(['time', '∆tgδ_HV'])
+
 #  Проверка параметра ∆tgδ для срабатывания предупредительной сигнализации (1%)
 def delta_tg_checker(cl=cols,  # Добавить индексы и оперировать словарём (с датами и временем)
                      data: pd.core = database,
                      exclude_values=(-10.0, -300.0)):
     df = []
-    for column_name in range(cols_len):
-        if cl[column_name][4] == '∆tgδ' and cl[column_name][3] == 'HV':  # заменить фильтры на формулы
-            df.append(data[cl[column_name][0]].tolist())
+    for column_index in range(cols_len):
+        if cl[column_index][4] == '∆tgδ' and cl[column_index][3] == 'HV':  # заменить фильтры на формулы
+            df.append(data[cl[column_index][0]].tolist())
     list_of_all_values = list(itertools.chain.from_iterable(df))
     list_of_filtered_values = []
     for value in list_of_all_values:
