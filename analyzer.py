@@ -104,7 +104,7 @@ def data_filter(filter_list, data=database, cl=cols):
     return data[filter_list_names]
 
 
-def data_average_finder_sep(filter_list, abs_parameter=True, list_of_non_math=None, data=database, cl=cols):
+def data_average_finder(filter_list, abs_parameter=True, unite_parameter=False, list_of_non_math=None, data=database, cl=cols):
     if list_of_non_math is None:
         list_of_non_math = ['Дата создания записи',
                             'Дата сохранения в БД']
@@ -117,11 +117,19 @@ def data_average_finder_sep(filter_list, abs_parameter=True, list_of_non_math=No
                 break
         else:
             columns_list_of_values = df[func_columns_list[i]].tolist()
-            if abs_parameter is True:
-                values_without_nan = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
+            if unite_parameter is True:  # !!! _ DEBUG
+                values_without_nan = []
+                if abs_parameter is True:
+                    values_without_nan.append(abs(x) for x in columns_list_of_values if not np.isnan(x))
+                else:
+                    values_without_nan.append(x for x in columns_list_of_values if not np.isnan(x))
+                func_result = {filter_list: sum(values_without_nan)/len(values_without_nan)}
             else:
-                values_without_nan = [x for x in columns_list_of_values if not np.isnan(x)]
-            func_result[func_columns_list[i]] = sum(values_without_nan)/len(values_without_nan)
+                if abs_parameter is True:
+                    values_without_nan = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
+                else:
+                    values_without_nan = [x for x in columns_list_of_values if not np.isnan(x)]
+                func_result[func_columns_list[i]] = sum(values_without_nan)/len(values_without_nan)
     return func_result
 
 
@@ -135,7 +143,7 @@ def data_average_finder_2(filter_list, data=database, cl=cols):
             return data[func_columns_list[i]].value_counts(normalize=False, sort=False)
 
 
-print(data_average_finder_sep(['time', '∆tgδ_HV']))
+print(data_average_finder(['time', '∆tgδ_HV']))
 
 
 #  ______ Проверка параметра ∆tgδ для срабатывания предупредительной сигнализации (1%)
