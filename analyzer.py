@@ -70,7 +70,7 @@ def values_time_analyzer(col_number=0,
 
 
 #  Перевести исключения (Ia(r) = -300, Tg = -10) в NaN
-def pass_the_nan(seeking_param='power',
+def pass_the_nan(seeking_param='power',  # Слишком медленно работает, много циклов, надо упростить
                  replacing_value=-300.0,
                  cl=cols,
                  data: pd.core = database):
@@ -101,31 +101,35 @@ def data_filter(filter_list, data=database, cl=cols):
             if cl[a_column][a_param] in filter_list:
                 filter_list_indexes.append(a_column)
     filter_list_names = [cl[i][0] for i in filter_list_indexes]
-    return data[filter_list_names]   
+    return data[filter_list_names]
 
 
-def data_average_finder(filter_list, abs_parameter=True, data=database, cl=cols):
+def data_average_finder(filter_list, abs_parameter=True, data=database, list_of_non_math=None):
+    if list_of_non_math is None:
+        list_of_non_math = ['Дата создания записи',
+                            'Дата сохранения в БД']
     df = data_filter(filter_list, data, cols)
     func_columns_list = list(df.columns)
     func_result = {}
-    for i in range(df.shape[1]-1):
-        if func_columns_list[i] == "Дата создания записи" or "Дата сохранения в БД":
-            pass
+    for i in range(df.shape[1]):
+        for k in list_of_non_math:
+            if k == func_columns_list[i]:
+                print('wait')
+                break
         else:
-            temp_list_1 = list(itertools.chain.from_iterable(df[func_columns_list[i]]))
+            columns_list_of_values = df[func_columns_list[i]].tolist()
             if abs_parameter is True:
-                temp_list_2 = [abs(x) for x in temp_list_1 if x is not None]
+                values_without_nan = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
             else:
-                temp_list_2 = [x for x in temp_list_1 if x is not None]
-            func_result[func_columns_list[i]].append(sum(temp_list_2) / len(temp_list_2))
+                values_without_nan = [x for x in columns_list_of_values if not np.isnan(x)]
+            func_result[func_columns_list[i]] = sum(values_without_nan)/len(values_without_nan)
     return func_result
 
 
-def data_average_finder(filter_list, data=database, cl=cols):
+def data_average_finder_2(filter_list, data=database, cl=cols):
     df = data_filter(filter_list, data, cols)
     func_columns_list = list(df.columns)
-    func_result = {}
-    for i in range(df.shape[1]-1):
+    for i in range(df.shape[1] - 1):
         if func_columns_list[i] == "Дата создания записи" or "Дата сохранения в БД":
             pass
         else:
