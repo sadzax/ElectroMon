@@ -83,9 +83,9 @@ def pass_the_nan(seeking_param='power',
     return data
 
 
-#database = pass_the_nan('power', -300.0)
-#database = pass_the_nan('tg', -10.0)
-#database = pass_the_nan('∆tgδ', -10.0)
+database = pass_the_nan('power', -300.0)
+database = pass_the_nan('tg', -10.0)
+database = pass_the_nan('∆tgδ', -10.0)
 
 
 #  ______ Корреляция с температурой окружающей среды (п.3.1. отчёта)
@@ -93,21 +93,49 @@ def correlation_temp():
     pass
 
 
-#  Вывод максимальных отклонений
-def delta_tg_checker_new(filter_list, data=database, cl=cols):
+#  Фильтрация
+def data_filter(filter_list, data=database, cl=cols):
     filter_list_indexes = []
     for a_column in range(cols_len):
         for a_param in range(len(cols[0])):
             if cl[a_column][a_param] in filter_list:
                 filter_list_indexes.append(a_column)
     filter_list_names = [cl[i][0] for i in filter_list_indexes]
-    return data[filter_list_names]
+    return data[filter_list_names]   
 
 
-database = pass_the_nan('∆tgδ', -10.0)
-delta_tg_checker_new(['time', '∆tgδ_HV'])
+def data_average_finder(filter_list, abs_parameter=True, data=database, cl=cols):
+    df = data_filter(filter_list, data, cols)
+    func_columns_list = list(df.columns)
+    func_result = {}
+    for i in range(df.shape[1]-1):
+        if func_columns_list[i] == "Дата создания записи" or "Дата сохранения в БД":
+            pass
+        else:
+            temp_list_1 = list(itertools.chain.from_iterable(df[func_columns_list[i]]))
+            if abs_parameter is True:
+                temp_list_2 = [abs(x) for x in temp_list_1 if x is not None]
+            else:
+                temp_list_2 = [x for x in temp_list_1 if x is not None]
+            func_result[func_columns_list[i]].append(sum(temp_list_2) / len(temp_list_2))
+    return func_result
 
-#  Проверка параметра ∆tgδ для срабатывания предупредительной сигнализации (1%)
+
+def data_average_finder(filter_list, data=database, cl=cols):
+    df = data_filter(filter_list, data, cols)
+    func_columns_list = list(df.columns)
+    func_result = {}
+    for i in range(df.shape[1]-1):
+        if func_columns_list[i] == "Дата создания записи" or "Дата сохранения в БД":
+            pass
+        else:
+            return data[func_columns_list[i]].value_counts(normalize=False, sort=False)
+
+
+print(data_average_finder(['time', '∆tgδ_HV']))
+
+
+#  ______ Проверка параметра ∆tgδ для срабатывания предупредительной сигнализации (1%)
 def delta_tg_checker(cl=cols,  # Добавить индексы и оперировать словарём (с датами и временем)
                      data: pd.core = database,
                      exclude_values=(-10.0, -300.0)):
@@ -127,15 +155,7 @@ def delta_tg_checker(cl=cols,  # Добавить индексы и оперир
 delta_tg_HV_check = delta_tg_checker()
 
 
-#  ______ Подсчёт количества уникальных значений (* уточнить по использованию)
-def values_counter(col_number=2,
-                   row_numer=None,
-                   cl=cols,
-                   data: pd.core = database):
-    return data[cl[col_number][0]].value_counts[row_numer](normalize=False, sort=False)
-
-
-# ______ Проверка срабатывания сигнализации
+#  ______ Проверка срабатывания сигнализации
 def delta_tg_checker_warning(operating_data=None, warning=1):
     if operating_data is None:
         operating_data = delta_tg_HV_check
