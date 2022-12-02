@@ -104,17 +104,16 @@ def data_filter(filter_list, data=database, cl=cols):
     return data[filter_list_names]
 
 
-def data_average_finder(filter_list, abs_parameter=True, data=database, list_of_non_math=None):
+def data_average_finder_sep(filter_list, abs_parameter=True, list_of_non_math=None, data=database, cl=cols):
     if list_of_non_math is None:
         list_of_non_math = ['Дата создания записи',
                             'Дата сохранения в БД']
-    df = data_filter(filter_list, data, cols)
+    df = data_filter(filter_list, data, cl)
     func_columns_list = list(df.columns)
     func_result = {}
     for i in range(df.shape[1]):
         for k in list_of_non_math:
             if k == func_columns_list[i]:
-                print('wait')
                 break
         else:
             columns_list_of_values = df[func_columns_list[i]].tolist()
@@ -136,7 +135,7 @@ def data_average_finder_2(filter_list, data=database, cl=cols):
             return data[func_columns_list[i]].value_counts(normalize=False, sort=False)
 
 
-print(data_average_finder(['time', '∆tgδ_HV']))
+print(data_average_finder_sep(['time', '∆tgδ_HV']))
 
 
 #  ______ Проверка параметра ∆tgδ для срабатывания предупредительной сигнализации (1%)
