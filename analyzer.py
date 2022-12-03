@@ -3,6 +3,7 @@ import pandas as pd
 import columns
 import devices
 import itertools
+import plots
 
 #  Get variable for data
 cols = columns.columns_analyzer()
