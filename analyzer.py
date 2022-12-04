@@ -83,7 +83,9 @@ def values_time_analyzer(col_number=0,  # Return the dataframe, not strings
                          data: pd.core = None,
                          file=devices.nkvv.work_file,
                          sep=devices.nkvv.work_file_sep,
-                         encoding=devices.nkvv.work_file_default_encoding):
+                         encoding=devices.nkvv.work_file_default_encoding,
+                         gap_const_day=1440,
+                         gap_const_hour=60):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -94,11 +96,11 @@ def values_time_analyzer(col_number=0,  # Return the dataframe, not strings
             pass
         else:
             gap = (df[a_row + 1] - df[a_row]).astype('timedelta64[m]')
-            if gap > 1440:
+            if gap > gap_const_day:
                 err = (df[a_row + 1] - df[a_row]).astype('timedelta64[D]')
-            elif gap > 60:
+            elif gap > gap_const_hour:
                 err = (df[a_row + 1] - df[a_row]).astype('timedelta64[h]')
-            elif gap < 1:
+            elif gap < time_sequence_min:
                 err = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
             else:
                 err = gap
@@ -191,7 +193,6 @@ def data_average_finder(filter_list=None,
                 break
         else:
             columns_list_of_values = df[func_columns_list[i]].tolist()
-            # okay
             if unite_parameter is False:
                 if abs_parameter is True:
                     values_without_nan = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
@@ -210,8 +211,10 @@ def data_average_finder(filter_list=None,
 
 #  ______ Search for deviations
 def data_deviation_finder(filter_list,
+                          unite_parameter=False,
                           cols=None,
                           data: pd.core = None,
+                          list_of_non_math=None,
                           file=devices.nkvv.work_file,
                           sep=devices.nkvv.work_file_sep,
                           encoding=devices.nkvv.work_file_default_encoding):
@@ -219,10 +222,22 @@ def data_deviation_finder(filter_list,
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
-    df = data_filter(filter_list, data, cols)
+    if list_of_non_math is None:
+        list_of_non_math = ['Дата создания записи',
+                            'Дата сохранения в БД']
+    df = data_filter(filter_list, cols, data)
     func_columns_list = list(df.columns)
-    for i in range(df.shape[1] - 1):
-        if func_columns_list[i] == "Дата создания записи" or "Дата сохранения в БД":
-            pass
+    func_result_prev = pd.Series([],dtype=pd.StringDtype())
+    func_result = {}
+    for i in range(df.shape[1]):
+        for k in list_of_non_math:
+            if k == func_columns_list[i]:
+                break
         else:
-            return data[func_columns_list[i]].value_counts(normalize=False, sort=False)
+            if unite_parameter is False:
+                func_result[func_columns_list[i]] = data[func_columns_list[i]].value_counts(normalize=True, sort=True)
+            else:  # doesn't work with different amount of indexes*
+                dump = data[func_columns_list[i]].value_counts(normalize=True, sort=True)
+                func_result_prev = np.c_[func_result_prev, dump]
+                func_result['Overall distribution: '] = func_result_prev
+    return func_result

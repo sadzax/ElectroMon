@@ -1,11 +1,7 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 import columns
 import analyzer
-
-#  Get variable for data
-cols = analyzer.cols
-cols_len = analyzer.cols_len
-database = analyzer.database
 
 
 def plot2(val_x: str = columns.paste_values_rus[0],
@@ -22,9 +18,12 @@ def plot2(val_x: str = columns.paste_values_rus[0],
     axs.plot(x, y)
 
 
-def histogram(val=columns.paste_values_rus[4], bin_parameter=100):
-    # df = analyzer.data_filter([val])  # AttributeError: partially initialized module 'analyzer_main' has no attribute 'data_filter' (most likely due to a circular import)
-    database[val].hist(bins=bin_parameter)
+database = pd.read_pickle('main_dataframe.pkl')
 
 
-print(histogram())
+def histogram(value, bin_parameter=100):
+    database[value].hist(bins=bin_parameter)
+    # if value = list:
+    # a = analyzer.data_deviation_finder(filter_list=['time', '∆tgδ_HV'])
+    # xex = lambda b: database[b].hist()
+    # return xex([i for i in a.keys()])
