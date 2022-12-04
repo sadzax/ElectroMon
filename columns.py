@@ -157,20 +157,22 @@ paste_values_rus_dict = {
     48: ['Unnamed: 48', 'other', 'no_codename', 'no_voltage_param', 'no_indicator']
 }
 
+
 indexer = [x for x in range(len(paste_values_rus))]
 
 
 def columns_maker(file=devices.nkvv.work_file,
                   sep=devices.nkvv.work_file_sep,
                   encoding=devices.nkvv.work_file_default_encoding):
-    return list(pd.read_csv(file,
-                            sep=sep,
-                            encoding=encoding))
+    return list(pd.read_csv(file, sep=sep, encoding=encoding))
 
 
-def dict_maker(list_for_columns=None):
+def dict_maker(list_for_columns=None,
+               file=devices.nkvv.work_file,
+               sep=devices.nkvv.work_file_sep,
+               encoding=devices.nkvv.work_file_default_encoding):
     if list_for_columns is None:
-        list_for_columns = columns_maker()
+        list_for_columns = columns_maker(file=file, sep=sep, encoding=encoding)
     return {v: [k] for v, k in enumerate(list_for_columns)}
 
 
@@ -185,9 +187,15 @@ types_of_data = {
 }
 
 
-def columns_analyzer(source_dict=None, range_limit = len(paste_values_rus)):  # заменить фильтры на формулы
+def columns_analyzer(source_dict=None,
+                     file=devices.nkvv.work_file,
+                     sep=devices.nkvv.work_file_sep,
+                     encoding=devices.nkvv.work_file_default_encoding,
+                     range_limit=None):
     if source_dict is None:
-        source_dict = dict_maker()
+        source_dict = dict_maker(None, file=file, sep=sep, encoding=encoding)
+    if range_limit is None:
+        range_limit = len(columns_maker(file=file, sep=sep, encoding=encoding))
     for i in range(range_limit):
         tail = sadzax.Trimmer.right(source_dict[i][0], 2)
         head = sadzax.Trimmer.left(source_dict[i][0], 4)

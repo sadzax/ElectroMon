@@ -2,15 +2,13 @@ import numpy as np
 import pandas as pd
 import columns
 import devices
-import itertools
 import plots
+import temp_exec
+import sadzax
+import printout
+import analyzer
 
-#  Однократное получение данных (* уточнить по оптимизации, нужно ли)
-cols = columns.columns_analyzer()
-cols_len = len(columns.columns_maker())
 
-
-#  Получение данных из CSV-файла
 def get_data(usecols: list = None,
              file=devices.nkvv.work_file,
              sep=devices.nkvv.work_file_sep,
@@ -70,7 +68,7 @@ unite_parameter=False
 list_of_non_math=None
 data=database
 cl=cols
-list_of_non_math = ['Дата создания записи','Дата сохранения в БД']
+# list_of_non_math = ['Дата создания записи','Дата сохранения в БД']
 
 database = pass_the_nan('power', -300.)
 database = pass_the_nan('tg', -10.0)

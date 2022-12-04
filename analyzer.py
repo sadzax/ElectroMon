@@ -3,11 +3,45 @@ import pandas as pd
 import columns
 import devices
 import itertools
-import plots
 
-#  Get variable for data
-cols = columns.columns_analyzer()
-cols_len = len(columns.columns_maker())
+
+#  ______ Archive _ Проверка параметра ∆tgδ для технических целей
+def delta_tg_checker(cols=None,
+                     data: pd.core = None,
+                     exclude_values=(-10.0, -300.0),
+                     file=devices.nkvv.work_file,
+                     sep=devices.nkvv.work_file_sep,
+                     encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    df = []
+    for column_index in range(len(columns.columns_maker(file=file, sep=sep, encoding=encoding))):
+        if cols[column_index][4] == '∆tgδ' and cols[column_index][3] == 'HV':
+            df.append(data[cols[column_index][0]].tolist())
+    list_of_all_values = list(itertools.chain.from_iterable(df))
+    list_of_filtered_values = []
+    for value in list_of_all_values:
+        if value not in exclude_values:
+            list_of_filtered_values.append(value)
+    list_of_filtered_abs_values = [abs(x) for x in list_of_filtered_values]  # уточнить по модулю отклонения
+    return list_of_filtered_abs_values
+
+
+#  ______ Archive _ Проверка срабатывания сигнализации срабатывания предупредительной сигнализации (1%)
+def delta_tg_checker_warning(operating_data=None, warning=1):
+    if operating_data is None:
+        operating_data = delta_tg_checker()
+    warning_list = []
+    for a_value in operating_data:
+        if abs(a_value) >= warning:
+            warning_list.append(a_value)
+    if not warning_list:
+        print(f"Превышение уровня ∆tgδ для срабатывания сигнализации не выявлено")  # убрать
+        return warning_list
+    else:
+        return warning_list
 
 
 #  Importing CSV
@@ -32,21 +66,29 @@ def get_data(usecols: list = None,
     return data
 
 
-#  Get variable for data
-database = get_data()
-
-
 #  Count the strings
-def total_log_counter(data: pd.core = database):
+def total_log_counter(data: pd.core = None,
+                      file=devices.nkvv.work_file,
+                      sep=devices.nkvv.work_file_sep,
+                      encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
     return data.shape[0]
 
 
 #  Analysis of time of measurements
-def values_time_analyzer(col_number=0,
+def values_time_analyzer(col_number=0,  # Return the dataframe, not strings
                          time_sequence_min=1,
-                         cl=cols,
-                         data: pd.core = database):
-    df = data[cl[col_number][0]].values
+                         cols=None,
+                         data: pd.core = None,
+                         file=devices.nkvv.work_file,
+                         sep=devices.nkvv.work_file_sep,
+                         encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    df = data[cols[col_number][0]].values
     for a_row in range(df.shape[0] - 1):
         if (df[a_row + 1] - df[a_row]).astype('timedelta64[m]') == time_sequence_min:
             pass
@@ -60,33 +102,39 @@ def values_time_analyzer(col_number=0,
                 err = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
             else:
                 err = gap
-            print(f"Ошибка измерения времени в данных! Строка № {a_row}:\n"
-                  f"В строке № {a_row}"
-                  f" дата {pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y')}"
-                  f" время {pd.to_datetime(str(df[a_row])).strftime('%H.%M')}"
-                  f", в следующей строке № {a_row + 1}"
-                  f" дата {pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y')}"
-                  f" время {pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M')}"
-                  f", т.е. через {err}\n")
+            print(f"Timeline error in a row # {a_row}:\n"
+                  f"The row # {a_row} has"
+                  f" date {pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y')}"
+                  f" and time {pd.to_datetime(str(df[a_row])).strftime('%H.%M')}"
+                  f", next row # {a_row + 1} has"
+                  f" date {pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y')}"
+                  f" and time {pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M')}"
+                  f", i.e. after {err}\n")
 
 
 #  Exclude (Ia(r) = -300, Tg = -10) to NaN
-def pass_the_nan(seeking_param='power',  # Need to optimize memory usage
-                 replacing_value=-300.0,
-                 cl=cols,
-                 data: pd.core = database):
-    for a_column in range(cols_len):
-        for a_param in range(len(cols[0])):
-            if cl[a_column][a_param] == seeking_param:
-                for a_row in range(data.shape[0]):
-                    if data.iloc[a_row, a_column] == replacing_value:
-                        data.iloc[a_row, a_column] = np.NaN
+def pass_the_nan(default_dict_for_replacement=None,
+                 cols=None,
+                 data: pd.core = None,
+                 file=devices.nkvv.work_file,
+                 sep=devices.nkvv.work_file_sep,
+                 encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    if default_dict_for_replacement is None:
+        default_dict_for_replacement = devices.nkvv.default_dict_for_replacement_to_nan
+    for i in range(len(default_dict_for_replacement)):
+        seeking_param = [x for x in default_dict_for_replacement.keys()][i]
+        replacing_value = [x for x in default_dict_for_replacement.values()][i]
+        for a_column in range(len(cols)):
+            for a_param in range(len(cols[0])):
+                if cols[a_column][a_param] == seeking_param:
+                    for a_row in range(data.shape[0]):  # Need to optimize memory usage
+                        if data.iloc[a_row, a_column] == replacing_value:
+                            data.iloc[a_row, a_column] = np.NaN
     return data
-
-
-database = pass_the_nan('power', -300.0)
-database = pass_the_nan('tg', -10.0)  # ?? Need to optimize
-database = pass_the_nan('∆tgδ', -10.0)
 
 
 #  ______ Correlation with environment temperature (p.3.1. of the report)
@@ -96,14 +144,21 @@ def correlation_temp():
 
 #  Filtering
 def data_filter(filter_list,
-                data=database,
-                cl=cols):
+                cols=None,
+                data: pd.core = None,
+                file=devices.nkvv.work_file,
+                sep=devices.nkvv.work_file_sep,
+                encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     filter_list_indexes = []
-    for a_column in range(cols_len):
+    for a_column in range(len(cols)):
         for a_param in range(len(cols[0])):
-            if cl[a_column][a_param] in filter_list:
+            if cols[a_column][a_param] in filter_list:
                 filter_list_indexes.append(a_column)
-    filter_list_names = [cl[i][0] for i in filter_list_indexes]
+    filter_list_names = [cols[i][0] for i in filter_list_indexes]
     return data[filter_list_names]
 
 
@@ -112,14 +167,21 @@ def data_average_finder(filter_list=None,
                         abs_parameter=True,
                         unite_parameter=False,
                         list_of_non_math=None,
-                        data=database,
-                        cl=cols):
+                        cols=None,
+                        data: pd.core = None,
+                        file=devices.nkvv.work_file,
+                        sep=devices.nkvv.work_file_sep,
+                        encoding=devices.nkvv.work_file_default_encoding):
     if filter_list is None:
         filter_list = ['time', '∆tgδ_HV']
     if list_of_non_math is None:
         list_of_non_math = ['Дата создания записи',
                             'Дата сохранения в БД']
-    df = data_filter(filter_list, data, cl)
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    df = data_filter(filter_list, cols, data)
     func_columns_list = list(df.columns)
     func_result_prev = []
     func_result = {}
@@ -142,12 +204,21 @@ def data_average_finder(filter_list=None,
                 else:
                     dump = [x for x in columns_list_of_values if not np.isnan(x)]
                 func_result_prev = func_result_prev + dump
-                func_result = {'Среднее по всем: ': sum(func_result_prev) / len(func_result_prev)}
+                func_result = {'Average: ': sum(func_result_prev) / len(func_result_prev)}
     return func_result
 
 
 #  ______ Search for deviations
-def data_deviation_finder(filter_list, data=database, cl=cols):
+def data_deviation_finder(filter_list,
+                          cols=None,
+                          data: pd.core = None,
+                          file=devices.nkvv.work_file,
+                          sep=devices.nkvv.work_file_sep,
+                          encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     df = data_filter(filter_list, data, cols)
     func_columns_list = list(df.columns)
     for i in range(df.shape[1] - 1):
@@ -155,54 +226,3 @@ def data_deviation_finder(filter_list, data=database, cl=cols):
             pass
         else:
             return data[func_columns_list[i]].value_counts(normalize=False, sort=False)
-
-
-print(data_average_finder(['time', '∆tgδ_HV']))
-
-
-#  ______ Проверка параметра ∆tgδ для технических целей
-def delta_tg_checker(cl=cols,
-                     data: pd.core = database,
-                     exclude_values=(-10.0, -300.0)):
-    df = []
-    for column_index in range(cols_len):
-        if cl[column_index][4] == '∆tgδ' and cl[column_index][3] == 'HV':
-            df.append(data[cl[column_index][0]].tolist())
-    list_of_all_values = list(itertools.chain.from_iterable(df))
-    list_of_filtered_values = []
-    for value in list_of_all_values:
-        if value not in exclude_values:
-            list_of_filtered_values.append(value)
-    list_of_filtered_abs_values = [abs(x) for x in list_of_filtered_values]  # уточнить по модулю отклонения
-    return list_of_filtered_abs_values
-
-
-#  ______ Проверка срабатывания сигнализации срабатывания предупредительной сигнализации (1%)
-def delta_tg_checker_warning(operating_data=None, warning=1):
-    if operating_data is None:
-        operating_data = delta_tg_HV_check
-    warning_list = []
-    for a_value in operating_data:
-        if abs(a_value) >= warning:
-            warning_list.append(a_value)
-    if not warning_list:
-        print(f"Превышение уровня ∆tgδ для срабатывания сигнализации не выявлено")  # убрать
-        return warning_list
-    else:
-        return warning_list
-
-
-delta_tg_HV_check = delta_tg_checker()
-
-
-print(values_time_analyzer())
-print(f"\nОбщее число записей в журнале измерений составило {total_log_counter()}")
-
-delta_tg_check = delta_tg_checker()
-
-print(f"\nСреднее отклонение ∆tgδ стороны ВН составляет"
-      f" по модулю {round(sum(delta_tg_HV_check) / len(delta_tg_HV_check), 3)}%"
-      f" при общем количестве {len(delta_tg_HV_check)} показателей (исключены значения '∆tgδ = -10')")
-print(f"\nПревышение уровня ∆tgδ ±1% для срабатывания"
-      f" предупредительной сигнализации: {len(delta_tg_checker_warning())}"
-      f" случая(-ев) \n {delta_tg_checker_warning()}")

@@ -14,6 +14,7 @@ nkvv.work_file = 'DB_i.csv'
 nkvv.work_file_sep = ';'
 nkvv.work_file_default_encoding = 'WINDOWS-1251'
 nkvv.work_file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
+nkvv.default_dict_for_replacement_to_nan = {'power': -300.0, 'tg': -10.0, '∆tgδ': -10.0}
 
 #  russian_date_parser = lambda x: datetime.strptime(x, "DD.MM.YYY HH:MM:SS")
 
