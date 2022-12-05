@@ -139,11 +139,6 @@ def pass_the_nan(default_dict_for_replacement=None,
     return data
 
 
-#  ______ Correlation with environment temperature (p.3.1. of the report)
-def correlation_temp():
-    pass
-
-
 #  Filtering
 def data_filter(filter_list,
                 cols=None,
@@ -209,15 +204,15 @@ def data_average_finder(filter_list=None,
     return func_result
 
 
-#  ______ Search for deviations
-def data_deviation_finder(filter_list,
-                          unite_parameter=False,
-                          cols=None,
-                          data: pd.core = None,
-                          list_of_non_math=None,
-                          file=devices.nkvv.work_file,
-                          sep=devices.nkvv.work_file_sep,
-                          encoding=devices.nkvv.work_file_default_encoding):
+#  Search for distributions
+def data_distribution_finder(filter_list,
+                             unite_parameter=False,
+                             cols=None,
+                             data: pd.core = None,
+                             list_of_non_math=None,
+                             file=devices.nkvv.work_file,
+                             sep=devices.nkvv.work_file_sep,
+                             encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -225,7 +220,7 @@ def data_deviation_finder(filter_list,
     if list_of_non_math is None:
         list_of_non_math = ['Дата создания записи',
                             'Дата сохранения в БД']
-    df = data_filter(filter_list, cols, data)
+    df = data_filter(filter_list, cols=cols, data=data)
     func_columns_list = list(df.columns)
     func_result_prev = pd.Series([],dtype=pd.StringDtype())
     func_result = {}
@@ -240,4 +235,46 @@ def data_deviation_finder(filter_list,
                 dump = data[func_columns_list[i]].value_counts(normalize=True, sort=True)
                 func_result_prev = np.c_[func_result_prev, dump]
                 func_result['Overall distribution: '] = func_result_prev
+    return func_result
+
+
+#  ______ Correlation with environment temperature (p.3.1. of the report)
+def data_correlation(filter_list1=None, filter_list2=None,
+                     cols=None, data: pd.core = None,  # Unite similar functions
+                     file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+                     encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    if filter_list1 is None:
+        filter_list1 = ['∆tgδ_HV', '∆C_HV']
+    if filter_list2 is None:
+        filter_list2 = ['temperature']
+    func_result = {}
+    for i in filter_list1:
+        for k in filter_list2:
+            filter_list = [i,k]
+            df = data_filter(filter_list, cols=cols, data=data)
+            for h in range(df.shape[1]):
+                g = h + 1
+                while g < df.shape[1]:
+                    a_values = df[df.columns.values[h]].tolist()
+                    b_values = df[df.columns.values[g]].tolist() # need to add abs_parameter
+                    # a_values_without_nan = [x for x in a_values if not np.isnan(x)]  # NaNs can cause different amount of indexes
+                    # b_values_without_nan = [x for x in b_values if not np.isnan(x)]  #
+                    correlation_integer = 0
+                    correlation_sequence = []
+                    for j in range(len(a_values)-1):
+                        if np.isnan(a_values[j]) == True or np.isnan(b_values[j]) == True:
+                            correlation_integer = correlation_integer
+                        elif a_values[j+1] >= a_values[j] and b_values[j+1] >= b_values[j]:
+                            correlation_integer = correlation_integer + 1
+                        elif a_values[j+1] <= a_values[j] and b_values[j+1] <= b_values[j]:
+                            correlation_integer = correlation_integer + 1
+                        else:
+                            correlation_integer = correlation_integer - 1
+                        correlation_sequence.append(correlation_integer)
+                    func_result[str(df.columns[h] + ' correlation with ' + df.columns[g])] = correlation_sequence
+                    g = g + 1
     return func_result

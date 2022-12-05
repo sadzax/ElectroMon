@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import columns
 import analyzer
+import devices
 
 
 def plot2(val_x: str = columns.paste_values_rus[0],
@@ -21,8 +22,10 @@ def plot2(val_x: str = columns.paste_values_rus[0],
 database = pd.read_pickle('main_dataframe.pkl')
 
 
-def histogram(value, bin_parameter=100):
-    database[value].hist(bins=bin_parameter)
+def histogram(value, data: pd.core = None, bins=333, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
+    data[value].hist(bins=bins)
     # if value = list:
     # a = analyzer.data_deviation_finder(filter_list=['time', '∆tgδ_HV'])
     # xex = lambda b: database[b].hist()
