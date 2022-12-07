@@ -6,12 +6,8 @@ import itertools
 
 
 #  ______ Archive _ Проверка параметра ∆tgδ для технических целей
-def delta_tg_checker(cols=None,
-                     data: pd.core = None,
-                     exclude_values=(-10.0, -300.0),
-                     file=devices.nkvv.work_file,
-                     sep=devices.nkvv.work_file_sep,
-                     encoding=devices.nkvv.work_file_default_encoding):
+def delta_tg_checker(cols=None, data: pd.core = None, exclude_values=(-10.0, -300.0), file=devices.nkvv.work_file,
+                     sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -45,9 +41,7 @@ def delta_tg_checker_warning(operating_data=None, warning=1):
 
 
 #  Importing CSV
-def get_data(usecols: list = None,
-             file=devices.nkvv.work_file,
-             sep=devices.nkvv.work_file_sep,
+def get_data(usecols: list = None, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
              encoding=devices.nkvv.work_file_default_encoding):
     if usecols is None:
         parse_dates = devices.nkvv.work_file_parse_dates
@@ -67,25 +61,17 @@ def get_data(usecols: list = None,
 
 
 #  Count the strings
-def total_log_counter(data: pd.core = None,
-                      file=devices.nkvv.work_file,
-                      sep=devices.nkvv.work_file_sep,
+def total_log_counter(data: pd.core = None, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
                       encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     return data.shape[0]
 
 
-#  Analysis of time of measurements
-def values_time_analyzer(col_number=0,  # Return the dataframe, not strings
-                         time_sequence_min=1,
-                         cols=None,
-                         data: pd.core = None,
-                         file=devices.nkvv.work_file,
-                         sep=devices.nkvv.work_file_sep,
-                         encoding=devices.nkvv.work_file_default_encoding,
-                         gap_const_day=1440,
-                         gap_const_hour=60):
+#  Analysis of time of measurements ______ # Return the dataframe, not strings
+def values_time_analyzer(col_number=0, time_sequence_min=1, cols=None, data: pd.core = None,
+                         file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+                         encoding=devices.nkvv.work_file_default_encoding, gap_const_day=1440, gap_const_hour=60):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -115,12 +101,8 @@ def values_time_analyzer(col_number=0,  # Return the dataframe, not strings
 
 
 #  Exclude (Ia(r) = -300, Tg = -10) to NaN
-def pass_the_nan(default_dict_for_replacement=None,
-                 cols=None,
-                 data: pd.core = None,
-                 file=devices.nkvv.work_file,
-                 sep=devices.nkvv.work_file_sep,
-                 encoding=devices.nkvv.work_file_default_encoding):
+def pass_the_nan(default_dict_for_replacement=None, cols=None, data: pd.core = None, file=devices.nkvv.work_file,
+                 sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -140,12 +122,8 @@ def pass_the_nan(default_dict_for_replacement=None,
 
 
 #  Filtering
-def data_filter(filter_list,
-                cols=None,
-                data: pd.core = None,
-                file=devices.nkvv.work_file,
-                sep=devices.nkvv.work_file_sep,
-                encoding=devices.nkvv.work_file_default_encoding):
+def data_filter(filter_list, cols=None, data: pd.core = None, file=devices.nkvv.work_file,
+                sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -160,14 +138,8 @@ def data_filter(filter_list,
 
 
 # Main averager
-def data_average_finder(filter_list=None,
-                        abs_parameter=True,
-                        unite_parameter=False,
-                        list_of_non_math=None,
-                        cols=None,
-                        data: pd.core = None,
-                        file=devices.nkvv.work_file,
-                        sep=devices.nkvv.work_file_sep,
+def data_average_finder(filter_list=None, abs_parameter=True, unite_parameter=False, list_of_non_math=None, cols=None,
+                        data: pd.core = None, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
                         encoding=devices.nkvv.work_file_default_encoding):
     if filter_list is None:
         filter_list = ['time', '∆tgδ_HV']
@@ -205,13 +177,8 @@ def data_average_finder(filter_list=None,
 
 
 #  Search for distributions
-def data_distribution_finder(filter_list,
-                             unite_parameter=False,
-                             cols=None,
-                             data: pd.core = None,
-                             list_of_non_math=None,
-                             file=devices.nkvv.work_file,
-                             sep=devices.nkvv.work_file_sep,
+def data_distribution_finder(filter_list, unite_parameter=False, cols=None, data: pd.core = None, list_of_non_math=None,
+                             file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
                              encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
@@ -222,7 +189,7 @@ def data_distribution_finder(filter_list,
                             'Дата сохранения в БД']
     df = data_filter(filter_list, cols=cols, data=data)
     func_columns_list = list(df.columns)
-    func_result_prev = pd.Series([],dtype=pd.StringDtype())
+    func_result_prev = pd.Series([], dtype=pd.StringDtype())
     func_result = {}
     for i in range(df.shape[1]):
         for k in list_of_non_math:
@@ -238,9 +205,8 @@ def data_distribution_finder(filter_list,
     return func_result
 
 
-#  ______ Correlation with environment temperature (p.3.1. of the report)
-def data_correlation(filter_list1=None, filter_list2=None,
-                     cols=None, data: pd.core = None,  # Unite similar functions
+#  Correlations
+def data_correlation(filter_list1=None, filter_list2=None, cols=None, data: pd.core = None,  # Unite similar functions
                      file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
                      encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
@@ -254,27 +220,31 @@ def data_correlation(filter_list1=None, filter_list2=None,
     func_result = {}
     for i in filter_list1:
         for k in filter_list2:
-            filter_list = [i,k]
+            filter_list = [i, k]
             df = data_filter(filter_list, cols=cols, data=data)
             for h in range(df.shape[1]):
                 g = h + 1
                 while g < df.shape[1]:
                     a_values = df[df.columns.values[h]].tolist()
-                    b_values = df[df.columns.values[g]].tolist() # need to add abs_parameter
-                    # a_values_without_nan = [x for x in a_values if not np.isnan(x)]  # NaNs can cause different amount of indexes
-                    # b_values_without_nan = [x for x in b_values if not np.isnan(x)]  #
+                    b_values = df[df.columns.values[g]].tolist()  # need to add abs_parameter
+                    # a_values_without_nan = [x for x in a_values if not np.isnan(x)]
+                    # NaNs can cause different amount of indexes
+                    # b_values_without_nan = [x for x in b_values if not np.isnan(x)]
                     correlation_integer = 0
                     correlation_sequence = []
                     for j in range(len(a_values)-1):
-                        if np.isnan(a_values[j]) == True or np.isnan(b_values[j]) == True:
+                        if np.isnan(a_values[j]) is True or np.isnan(b_values[j]) is True:  # == / is
                             correlation_integer = correlation_integer
                         elif a_values[j+1] >= a_values[j] and b_values[j+1] >= b_values[j]:
                             correlation_integer = correlation_integer + 1
                         elif a_values[j+1] <= a_values[j] and b_values[j+1] <= b_values[j]:
                             correlation_integer = correlation_integer + 1
                         else:
-                            correlation_integer = correlation_integer - 1
+                            correlation_integer = correlation_integer - 2
                         correlation_sequence.append(correlation_integer)
                     func_result[str(df.columns[h] + ' correlation with ' + df.columns[g])] = correlation_sequence
                     g = g + 1
     return func_result
+
+
+#
