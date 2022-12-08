@@ -189,6 +189,7 @@ types_of_data = {
 }
 
 
+#  ______ Analyze more data - Ir, Ia, etc.
 def columns_analyzer(source_dict=None,
                      file=devices.nkvv.work_file,
                      sep=devices.nkvv.work_file_sep,

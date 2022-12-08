@@ -6,6 +6,7 @@ import devices
 database = pd.read_pickle('main_dataframe.pkl')
 
 
+#  Simple Graph
 def flat_graph(input_x: str = None,
                input_y: list = None,
                cols=None,
@@ -38,7 +39,13 @@ def flat_graph(input_x: str = None,
         plt.legend(legend)
 
 
-def histogram(value, data: pd.core = None, bins=333, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
+#  ______ Need to implement cycling in histogram
+def histogram(value,
+              data: pd.core = None,
+              bins=333,
+              file=devices.nkvv.work_file,
+              sep=devices.nkvv.work_file_sep,
+              encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
     data[value].hist(bins=bins)
@@ -46,3 +53,47 @@ def histogram(value, data: pd.core = None, bins=333, file=devices.nkvv.work_file
     # a = analyzer.data_deviation_finder(filter_list=['time', '∆tgδ_HV'])
     # xex = lambda b: database[b].hist()
     # return xex([i for i in a.keys()])
+
+
+#  Correlation Plot
+def correlation_plot(filter_list1=None,
+                     filter_list2=None,
+                     cols=None,
+                     data: pd.core = None,
+                     file=devices.nkvv.work_file,
+                     sep=devices.nkvv.work_file_sep,
+                     encoding=devices.nkvv.work_file_default_encoding):
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    if data is None:
+        data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
+    if filter_list1 is None:
+        filter_list1 = ['∆tgδ_HV']
+    if filter_list2 is None:
+        filter_list2 = ['temperature']
+    cr = analyzer.data_correlation(filter_list1=filter_list1,
+                                   filter_list2=filter_list2,
+                                   cols=cols,
+                                   data=data,
+                                   file=file,
+                                   sep=sep,
+                                   encoding=encoding)
+    keys_list = [key for key in cr.keys()]
+    fig, axs = plt.subplots()
+    axs.grid(axis='both', color='gray', linestyle='--')
+    max_len = 0
+    legend = []
+    for i in range(len(cr.keys())):
+        if len(cr[keys_list[i]]) > max_len:
+            max_len = len(cr[keys_list[i]])
+            axs.set_ylim(0, max_len)
+            axs.set_xlim(0, max_len)
+            legend.append(keys_list[i])
+        plt.xlabel('Steps')
+        plt.ylabel('Matches')
+        y = cr[keys_list[i]]
+        legend.append(keys_list[i])
+        axs.plot([i for i in range(max_len)], y)
+        plt.legend(legend)
+
+

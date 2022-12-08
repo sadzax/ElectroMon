@@ -6,8 +6,12 @@ import itertools
 
 
 #  ______ Archive _ Проверка параметра ∆tgδ для технических целей
-def delta_tg_checker(cols=None, data: pd.core = None, exclude_values=(-10.0, -300.0), file=devices.nkvv.work_file,
-                     sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
+def delta_tg_checker(cols=None,
+                     data: pd.core = None,
+                     exclude_values=(-10.0, -300.0),
+                     file=devices.nkvv.work_file,
+                     sep=devices.nkvv.work_file_sep,
+                     encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -26,7 +30,8 @@ def delta_tg_checker(cols=None, data: pd.core = None, exclude_values=(-10.0, -30
 
 
 #  ______ Archive _ Проверка срабатывания сигнализации срабатывания предупредительной сигнализации (1%)
-def delta_tg_checker_warning(operating_data=None, warning=1):
+def delta_tg_checker_warning(operating_data=None,
+                             warning=1):
     if operating_data is None:
         operating_data = delta_tg_checker()
     warning_list = []
@@ -41,7 +46,9 @@ def delta_tg_checker_warning(operating_data=None, warning=1):
 
 
 #  Importing CSV
-def get_data(usecols: list = None, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+def get_data(usecols: list = None,
+             file=devices.nkvv.work_file,
+             sep=devices.nkvv.work_file_sep,
              encoding=devices.nkvv.work_file_default_encoding):
     if usecols is None:
         parse_dates = devices.nkvv.work_file_parse_dates
@@ -61,7 +68,9 @@ def get_data(usecols: list = None, file=devices.nkvv.work_file, sep=devices.nkvv
 
 
 #  Count the strings
-def total_log_counter(data: pd.core = None, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+def total_log_counter(data: pd.core = None,
+                      file=devices.nkvv.work_file,
+                      sep=devices.nkvv.work_file_sep,
                       encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
@@ -69,9 +78,15 @@ def total_log_counter(data: pd.core = None, file=devices.nkvv.work_file, sep=dev
 
 
 #  Analysis of time of measurements ______ # Return the dataframe, not strings
-def values_time_analyzer(col_number=0, time_sequence_min=1, cols=None, data: pd.core = None,
-                         file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
-                         encoding=devices.nkvv.work_file_default_encoding, gap_const_day=1440, gap_const_hour=60):
+def values_time_analyzer(col_number=0,
+                         time_sequence_min=1,
+                         cols=None,
+                         data: pd.core = None,
+                         file=devices.nkvv.work_file,
+                         sep=devices.nkvv.work_file_sep,
+                         encoding=devices.nkvv.work_file_default_encoding,
+                         gap_const_day=1440,
+                         gap_const_hour=60):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -101,8 +116,12 @@ def values_time_analyzer(col_number=0, time_sequence_min=1, cols=None, data: pd.
 
 
 #  Exclude (Ia(r) = -300, Tg = -10) to NaN
-def pass_the_nan(default_dict_for_replacement=None, cols=None, data: pd.core = None, file=devices.nkvv.work_file,
-                 sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
+def pass_the_nan(default_dict_for_replacement=None,
+                 cols=None,
+                 data: pd.core = None,
+                 file=devices.nkvv.work_file,
+                 sep=devices.nkvv.work_file_sep,
+                 encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -122,8 +141,12 @@ def pass_the_nan(default_dict_for_replacement=None, cols=None, data: pd.core = N
 
 
 #  Filtering
-def data_filter(filter_list, cols=None, data: pd.core = None, file=devices.nkvv.work_file,
-                sep=devices.nkvv.work_file_sep, encoding=devices.nkvv.work_file_default_encoding):
+def data_filter(filter_list,
+                cols=None,
+                data: pd.core = None,
+                file=devices.nkvv.work_file,
+                sep=devices.nkvv.work_file_sep,
+                encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -138,8 +161,14 @@ def data_filter(filter_list, cols=None, data: pd.core = None, file=devices.nkvv.
 
 
 # Main averager
-def data_average_finder(filter_list=None, abs_parameter=True, unite_parameter=False, list_of_non_math=None, cols=None,
-                        data: pd.core = None, file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+def data_average_finder(filter_list=None,
+                        abs_parameter=True,
+                        unite_parameter=False,
+                        list_of_non_math=None,
+                        cols=None,
+                        data: pd.core = None,
+                        file=devices.nkvv.work_file,
+                        sep=devices.nkvv.work_file_sep,
                         encoding=devices.nkvv.work_file_default_encoding):
     if filter_list is None:
         filter_list = ['time', '∆tgδ_HV']
@@ -177,8 +206,13 @@ def data_average_finder(filter_list=None, abs_parameter=True, unite_parameter=Fa
 
 
 #  Search for distributions
-def data_distribution_finder(filter_list, unite_parameter=False, cols=None, data: pd.core = None, list_of_non_math=None,
-                             file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+def data_distribution_finder(filter_list,
+                             unite_parameter=False,
+                             cols=None,
+                             data: pd.core = None,
+                             list_of_non_math=None,
+                             file=devices.nkvv.work_file,
+                             sep=devices.nkvv.work_file_sep,
                              encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
@@ -197,7 +231,8 @@ def data_distribution_finder(filter_list, unite_parameter=False, cols=None, data
                 break
         else:
             if unite_parameter is False:
-                func_result[func_columns_list[i]] = data[func_columns_list[i]].value_counts(normalize=True, sort=True)
+                func_result[func_columns_list[i]] = data[func_columns_list[i]].value_counts(normalize=True,
+                                                                                            sort=True)
             else:  # doesn't work with different amount of indexes*
                 dump = data[func_columns_list[i]].value_counts(normalize=True, sort=True)
                 func_result_prev = np.c_[func_result_prev, dump]
@@ -206,17 +241,21 @@ def data_distribution_finder(filter_list, unite_parameter=False, cols=None, data
 
 
 #  Correlations
-def data_correlation(filter_list1=None, filter_list2=None, cols=None, data: pd.core = None,  # Unite similar functions
-                     file=devices.nkvv.work_file, sep=devices.nkvv.work_file_sep,
+def data_correlation(filter_list1=None,
+                     filter_list2=None,
+                     cols=None,
+                     data: pd.core = None,  # Unite similar functions
+                     file=devices.nkvv.work_file,
+                     sep=devices.nkvv.work_file_sep,
                      encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     if filter_list1 is None:
-        filter_list1 = ['∆tgδ_HV', '∆C_HV']
+        filter_list1 = ['∆tgδ_HV']
     if filter_list2 is None:
-        filter_list2 = ['temperature']
+        filter_list2 = ['∆tgδ_МV']
     func_result = {}
     for i in filter_list1:
         for k in filter_list2:
