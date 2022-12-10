@@ -5,17 +5,15 @@ import columns
 import plots
 import warnings
 import matplotlib.pyplot as plt
+from analyzer import data_filter
 warnings.simplefilter(action='ignore', category=FutureWarning)
 cols = columns.columns_analyzer()
 database = pd.read_pickle('main_dataframe.pkl')
+data = database
 # database = analyzer.pass_the_nan(None, cols)  # it's faster to use pickle above
 
-plots.correlation_plot()
+plots.correlation_plot(filter_list1=['∆tgδ_HV'], filter_list2=['∆tgδ_MV'])
 
-# plots.correlation_plot(filter_list1=['Ia_A1,мА'], filter_list2=['Ir_A1,мА'])
-plots.correlation_plot(filter_list1=['Tair,°С'], filter_list2=['Tcpu,°С'])
-
-c = analyzer.data_correlation(filter_list1=['∆tgδ_HV'], filter_list2=['∆tgδ_MV'])
 
 #  Okay
 plots.flat_graph(input_y=['tg_HV', 'tg_MV'], data=database)

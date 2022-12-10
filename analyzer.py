@@ -255,34 +255,33 @@ def data_correlation(filter_list1=None,
     if filter_list1 is None:
         filter_list1 = ['∆tgδ_HV']
     if filter_list2 is None:
-        filter_list2 = ['∆tgδ_МV']
+        filter_list2 = ['∆tgδ_MV']
     func_result = {}
-    for i in filter_list1:
-        for k in filter_list2:
-            filter_list = [i, k]
-            df = data_filter(filter_list, cols=cols, data=data)
-            for h in range(df.shape[1]):
-                g = h + 1
-                while g < df.shape[1]:
-                    a_values = df[df.columns.values[h]].tolist()
-                    b_values = df[df.columns.values[g]].tolist()  # need to add abs_parameter
-                    # a_values_without_nan = [x for x in a_values if not np.isnan(x)]
-                    # NaNs can cause different amount of indexes
-                    # b_values_without_nan = [x for x in b_values if not np.isnan(x)]
-                    correlation_integer = 0
-                    correlation_sequence = []
-                    for j in range(len(a_values)-1):
-                        if np.isnan(a_values[j]) is True or np.isnan(b_values[j]) is True:  # == / is
-                            correlation_integer = correlation_integer
-                        elif a_values[j+1] >= a_values[j] and b_values[j+1] >= b_values[j]:
-                            correlation_integer = correlation_integer + 1
-                        elif a_values[j+1] <= a_values[j] and b_values[j+1] <= b_values[j]:
-                            correlation_integer = correlation_integer + 1
-                        else:
-                            correlation_integer = correlation_integer - 2
-                        correlation_sequence.append(correlation_integer)
-                    func_result[str(df.columns[h] + ' correlation with ' + df.columns[g])] = correlation_sequence
-                    g = g + 1
+    df1 = data_filter(filter_list1, cols=cols, data=data)
+    df2 = data_filter(filter_list2, cols=cols, data=data)
+    shape1 = data_filter(filter_list1, cols=cols, data=data).shape[1]
+    shape2 = data_filter(filter_list2, cols=cols, data=data).shape[1]
+    df = pd.concat([df1, df2], axis=1)
+    for h in range(shape1):
+        for g in range(shape2):
+            a_values = df[df.columns.values[h]].tolist()
+            b_values = df[df.columns.values[g + shape1]].tolist()  #  ??????? why doesn't it work?
+            # a_values_without_nan = [x for x in a_values if not np.isnan(x)]
+            # NaNs can cause different amount of indexes
+            # b_values_without_nan = [x for x in b_values if not np.isnan(x)]
+            correlation_integer = 0
+            correlation_sequence = []
+            for j in range(len(a_values)-1):
+                if np.isnan(a_values[j]) is True or np.isnan(b_values[j]) is True:  # == / is
+                    correlation_integer = np.NaN
+                elif a_values[j+1] >= a_values[j] and b_values[j+1] >= b_values[j]:
+                    correlation_integer = correlation_integer + 1
+                elif a_values[j+1] <= a_values[j] and b_values[j+1] <= b_values[j]:
+                    correlation_integer = correlation_integer + 1
+                else:
+                    correlation_integer = correlation_integer - 1
+                correlation_sequence.append(correlation_integer)
+            func_result[str(df.columns[h] + ' correlation with ' + df.columns[g + shape1])] = correlation_sequence
     return func_result
 
 

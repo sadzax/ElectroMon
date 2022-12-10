@@ -70,7 +70,7 @@ def correlation_plot(filter_list1=None,
     if filter_list1 is None:
         filter_list1 = ['∆tgδ_HV']
     if filter_list2 is None:
-        filter_list2 = ['temperature']
+        filter_list2 = ['∆tgδ_MV']
     cr = analyzer.data_correlation(filter_list1=filter_list1,
                                    filter_list2=filter_list2,
                                    cols=cols,
