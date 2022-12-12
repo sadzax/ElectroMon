@@ -86,7 +86,7 @@ def correlation_plot(filter_list1=None,
     for i in range(len(cr.keys())):
         if len(cr[keys_list[i]]) > max_len:
             max_len = len(cr[keys_list[i]])
-            axs.set_ylim(0, max_len)
+            axs.set_ylim(max_len * -1, max_len)
             axs.set_xlim(0, max_len)
             legend.append(keys_list[i])
         plt.xlabel('Steps')

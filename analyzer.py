@@ -179,7 +179,7 @@ def data_average_finder(filter_list=None,
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
-    df = data_filter(filter_list, cols, data)
+    df = data_filter(filter_list, cols=cols, data=data)
     func_columns_list = list(df.columns)
     func_result_prev = []
     func_result = {}
@@ -285,4 +285,33 @@ def data_correlation(filter_list1=None,
     return func_result
 
 
-#
+#  Warning Notes
+def warning_finder(filter_list,
+                   warning_amount=1,
+                   accident_amount=1.5,
+                   cols=None,
+                   data: pd.core = None,
+                   list_of_non_math=None,
+                   file=devices.nkvv.work_file,
+                   sep=devices.nkvv.work_file_sep,
+                   encoding=devices.nkvv.work_file_default_encoding):
+    if filter_list is None:
+        filter_list = ['time', '∆tgδ_HV']
+    if list_of_non_math is None:
+        list_of_non_math = ['Дата создания записи', 'Дата сохранения в БД']
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    df = data_filter(filter_list, cols=cols, data=data)
+    for i in range(df.shape[1]):
+        for k in list_of_non_math:
+            if k == list(df.columns)[i]:
+                break
+        else:
+            pass
+
+
+
+
+
