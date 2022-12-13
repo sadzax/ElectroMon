@@ -286,7 +286,7 @@ def data_correlation(filter_list1=None,
 
 
 #  Warning Notes
-def warning_finder(filter_list,
+def warning_finder(filter_list=None,
                    warning_amount=1,
                    abs_parameter=True,
                    cols=None,
@@ -321,5 +321,6 @@ def warning_finder(filter_list,
                                         (df_temp[cols_list[i]] <= warning_amount *-1 )]
             else:
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
+
             func_result.append(df_temp_result)
     return func_result
