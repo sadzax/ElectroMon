@@ -309,7 +309,7 @@ def warning_finder(filter_list,
         for i in range(df.shape[1]):
             if k == cols_list[i]:
                 date_index = i
-    df_result = data_filter(filter_list=[cols_list[date_index]])
+    func_result = []
     for i in range(df.shape[1]):
         for k in list_of_non_math:
             if k == cols_list[i]:
@@ -321,5 +321,5 @@ def warning_finder(filter_list,
                                         (df_temp[cols_list[i]] <= warning_amount *-1 )]
             else:
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
-        df_result = df_result.merge(df_temp_result, on=cols_list[date_index], how='left')
-    return df_result
+            func_result.append(df_temp_result)
+    return func_result
