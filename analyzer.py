@@ -288,7 +288,7 @@ def data_correlation(filter_list1=None,
 #  Warning Notes
 def warning_finder(filter_list,
                    warning_amount=1,
-                   accident_amount=1.5,
+                   abs_parameter=True,
                    cols=None,
                    data: pd.core = None,
                    list_of_non_math=None,
@@ -296,7 +296,7 @@ def warning_finder(filter_list,
                    sep=devices.nkvv.work_file_sep,
                    encoding=devices.nkvv.work_file_default_encoding):
     if filter_list is None:
-        filter_list = ['time', '∆tgδ_HV']
+        filter_list = ['time', '∆tgδ_MV']
     if list_of_non_math is None:
         list_of_non_math = ['Дата создания записи', 'Дата сохранения в БД']
     if data is None:
@@ -304,14 +304,22 @@ def warning_finder(filter_list,
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     df = data_filter(filter_list, cols=cols, data=data)
+    cols_list = list(df.columns)
+    for k in list_of_non_math:
+        for i in range(df.shape[1]):
+            if k == cols_list[i]:
+                date_index = i
+    df_result = data_filter(filter_list=[cols_list[date_index]])
     for i in range(df.shape[1]):
         for k in list_of_non_math:
-            if k == list(df.columns)[i]:
+            if k == cols_list[i]:
                 break
         else:
-            pass
-
-
-
-
-
+            df_temp = data_filter(filter_list=[cols_list[date_index], cols_list[i]], data=df)
+            if abs_parameter is True:
+                df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount) |
+                                        (df_temp[cols_list[i]] <= warning_amount *-1 )]
+            else:
+                df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
+        df_result = df_result.merge(df_temp_result, on=cols_list[date_index], how='left')
+    return df_result

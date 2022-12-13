@@ -14,6 +14,8 @@ data = database
 
 plots.correlation_plot(filter_list1=['∆tgδ_HV'], filter_list2=['∆tgδ_MV'])
 
+plots.correlation_plot(filter_list1=aa, filter_list2=bb)
+
 
 #  Okay
 plots.flat_graph(input_y=['tg_HV', 'tg_MV'], data=database)
