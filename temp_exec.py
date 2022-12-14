@@ -13,10 +13,13 @@ data = database
 # database = analyzer.pass_the_nan(None, cols)  # it's faster to use pickle above
 # database.to_pickle('main_dataframe.pkl')
 
+
+
 analyzer.warning_finder(filter_list=['time', '∆tgδ_HV'], warning_amount=1, data=database, abs_parameter=True)
 analyzer.warning_finder(filter_list=['time', '∆tgδ_MV'], warning_amount=1.5, data=database, abs_parameter=True)
 
 
+# ______________________________________________________________
 #  Okay
 
 plots.flat_graph(input_y=['tg_HV', 'tg_MV'], data=database)
@@ -33,5 +36,5 @@ for i in [i for i in b.keys()]:
 
 
 #  Working ones:
-# analyzer.values_time_analyzer(0, 1, cols, database)
-# analyzer.data_average_finder(filter_list=['time', '∆tgδ_HV'], cols=None, data=database)
+analyzer.values_time_analyzer(0, 1, cols, database)
+analyzer.data_average_finder(filter_list=['time', '∆tgδ_HV'], cols=None, data=database)

@@ -77,7 +77,7 @@ def total_log_counter(data: pd.core = None,
     return data.shape[0]
 
 
-#  Analysis of time of measurements ______ # Return the dataframe, not strings
+#  Analysis of time of measurements
 def values_time_analyzer(col_number=0,
                          time_sequence_min=1,
                          cols=None,
@@ -92,6 +92,7 @@ def values_time_analyzer(col_number=0,
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     df = data[cols[col_number][0]].values
+    error_dict = {}
     for a_row in range(df.shape[0] - 1):
         if (df[a_row + 1] - df[a_row]).astype('timedelta64[m]') == time_sequence_min:
             pass
@@ -105,14 +106,12 @@ def values_time_analyzer(col_number=0,
                 err = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
             else:
                 err = gap
-            print(f"Timeline error in a row # {a_row}:\n"
-                  f"The row # {a_row} has"
-                  f" date {pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y')}"
-                  f" and time {pd.to_datetime(str(df[a_row])).strftime('%H.%M')}"
-                  f", next row # {a_row + 1} has"
-                  f" date {pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y')}"
-                  f" and time {pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M')}"
-                  f", i.e. after {err}\n")
+            error_dict[a_row + 1] = [pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y'),
+                                     pd.to_datetime(str(df[a_row])).strftime('%H.%M'),
+                                     pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y'),
+                                     pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M'),
+                                     err]
+    return error_dict
 
 
 #  Exclude (Ia(r) = -300, Tg = -10) to NaN
@@ -265,7 +264,7 @@ def data_correlation(filter_list1=None,
     for h in range(shape1):
         for g in range(shape2):
             a_values = df[df.columns.values[h]].tolist()
-            b_values = df[df.columns.values[g + shape1]].tolist()  #  ??????? why doesn't it work?
+            b_values = df[df.columns.values[g + shape1]].tolist()
             # a_values_without_nan = [x for x in a_values if not np.isnan(x)]
             # NaNs can cause different amount of indexes
             # b_values_without_nan = [x for x in b_values if not np.isnan(x)]
