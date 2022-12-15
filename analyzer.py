@@ -67,7 +67,7 @@ def get_data(usecols: list = None,
     return data
 
 
-#  Count the strings
+#  2.0. Count the strings
 def total_log_counter(data: pd.core = None,
                       file=devices.nkvv.work_file,
                       sep=devices.nkvv.work_file_sep,
@@ -114,7 +114,7 @@ def values_time_analyzer(col_number=0,
     return error_dict
 
 
-#  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS
+#  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS LISTS!
 def pass_the_nan(default_dict_for_replacement=None,
                  cols=None,
                  data: pd.core = None,

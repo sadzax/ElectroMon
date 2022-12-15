@@ -58,6 +58,7 @@ def histogram(value,
     if isinstance(value, list) is True:
         legend = []
         plt.xlabel(', '.join(value))
+        plt.ylabel('Количество значений')
         if data_distribution_parameter is True:
             data_distribution = analyzer.data_distribution_finder(value, data=data, cols=cols,
                                                                   unite_parameter=unite_parameter)
