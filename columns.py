@@ -233,6 +233,14 @@ def columns_analyzer(source_dict=None,
             source_dict[i].append('C_dev')
         elif sadzax.Trimmer.left(source_dict[i][0], 20) == "Дата создания записи":
             source_dict[i].append('time')
+        elif sadzax.Trimmer.left(source_dict[i][0], 20) == "Дата сохранения в БД":
+            source_dict[i].append('time_of_saving')
+        elif sadzax.Trimmer.left(source_dict[i][0], 2) == "U_":
+            source_dict[i].append('U')
+        elif sadzax.Trimmer.left(source_dict[i][0], 3) == "Ia_":
+            source_dict[i].append('power_active')
+        elif sadzax.Trimmer.left(source_dict[i][0], 3) == "Ir_":
+            source_dict[i].append('power_reactive')
         else:
             source_dict[i].append('no_indicator')
     for i in range(range_limit):

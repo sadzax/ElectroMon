@@ -39,20 +39,37 @@ def flat_graph(input_x: str = None,
         plt.legend(legend)
 
 
-#  ______ Need to implement cycling in histogram
+#  Histogram for raw data and distribution data
 def histogram(value,
-              data: pd.core = None,
               bins=333,
+              data_distribution_parameter=False,
+              cols=None,
+              data: pd.core = None,
+              unite_parameter=False,
               file=devices.nkvv.work_file,
               sep=devices.nkvv.work_file_sep,
               encoding=devices.nkvv.work_file_default_encoding):
     if data is None:
         data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
-    data[value].hist(bins=bins)
-    # if value = list:
-    # a = analyzer.data_deviation_finder(filter_list=['time', '∆tgδ_HV'])
-    # xex = lambda b: database[b].hist()
-    # return xex([i for i in a.keys()])
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    if isinstance(value, str) is True:
+        data[value].hist(bins=bins)
+    if isinstance(value, list) is True:
+        legend = []
+        plt.xlabel(', '.join(value))
+        if data_distribution_parameter is True:
+            data_distribution = analyzer.data_distribution_finder(value, data=data, cols=cols,
+                                                                  unite_parameter=unite_parameter)
+            for i in data_distribution:
+                legend.append(i)
+                data_distribution[i].hist(bins=bins)
+                plt.legend(legend)
+        else:
+            df = analyzer.data_filter(value, data=data, cols=cols)
+            for i in df:
+                legend.append(i)
+                df[i].hist(bins=bins)
 
 
 #  Correlation Plot
@@ -95,5 +112,3 @@ def correlation_plot(filter_list1=None,
         legend.append(keys_list[i])
         axs.plot([i for i in range(max_len)], y)
         plt.legend(legend)
-
-

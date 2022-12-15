@@ -45,7 +45,7 @@ def delta_tg_checker_warning(operating_data=None,
         return warning_list
 
 
-#  Importing CSV
+#  1.0. Importing CSV
 def get_data(usecols: list = None,
              file=devices.nkvv.work_file,
              sep=devices.nkvv.work_file_sep,
@@ -77,7 +77,7 @@ def total_log_counter(data: pd.core = None,
     return data.shape[0]
 
 
-#  Analysis of time of measurements
+#  2.1. Analysis of time of measurements
 def values_time_analyzer(col_number=0,
                          time_sequence_min=1,
                          cols=None,
@@ -114,7 +114,7 @@ def values_time_analyzer(col_number=0,
     return error_dict
 
 
-#  Exclude (Ia(r) = -300, Tg = -10) to NaN
+#  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS
 def pass_the_nan(default_dict_for_replacement=None,
                  cols=None,
                  data: pd.core = None,
@@ -139,7 +139,7 @@ def pass_the_nan(default_dict_for_replacement=None,
     return data
 
 
-#  Filtering
+#  3.1. Filtering
 def data_filter(filter_list,
                 cols=None,
                 data: pd.core = None,
@@ -159,7 +159,7 @@ def data_filter(filter_list,
     return data[filter_list_names]
 
 
-# Main averager
+# 4.1. Main averager
 def data_average_finder(filter_list=None,
                         abs_parameter=True,
                         unite_parameter=False,
@@ -193,7 +193,7 @@ def data_average_finder(filter_list=None,
                     values_without_nan = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
                 else:
                     values_without_nan = [x for x in columns_list_of_values if not np.isnan(x)]
-                func_result[func_columns_list[i]] = sum(values_without_nan)/len(values_without_nan)
+                func_result[func_columns_list[i]] = sum(values_without_nan) / len(values_without_nan)
             else:
                 if abs_parameter is True:
                     dump = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
@@ -204,7 +204,7 @@ def data_average_finder(filter_list=None,
     return func_result
 
 
-#  Search for distributions
+#  4.2. Search for distributions
 def data_distribution_finder(filter_list,
                              unite_parameter=False,
                              cols=None,
@@ -239,7 +239,7 @@ def data_distribution_finder(filter_list,
     return func_result
 
 
-#  Correlations
+#  4.3. Correlations
 def data_correlation(filter_list1=None,
                      filter_list2=None,
                      cols=None,
@@ -270,12 +270,12 @@ def data_correlation(filter_list1=None,
             # b_values_without_nan = [x for x in b_values if not np.isnan(x)]
             correlation_integer = 0
             correlation_sequence = []
-            for j in range(len(a_values)-1):
+            for j in range(len(a_values) - 1):
                 if np.isnan(a_values[j]) is True or np.isnan(b_values[j]) is True:  # == / is
                     correlation_integer = np.NaN
-                elif a_values[j+1] >= a_values[j] and b_values[j+1] >= b_values[j]:
+                elif a_values[j + 1] >= a_values[j] and b_values[j + 1] >= b_values[j]:
                     correlation_integer = correlation_integer + 1
-                elif a_values[j+1] <= a_values[j] and b_values[j+1] <= b_values[j]:
+                elif a_values[j + 1] <= a_values[j] and b_values[j + 1] <= b_values[j]:
                     correlation_integer = correlation_integer + 1
                 else:
                     correlation_integer = correlation_integer - 1
@@ -284,7 +284,7 @@ def data_correlation(filter_list1=None,
     return func_result
 
 
-#  Warning Notes
+#  4.4. Warning Notes
 def warning_finder(filter_list=None,
                    warning_amount=1,
                    abs_parameter=True,
@@ -304,6 +304,7 @@ def warning_finder(filter_list=None,
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     df = data_filter(filter_list, cols=cols, data=data)
     cols_list = list(df.columns)
+    date_index = 0
     for k in list_of_non_math:
         for i in range(df.shape[1]):
             if k == cols_list[i]:
@@ -317,7 +318,7 @@ def warning_finder(filter_list=None,
             df_temp = data_filter(filter_list=[cols_list[date_index], cols_list[i]], data=df)
             if abs_parameter is True:
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount) |
-                                        (df_temp[cols_list[i]] <= warning_amount *-1 )]
+                                             (df_temp[cols_list[i]] <= warning_amount * -1)]
             else:
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
 
