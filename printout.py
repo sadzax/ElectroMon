@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import analyzer
 import columns
@@ -7,9 +8,9 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 cols = columns.columns_analyzer()
-# database = analyzer.pass_the_nan(None, cols)  # it's faster to use pickle below
-# database.to_pickle('main_dataframe.pkl')
-database = pd.read_pickle('main_dataframe.pkl')
+database = analyzer.pass_the_nan(None, cols)  # it's faster to use pickle below
+database.to_pickle('main_dataframe.pkl')
+# database = pd.read_pickle('main_dataframe.pkl')
 data = database
 
 
@@ -45,14 +46,14 @@ else:
     answering('Хотите вывести подробные данные?', yes=log_time_df, no='')
 
 
-# info_print('Анализ периодов массовой некорректности измерений')
-# log_nans = analyzer.total_nan_counter(data=database, cols=cols)
-# log_nans_df = analyzer.total_nan_counter_df(source_dict=log_nans, orient='index')
-# if len(log_nans) == 0:
-#     print(f"\n Периоды некорректных измерений не выявлены")
-# else:
-#     print(f"\n Выявлено {len(log_nans)} замеров с некорректными данными НКВВ")
-#     answering('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no='')
+info_print('Анализ периодов массовой некорректности измерений')
+log_nans = analyzer.total_nan_counter(data=database, cols=cols)
+log_nans_df = analyzer.total_nan_counter_df(source_dict=log_nans, orient='index')
+if len(log_nans) == 0:
+    print(f"\n Периоды некорректных измерений не выявлены")
+else:
+    print(f"\n Выявлено {len(log_nans)} замеров с некорректными данными НКВВ")
+    answering('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no='')
 
 
 info_print('Анализ трендов стороны ВН')
@@ -66,12 +67,17 @@ for i in log_trends_HV_3_2:
     print(f"Среднее по {i} составило {log_trends_HV_3_2[i]}")
 print(f"Распределение значений {ex1} (гистограмма): \r")
 plots.histogram([ex1], data=database, data_distribution_parameter=False)
-
+print(f"Среднее значение по {ex2}: \r")
+log_trends_HV_3_2 = analyzer.data_average_finder(filter_list=[ex2], abs_parameter=True)
+for i in log_trends_HV_3_2:
+    print(f"Среднее по {i} составило {log_trends_HV_3_2[i]}")
+print(f"Распределение значений {ex2} (гистограмма): \r")
+plots.histogram([ex2], data=database, data_distribution_parameter=False)
 
 info_print('Анализ сигнализации со стороны ВН')
 w1 = 1.0
 w2 = 1.5
-print(f"Превышение уровней {ex1} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r")
+print(f"\nПревышение уровней {ex1} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r")
 
 
 def warning_printer(filter_list_append, warning_param1=w1, warning_param2=w2, warn_type='accident',
@@ -92,9 +98,10 @@ def warning_printer(filter_list_append, warning_param1=w1, warning_param2=w2, wa
             print(f"Превышение уровней {every_df.axes[1].values[1]} "
                   f"для срабатывания {warn_str} (±{warning_param}) сигнализации не выявлено")
         else:
-            print(f"Выявлено {log_warn[every_df].shape[0]} превышения(-ий) (±{warning_param}) "
-                  f"уровней {every_df.axes[1].values[1]}"
-                  f"для срабатывания {warn_str} сигнализации")
+            print(f"Выявлено превышений (±{warning_param}): {every_df.shape[0]} "
+                  f"уровней {every_df.axes[1].values[1]} для срабатывания {warn_str} сигнализации. "
+                  f"\n Процент срабатывания {round((every_df.shape[0] / log_total) * 100, 3)}%")
+            answering('Вывести список?', every_df)
 
 
 warning_printer([ex1], w1, w2, 'warning')
@@ -102,19 +109,22 @@ warning_printer([ex1], w1, w2, 'accident')
 
 w1 = 3.0
 w2 = 4.5
-print(f"Превышение уровней {ex2} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r")
-warning_printer([ex2], w1, w2, 'warning')
-warning_printer([ex2], w1, w2, 'accident')
+print(f"\nПревышение уровней {ex2} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r")
+warning_printer([ex2], w1, w2, 'warning', abs_parameter=True)
+warning_printer([ex2], w1, w2, 'accident', abs_parameter=True)
 
 
+info_print('Графики изменения значений напряжений в фазах А, В и С стороны ВН')
+plots.flat_graph(input_y=['U_HV'], data=database)
 
-print(f"\n")
 
-print(f"\nСреднее отклонение ∆tgδ стороны ВН составляет"
-      # f" по модулю {round(sum(delta_tg_HV_check) / len(delta_tg_HV_check), 3)}%"
-      # f" при общем количестве {len(delta_tg_HV_check)} "
-      f"показателей (исключены значения '∆tgδ = -10')")
-print(f"\nПревышение уровня ∆tgδ ±1% для срабатывания"
-      # f" предупредительной сигнализации: {len(analyzer.delta_tg_checker_warning())}"
-      # f" случая(-ев) \n {analyzer.delta_tg_checker_warning()}' - "
-      f"")
+info_print('Графики изменения активной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН')
+plots.flat_graph(input_y=['Ia_HV'], data=database)
+
+
+info_print('Графики изменения реактивной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН')
+plots.flat_graph(input_y=['Ir_HV'], data=database)
+
+
+info_print('Графики изменения значений tgδ высоковольтных вводов фаз А, В и С стороны ВН')
+plots.flat_graph(input_y=['tg_HV'], data=database)
