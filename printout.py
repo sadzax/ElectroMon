@@ -8,6 +8,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 cols = columns.columns_analyzer()
+print('Чтение и обработка файла...')
 database = analyzer.pass_the_nan(None, cols)  # it's faster to use pickle below
 database.to_pickle('main_dataframe.pkl')
 # database = pd.read_pickle('main_dataframe.pkl')
@@ -114,17 +115,32 @@ warning_printer([ex2], w1, w2, 'warning', abs_parameter=True)
 warning_printer([ex2], w1, w2, 'accident', abs_parameter=True)
 
 
-info_print('Графики изменения значений напряжений в фазах А, В и С стороны ВН')
+info_print('Графики изменения значений напряжений в фазах А, В и С стороны ВН-220кВ')
 plots.flat_graph(input_y=['U_HV'], data=database)
 
 
-info_print('Графики изменения активной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН')
+info_print('Графики изменения активной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН-220кВ')
 plots.flat_graph(input_y=['Ia_HV'], data=database)
 
 
-info_print('Графики изменения реактивной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН')
+info_print('Графики изменения реактивной составляющей токов утечек высоковольтных вводов фаз А, В и С'
+           ' стороны ВН-220кВ')
 plots.flat_graph(input_y=['Ir_HV'], data=database)
 
 
-info_print('Графики изменения значений tgδ высоковольтных вводов фаз А, В и С стороны ВН')
+info_print('Графики изменения значений tgδ высоковольтных вводов фаз А, В и С стороны ВН-220кВ')
 plots.flat_graph(input_y=['tg_HV'], data=database)
+
+
+info_print('Графики изменения значений емкостей С1 высоковольтных вводов фаз А, В и С стороны ВН-220кВ')
+plots.flat_graph(input_y=['C_HV'], data=database)
+
+
+info_print('Графики изменения значений ∆tgδ (изменение tgδ относительно начальных значений) высоковольтных вводов'
+           ' фаз А, В и С стороны ВН-220кВ')
+plots.flat_graph(input_y=['∆tgδ_HV'], data=database)
+
+
+info_print('Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
+           ' высоковольтных вводов фаз А, В и С стороны ВН-220кВ')
+plots.flat_graph(input_y=['∆C_HV'], data=database)
