@@ -217,6 +217,7 @@ def data_filter(filter_list,
 def data_average_finder(filter_list=None,
                         abs_parameter=True,
                         unite_parameter=False,
+                        round_parameter=3,
                         list_of_non_math=None,
                         cols=None,
                         data: pd.core = None,
@@ -247,14 +248,16 @@ def data_average_finder(filter_list=None,
                     values_without_nan = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
                 else:
                     values_without_nan = [x for x in columns_list_of_values if not np.isnan(x)]
-                func_result[func_columns_list[i]] = sum(values_without_nan) / len(values_without_nan)
+                func_result[func_columns_list[i]] = round(sum(values_without_nan)
+                                                          / len(values_without_nan), round_parameter)
             else:
                 if abs_parameter is True:
                     dump = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
                 else:
                     dump = [x for x in columns_list_of_values if not np.isnan(x)]
                 func_result_prev = func_result_prev + dump
-                func_result = {'Average: ': sum(func_result_prev) / len(func_result_prev)}
+                func_result = {'Average: ': round(sum(func_result_prev)
+                                                  / len(func_result_prev), round_parameter)}
     return func_result
 
 
