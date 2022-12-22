@@ -86,7 +86,8 @@ def values_time_analyzer(col_number=0,
                          sep=devices.nkvv.work_file_sep,
                          encoding=devices.nkvv.work_file_default_encoding,
                          gap_const_day=1440,
-                         gap_const_hour=60):
+                         gap_const_hour=60,
+                         exact_gap=True):
     if data is None:
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
@@ -97,21 +98,35 @@ def values_time_analyzer(col_number=0,
         if (df[a_row + 1] - df[a_row]).astype('timedelta64[m]') == time_sequence_min:
             pass
         else:
-            gap = (df[a_row + 1] - df[a_row]).astype('timedelta64[m]')
-            if gap > gap_const_day:
-                err = (df[a_row + 1] - df[a_row]).astype('timedelta64[D]')
-            elif gap > gap_const_hour:
-                err = (df[a_row + 1] - df[a_row]).astype('timedelta64[h]')
-            elif gap < time_sequence_min:
-                err = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
+            if exact_gap is False:  # for console use
+                gap = (df[a_row + 1] - df[a_row]).astype('timedelta64[m]')
+                if gap > gap_const_day:
+                    err = (df[a_row + 1] - df[a_row]).astype('timedelta64[D]')
+                elif gap > gap_const_hour:
+                    err = (df[a_row + 1] - df[a_row]).astype('timedelta64[h]')
+                elif gap < time_sequence_min:
+                    err = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
+                else:
+                    err = gap
             else:
-                err = gap
+                err = df[a_row + 1] - df[a_row]
             error_dict[a_row + 1] = [pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y'),
                                      pd.to_datetime(str(df[a_row])).strftime('%H.%M'),
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y'),
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M'),
                                      err]
     return error_dict
+
+
+#  2.1.1. Analysis of time of measurements to dataframe
+def values_time_analyzer_df(source_dict=None,
+                            orient='index',
+                            cols=None):
+    if source_dict is None:
+        source_dict = values_time_analyzer()
+    if cols is None:
+        cols = ["Дата", "Время", "Дата след.", "Время след.", "Разница"]
+    return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols)
 
 
 #  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS LISTS!
@@ -142,6 +157,40 @@ def pass_the_nan(default_dict_for_replacement=None,
                                 if data.iloc[a_row, a_column] == every_replacing_value:
                                     data.iloc[a_row, a_column] = np.NaN
     return data
+
+
+#  2.3. Counting the nan_strings:
+def total_nan_counter(data=None,
+                      cols=None,
+                      file=devices.nkvv.work_file,
+                      sep=devices.nkvv.work_file_sep,
+                      encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    nans_dict = {}
+    for a_row in range(data.shape[0]):
+        nan_counter = 0
+        for a_column in range(len(cols)):
+            if pd.isna(data.iloc[a_row, a_column]) is True:
+                nan_counter += 1
+        if nan_counter > (len(cols)/3):
+            nans_dict[a_row] = [pd.to_datetime(str(data.iloc[a_row, 0])).strftime('%d.%m.%y'),
+                                pd.to_datetime(str(data.iloc[a_row, 0])).strftime('%H.%M'),
+                                round((nan_counter/len(cols))*100, 0)]  # correct percentage
+    return nans_dict
+
+
+#  2.3.1.  Counting the nan_strings to dataframe:
+def total_nan_counter_df(source_dict=None,
+                         orient='index',
+                         cols=None):
+    if source_dict is None:
+        source_dict = total_nan_counter()
+    if cols is None:
+        cols = ['Дата', 'Время', '% некорректных замеров']
+    return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols)
 
 
 #  3.1. Filtering
@@ -326,6 +375,5 @@ def warning_finder(filter_list=None,
                                              (df_temp[cols_list[i]] <= warning_amount * -1)]
             else:
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
-
             func_result.append(df_temp_result)
     return func_result
