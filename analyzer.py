@@ -134,8 +134,13 @@ def pass_the_nan(default_dict_for_replacement=None,
             for a_param in range(len(cols[0])):
                 if cols[a_column][a_param] == seeking_param:
                     for a_row in range(data.shape[0]):  # Need to optimize memory usage
-                        if data.iloc[a_row, a_column] == replacing_value:
-                            data.iloc[a_row, a_column] = np.NaN
+                        if isinstance(replacing_value, list) is False:
+                            if data.iloc[a_row, a_column] == replacing_value:
+                                data.iloc[a_row, a_column] = np.NaN
+                        else:
+                            for every_replacing_value in replacing_value:
+                                if data.iloc[a_row, a_column] == every_replacing_value:
+                                    data.iloc[a_row, a_column] = np.NaN
     return data
 
 

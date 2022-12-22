@@ -1,7 +1,20 @@
+import pandas as pd
 import analyzer
+import columns
+import plots
+import devices
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+cols = columns.columns_analyzer()
+database = analyzer.pass_the_nan(None, cols)
+database.to_pickle('main_dataframe.pkl')
 
 
-delta_tg_HV_check = analyzer.delta_tg_checker()
+
+
+
+
+
 
 
 print(analyzer.values_time_analyzer())

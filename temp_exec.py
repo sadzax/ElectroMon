@@ -5,8 +5,8 @@ import plots
 import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 cols = columns.columns_analyzer()
-database = analyzer.pass_the_nan(None, cols)  # it's faster to use pickle above
-database.to_pickle('main_dataframe.pkl')
+# database = analyzer.pass_the_nan(None, cols)  # it's faster to use pickle below
+# database.to_pickle('main_dataframe.pkl')
 database = pd.read_pickle('main_dataframe.pkl')
 data = database
 
