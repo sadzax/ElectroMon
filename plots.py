@@ -11,6 +11,7 @@ def flat_graph(input_x: str = None,
                input_y: list = None,
                cols=None,
                data: pd.core = None,
+               title='',
                file=devices.nkvv.work_file,
                sep=devices.nkvv.work_file_sep,
                encoding=devices.nkvv.work_file_default_encoding,
@@ -31,6 +32,7 @@ def flat_graph(input_x: str = None,
     plt.ylabel(', '.join(input_y))
     df_y = analyzer.data_filter(input_y, cols=cols, data=data)
     legend = []
+    plt.title(title)
     for y_name in [col for col in df_y.columns]:
         x = df_x[input_x].tolist()
         y = df_y[y_name].tolist()
@@ -42,6 +44,7 @@ def flat_graph(input_x: str = None,
 #  Histogram for raw data and distribution data
 def histogram(value,
               bins=333,
+              title='',
               data_distribution_parameter=False,
               cols=None,
               data: pd.core = None,
@@ -53,29 +56,32 @@ def histogram(value,
         data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    legend = []
     if isinstance(value, str) is True:
         data[value].hist(bins=bins)
+        plt.title(title)
     if isinstance(value, list) is True:
-        legend = []
-        plt.xlabel(', '.join(value))
-        plt.ylabel('Количество значений')
         if data_distribution_parameter is True:
             data_distribution = analyzer.data_distribution_finder(value, data=data, cols=cols,
                                                                   unite_parameter=unite_parameter)
             for i in data_distribution:
                 legend.append(i)
                 data_distribution[i].hist(bins=bins)
-                plt.legend(legend)
         else:
             df = analyzer.data_filter(value, data=data, cols=cols)
             for i in df:
                 legend.append(i)
                 df[i].hist(bins=bins)
+        plt.legend(legend)
+        plt.title(title)
+        plt.xlabel(', '.join(value))
+        plt.ylabel('Количество значений')
 
 
 #  Correlation Plot
 def correlation_plot(filter_list1=None,
                      filter_list2=None,
+                     title='',
                      cols=None,
                      data: pd.core = None,
                      file=devices.nkvv.work_file,
@@ -100,6 +106,7 @@ def correlation_plot(filter_list1=None,
     fig, axs = plt.subplots()
     axs.grid(axis='both', color='gray', linestyle='--')
     max_len = 0
+    plt.title(title)
     legend = []
     for i in range(len(cr.keys())):
         if len(cr[keys_list[i]]) > max_len:
