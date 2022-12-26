@@ -1,9 +1,7 @@
-import numpy as np
 import pandas as pd
+import plots
 import analyzer
 import columns
-import plots
-import devices
 import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)

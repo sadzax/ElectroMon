@@ -1,12 +1,6 @@
 import numpy as np
 import pandas as pd
-import columns
 import devices
-import plots
-import temp_exec
-import sadzax
-import run
-import analyzer
 
 
 def get_data(usecols: list = None,

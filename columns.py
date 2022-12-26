@@ -1,7 +1,6 @@
-import devices
 import pandas as pd
+import devices
 import sadzax
-
 
 paste_values_rus = [
     "Дата создания записи",
