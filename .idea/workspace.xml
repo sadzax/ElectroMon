@@ -3,17 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="printouts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Book1.xlsb" beforeDir="false" afterPath="$PROJECT_DIR$/arch/Book1.xlsb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/columns.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/columns.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/devices.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/events.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ideas" beforeDir="false" afterPath="$PROJECT_DIR$/arch/ideas" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/plots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sadzax.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/sadzax.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp_cons.py" beforeDir="false" afterPath="$PROJECT_DIR$/arch/temp_cons.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp_exec.py" beforeDir="false" afterPath="$PROJECT_DIR$/arch/temp_exec.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +28,7 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/modules/devices.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/devices.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -81,6 +70,7 @@
       <recent name="D:\Cloud2022\sadzax\_NKVV" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Cloud2022\sadzax\_NKVV" />
       <recent name="D:\Cloud2022\sadzax\_NKVV\modules" />
       <recent name="D:\Cloud2022\sadzax\_NKVV\arch" />
     </key>
@@ -212,13 +202,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00001" summary="1.0">
-      <created>1669125523413</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1669125523413</updated>
     </task>
     <task id="LOCAL-00002" summary="1.1">
       <created>1669126426904</created>
@@ -556,7 +539,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671957147614</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="printouts">
+      <created>1672085388803</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1672085388804</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
