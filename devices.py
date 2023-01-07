@@ -1,13 +1,14 @@
 import csv
+import columns
 import os
 
 
 class Device:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
-nkvv = Device()
-nkvv.name = 'NKVV'
+nkvv = Device('NKVV')
 nkvv.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
 nkvv.monitoring_params = {'input': 220000, 'output': 110000}
 nkvv.log_types = {'measure': 'CSV', 'event': 'CSV'}
@@ -22,15 +23,14 @@ nkvv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                             'c_deviation': 0.0,
                                             'voltage_difference': 0.0}
 
-kiv = Device()
-kiv.name = 'KIV'
+kiv = Device('KIV')
 kiv.log_types = {'measure': 'xlsx', 'event': 'xlsx'}
 kiv.file_names_starts = {'measure': 'MeasJ', 'event': 'WorkJ'}
-
+#  kiv.work_file = 'upload/kiv/' + columns.kiv_xlsx_files_form()[0]
 
 #  russian_date_parser = lambda x: datetime.strptime(x, "DD.MM.YYY HH:MM:SS")
 
-
+#  unused
 def preview(file, limit):
     with open(file) as r_file:
         file_reader = csv.DictReader(r_file, delimiter=";")

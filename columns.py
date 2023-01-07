@@ -1,8 +1,9 @@
 import pandas as pd
 import devices
 import sadzax
+import os
 
-paste_values_rus = [
+devices.nkvv.paste_values_rus = [
     "Дата создания записи",
     "Дата сохранения в БД",
     "U_A1,кВ",
@@ -53,7 +54,7 @@ paste_values_rus = [
     "Freq,Гц",
     ""
     ]
-paste_values_utf8 = [
+devices.nkvv.paste_values_utf8 = [
     '\u0414\u0430\u0442\u0430 \u0441\u043e\u0437\u0434\u0430\u043d\u0438\u044f \u0437\u0430\u043f\u0438\u0441\u0438',
     '\u0414\u0430\u0442\u0430 \u0441\u043e\u0445\u0440\u0430\u043d\u0435\u043d\u0438\u044f \u0432 \u0411\u0414',
     'U_A1,\u043a\u0412',
@@ -104,7 +105,7 @@ paste_values_utf8 = [
     'Freq,\u0413\u0446',
     'Unnamed: 48'
     ]
-paste_values_rus_dict = {
+devices.nkvv.paste_values_rus_dict = {
  0: ['Дата создания записи', 'datetime', 'overall', 'no_voltage', 'time', 'time_of_measure', 'time_no_voltage'],
  1: ['Дата сохранения в БД', 'datetime', 'overall', 'no_voltage', 'save', 'time_of_saving', 'save_no_voltage'],
  2: ['U_A1,кВ', 'voltage', 'A1', 'HV', 'U', 'voltage_difference', 'U_HV'],
@@ -160,13 +161,20 @@ paste_values_rus_dict = {
 #         short_search_name, full_search_name, concat_of_short_search_name_and_voltage_param]
 
 
-indexer = [x for x in range(len(paste_values_rus))]
+indexer = [x for x in range(len(devices.nkvv.paste_values_rus))]
 
 
-def columns_maker(file=devices.nkvv.work_file,
+def columns_maker(type='nkvv',
+                  file=devices.nkvv.work_file,
                   sep=devices.nkvv.work_file_sep,
                   encoding=devices.nkvv.work_file_default_encoding):
-    return list(pd.read_csv(file, sep=sep, encoding=encoding))
+    """
+    Need to take it to the class of Devices / NKVV
+    """
+    if type == 'nkvv':
+        return list(pd.read_csv(file, sep=sep, encoding=encoding))
+    elif type == 'kiv':
+        return list(pd.read_excel(file))
 
 
 def dict_maker(list_for_columns=None,
@@ -187,6 +195,43 @@ types_of_data = {
         'Гц': 'frequency',
         'Дата': 'datetime',
 }
+
+#  rebuild with classes!
+kiv_types_of_data = {
+        '°С': 'temperature',
+        'Дата': 'datetime',
+        'U': 'voltage',
+        'C1': 'power',
+        'tg': 'percentage',
+        '∆C': 'deviation'
+}
+
+
+def kiv_xlsx_files_form():
+    a_list_of_files = [filename for filename
+         in os.listdir(devices.kiv.work_file_folder)if filename.startswith(devices.kiv.file_names_starts['measure'])]
+    return a_list_of_files
+
+
+def kiv_xlsx_columns_analyzer(source_dict=None,
+                              range_limit=None):
+    if source_dict is None:
+        source_dict = dict_maker(list(pd.read_excel(devices.kiv.work_file_folder + kiv_xlsx_files_form()[0]).iloc[3]))
+    if range_limit is None:
+        range_limit = len(source_dict)
+    for i in range(range_limit):
+        tail = sadzax.Trimmer.right(source_dict[i][0], 2)
+        head = sadzax.Trimmer.left(source_dict[i][0], 4)
+        for key in kiv_types_of_data:
+            if key == tail:
+                source_dict[i].append(kiv_types_of_data[key])
+            elif key == head:
+                source_dict[i].append(kiv_types_of_data[key])
+            elif 'ф.' in source_dict[i]:
+                source_dict[i].append(kiv_types_of_data[key])
+            else:
+                source_dict[i].append('other')
+    return source_dict
 
 
 #  Analyze all columns
@@ -268,3 +313,6 @@ def columns_analyzer(source_dict=None,
     for i in range(range_limit):
         source_dict[i].append(source_dict[i][4] + '_' + source_dict[i][3])
     return source_dict
+
+
+

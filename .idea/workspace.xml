@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv start">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/columns.py" beforeDir="false" afterPath="$PROJECT_DIR$/columns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/temp_exec_kiv.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp_exec_kiv.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/upload/kiv/MeasJ a284 #572665920 30-12-2022.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/upload/kiv/MeasJ a284 #572665920 30-12-2022.xlsx" afterDir="false" />
     </list>
@@ -78,20 +79,17 @@
       <recent name="D:\Cloud2022\sadzax\_NKVV\arch" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.temp_exec_kiv">
+  <component name="RunManager" selected="Python.devices">
     <configuration name="devices" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="_NKVV" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\Cloud2022\sadzax\_NKVV\devices.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/devices.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -167,6 +165,9 @@
       <module name="_NKVV" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -183,11 +184,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.devices" />
         <item itemvalue="Python.temp_exec_kiv" />
         <item itemvalue="Python.run" />
         <item itemvalue="Python.temp_exec" />
         <item itemvalue="Python.plots" />
-        <item itemvalue="Python.devices" />
       </list>
     </recent_temporary>
   </component>
@@ -202,13 +203,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00005" summary="1.2">
-      <created>1669287610104</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1669287610104</updated>
     </task>
     <task id="LOCAL-00006" summary="1.2">
       <created>1669295372587</created>
@@ -546,7 +540,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672788868039</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="kiv start">
+      <created>1672955326876</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1672955326876</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
