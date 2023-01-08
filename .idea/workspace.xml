@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv start">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv columns debugging">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/columns.py" beforeDir="false" afterPath="$PROJECT_DIR$/columns.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/temp_exec_kiv.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp_exec_kiv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/kiv/MeasJ a284 #572665920 30-12-2022.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/upload/kiv/MeasJ a284 #572665920 30-12-2022.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,13 +202,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00006" summary="1.2">
-      <created>1669295372587</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1669295372587</updated>
     </task>
     <task id="LOCAL-00007" summary="1.3">
       <created>1669455905045</created>
@@ -547,7 +539,14 @@
       <option name="project" value="LOCAL" />
       <updated>1672955326876</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="kiv columns debugging">
+      <created>1673098167044</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1673098167044</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -562,7 +561,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.3.4" />
     <MESSAGE value="1.4" />
     <MESSAGE value="1.5" />
     <MESSAGE value="1.6.1" />
@@ -587,6 +585,7 @@
     <MESSAGE value="added list handler for passing the nans in main DF" />
     <MESSAGE value="printouts" />
     <MESSAGE value="kiv start" />
-    <option name="LAST_COMMIT_MESSAGE" value="kiv start" />
+    <MESSAGE value="kiv columns debugging" />
+    <option name="LAST_COMMIT_MESSAGE" value="kiv columns debugging" />
   </component>
 </project>
