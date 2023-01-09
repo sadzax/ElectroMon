@@ -9,18 +9,21 @@ import os
 
 indexer = [x for x in range(len(devices.nkvv.paste_values_rus))]
 
+#  Need to organize "file=devices.nkvv.work_file" etc..... ->  to func.
 
-def columns_maker(type='nkvv',
-                  file=devices.nkvv.work_file,
-                  sep=devices.nkvv.work_file_sep,
-                  encoding=devices.nkvv.work_file_default_encoding):
+
+def columns_list_maker(device_type='nkvv',
+                       file=devices.nkvv.work_file,
+                       sep=devices.nkvv.work_file_sep,
+                       encoding=devices.nkvv.work_file_default_encoding,
+                       data: pd.core = None):
     """
-    Need to take it to the class of Devices / NKVV
+    Need to take it to the class of Devices
     """
-    if type == 'nkvv':
+    if device_type == 'nkvv':
         return list(pd.read_csv(file, sep=sep, encoding=encoding))
-    elif type == 'kiv':
-        return list(pd.read_excel(file))
+    elif device_type == 'kiv':
+        return list(data.iloc[3])
 
 
 def dict_maker(list_for_columns=None,
@@ -28,7 +31,7 @@ def dict_maker(list_for_columns=None,
                sep=devices.nkvv.work_file_sep,
                encoding=devices.nkvv.work_file_default_encoding):
     if list_for_columns is None:
-        list_for_columns = columns_maker(file=file, sep=sep, encoding=encoding)
+        list_for_columns = columns_list_maker(file=file, sep=sep, encoding=encoding)
     return {v: [k] for v, k in enumerate(list_for_columns)}
 
 
@@ -51,12 +54,6 @@ kiv_types_of_data = {
         'tg': 'percentage',
         '∆C': 'deviation'
 }
-
-
-def kiv_xlsx_files_form():
-    a_list_of_files = [filename for filename
-         in os.listdir(devices.kiv.work_file_folder)if filename.startswith(devices.kiv.file_names_starts['measure'])]
-    return a_list_of_files
 
 
 def kiv_xlsx_columns_analyzer(source_dict=None,
@@ -87,7 +84,7 @@ def columns_analyzer(source_dict=None,
     if source_dict is None:
         source_dict = dict_maker(None, file=file, sep=sep, encoding=encoding)
     if range_limit is None:
-        range_limit = len(columns_maker(file=file, sep=sep, encoding=encoding))
+        range_limit = len(columns_list_maker(file=file, sep=sep, encoding=encoding))
     for i in range(range_limit):
         tail = sadzax.Trimmer.right(source_dict[i][0], 2)
         head = sadzax.Trimmer.left(source_dict[i][0], 4)

@@ -17,7 +17,7 @@ def delta_tg_checker(cols=None,
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     df = []
-    for column_index in range(len(columns.columns_maker(file=file, sep=sep, encoding=encoding))):
+    for column_index in range(len(columns.columns_list_maker(file=file, sep=sep, encoding=encoding))):
         if cols[column_index][4] == '∆tgδ' and cols[column_index][3] == 'HV':
             df.append(data[cols[column_index][0]].tolist())
     list_of_all_values = list(itertools.chain.from_iterable(df))
