@@ -1,8 +1,10 @@
+import warnings
+
 import pandas as pd
-import plots
+
 import analyzer
 import columns
-import warnings
+import plots
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -107,7 +109,7 @@ else:
 
 info_print('Анализ трендов стороны ВН')
 
-ex1 = '∆tgδ_HV'
+ex1 = '∆tg_HV'
 ex2 = '∆C_HV'
 print(f'Анализ корреляции данных {ex1}, {ex2} от температуры воздуха (при корреляции изменения на графике синхронны)')
 plots.correlation_plot(filter_list1=[ex1, ex2], filter_list2=['tair'])
@@ -154,7 +156,7 @@ print_flat_graph(input_y=['C_HV'], data=database, title=hv5)
 
 hv6 = 'Графики изменения значений ∆tgδ (изменение tgδ относительно начальных значений) высоковольтных вводов' \
       ' фаз А, В и С стороны ВН-220кВ'
-print_flat_graph(input_y=['∆tgδ_HV'], data=database, title=hv6)
+print_flat_graph(input_y=['∆tg_HV'], data=database, title=hv6)
 
 hv7 = 'Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений) высоковольтных вводов' \
       ' фаз А, В и С стороны ВН-220кВ'
@@ -165,7 +167,7 @@ print_flat_graph(input_y=['∆C_HV'], data=database, title=hv7)
 
 info_print('Анализ трендов стороны СН')
 
-ex3 = '∆tgδ_MV'
+ex3 = '∆tg_MV'
 ex4 = '∆C_MV'
 print(f'Анализ корреляции данных {ex3}, {ex4} от температуры воздуха (при корреляции изменения на графике синхронны)')
 plots.correlation_plot(filter_list1=[ex3, ex4], filter_list2=['tair'])
@@ -212,7 +214,7 @@ print_flat_graph(input_y=['C_MV'], data=database, title=mv5)
 
 mv6 = 'Графики изменения значений ∆tgδ (изменение tgδ относительно начальных значений) высоковольтных вводов' \
       ' фаз А, В и С стороны СН-110кВ'
-print_flat_graph(input_y=['∆tgδ_MV'], data=database, title=mv6)
+print_flat_graph(input_y=['∆tg_MV'], data=database, title=mv6)
 
 mv7 = 'Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений) высоковольтных вводов' \
       ' фаз А, В и С стороны СН-110кВ'

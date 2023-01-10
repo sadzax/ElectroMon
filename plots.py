@@ -1,8 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import columns
+
 import analyzer
+import columns
 import devices
+
 database = pd.read_pickle('main_dataframe.pkl')
 
 
@@ -24,7 +26,7 @@ def flat_graph(input_x: str = None,
     if input_x is None:
         input_x = 'Дата создания записи'
     if input_y is None:
-        input_y = ['∆tgδ_HV', '∆tgδ_MV']
+        input_y = ['∆tg_HV', '∆tg_MV']
     fig, axs = plt.subplots(figsize=(size_x, size_y))
     axs.grid(axis='both', color='gray', linestyle='--')
     plt.xlabel(input_x)
@@ -92,9 +94,9 @@ def correlation_plot(filter_list1=None,
     if data is None:
         data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
     if filter_list1 is None:
-        filter_list1 = ['∆tgδ_HV']
+        filter_list1 = ['∆tg_HV']
     if filter_list2 is None:
-        filter_list2 = ['∆tgδ_MV']
+        filter_list2 = ['∆tg_MV']
     cr = analyzer.data_correlation(filter_list1=filter_list1,
                                    filter_list2=filter_list2,
                                    cols=cols,

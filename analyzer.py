@@ -1,8 +1,10 @@
+import itertools
+
 import numpy as np
 import pandas as pd
+
 import columns
 import devices
-import itertools
 
 
 #  ______ Archive _ Проверка параметра ∆tgδ для технических целей
@@ -18,7 +20,7 @@ def delta_tg_checker(cols=None,
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     df = []
     for column_index in range(len(columns.columns_list_maker(file=file, sep=sep, encoding=encoding))):
-        if cols[column_index][4] == '∆tgδ' and cols[column_index][3] == 'HV':
+        if cols[column_index][4] == '∆tg' and cols[column_index][3] == 'HV':
             df.append(data[cols[column_index][0]].tolist())
     list_of_all_values = list(itertools.chain.from_iterable(df))
     list_of_filtered_values = []
@@ -225,7 +227,7 @@ def data_average_finder(filter_list=None,
                         sep=devices.nkvv.work_file_sep,
                         encoding=devices.nkvv.work_file_default_encoding):
     if filter_list is None:
-        filter_list = ['time', '∆tgδ_HV']
+        filter_list = ['time', '∆tg_HV']
     if list_of_non_math is None:
         list_of_non_math = ['Дата создания записи',
                             'Дата сохранения в БД']
@@ -309,9 +311,9 @@ def data_correlation(filter_list1=None,
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     if filter_list1 is None:
-        filter_list1 = ['∆tgδ_HV']
+        filter_list1 = ['∆tg_HV']
     if filter_list2 is None:
-        filter_list2 = ['∆tgδ_MV']
+        filter_list2 = ['∆tg_MV']
     func_result = {}
     df1 = data_filter(filter_list1, cols=cols, data=data)
     df2 = data_filter(filter_list2, cols=cols, data=data)
