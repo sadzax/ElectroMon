@@ -11,7 +11,7 @@ database = pd.read_pickle('main_dataframe.pkl')
 #  Simple Graph
 def flat_graph(input_x: str = None,
                input_y: list = None,
-               cols=None,
+               cols: dict = None,
                data: pd.core = None,
                title='',
                file=devices.nkvv.work_file,

@@ -24,4 +24,4 @@ cols_dict = columns.columns_analyzer(device_type='kiv', list_for_columns=cols_li
 ex1 = '∆tg_MV'
 ex2 = '∆C_MV'
 
-plots.flat_graph(cols=cols_dict, data=data, input_x='time', input_y=[ex1])
+plots.flat_graph(cols=cols_dict, data=df, input_x='time', input_y=[ex1])
