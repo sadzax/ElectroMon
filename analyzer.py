@@ -1,48 +1,10 @@
-import numpy as np
-import pandas as pd
-import columns
-import devices
 import itertools
 
+import numpy as np
+import pandas as pd
 
-#  ______ Archive _ Проверка параметра ∆tgδ для технических целей
-def delta_tg_checker(cols=None,
-                     data: pd.core = None,
-                     exclude_values=(-10.0, -300.0),
-                     file=devices.nkvv.work_file,
-                     sep=devices.nkvv.work_file_sep,
-                     encoding=devices.nkvv.work_file_default_encoding):
-    if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
-    if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
-    df = []
-    for column_index in range(len(columns.columns_list_maker(file=file, sep=sep, encoding=encoding))):
-        if cols[column_index][4] == '∆tgδ' and cols[column_index][3] == 'HV':
-            df.append(data[cols[column_index][0]].tolist())
-    list_of_all_values = list(itertools.chain.from_iterable(df))
-    list_of_filtered_values = []
-    for value in list_of_all_values:
-        if value not in exclude_values:
-            list_of_filtered_values.append(value)
-    list_of_filtered_abs_values = [abs(x) for x in list_of_filtered_values]  # уточнить по модулю отклонения
-    return list_of_filtered_abs_values
-
-
-#  ______ Archive _ Проверка срабатывания сигнализации срабатывания предупредительной сигнализации (1%)
-def delta_tg_checker_warning(operating_data=None,
-                             warning=1):
-    if operating_data is None:
-        operating_data = delta_tg_checker()
-    warning_list = []
-    for a_value in operating_data:
-        if abs(a_value) >= warning:
-            warning_list.append(a_value)
-    if not warning_list:
-        print(f"Превышение уровня ∆tgδ для срабатывания сигнализации не выявлено")  # убрать
-        return warning_list
-    else:
-        return warning_list
+import columns
+import devices
 
 
 #  1.0. Importing CSV
@@ -225,7 +187,7 @@ def data_average_finder(filter_list=None,
                         sep=devices.nkvv.work_file_sep,
                         encoding=devices.nkvv.work_file_default_encoding):
     if filter_list is None:
-        filter_list = ['time', '∆tgδ_HV']
+        filter_list = ['time', '∆tg_HV']
     if list_of_non_math is None:
         list_of_non_math = ['Дата создания записи',
                             'Дата сохранения в БД']
@@ -309,9 +271,9 @@ def data_correlation(filter_list1=None,
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
     if filter_list1 is None:
-        filter_list1 = ['∆tgδ_HV']
+        filter_list1 = ['∆tg_HV']
     if filter_list2 is None:
-        filter_list2 = ['∆tgδ_MV']
+        filter_list2 = ['∆tg_MV']
     func_result = {}
     df1 = data_filter(filter_list1, cols=cols, data=data)
     df2 = data_filter(filter_list2, cols=cols, data=data)
@@ -380,3 +342,44 @@ def warning_finder(filter_list=None,
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
             func_result.append(df_temp_result)
     return func_result
+
+
+#  ______ Archive _ Проверка параметра ∆tgδ для технических целей
+def delta_tg_checker(cols=None,
+                     data: pd.core = None,
+                     exclude_values=(-10.0, -300.0),
+                     file=devices.nkvv.work_file,
+                     sep=devices.nkvv.work_file_sep,
+                     encoding=devices.nkvv.work_file_default_encoding):
+    if data is None:
+        data = get_data(file=file, sep=sep, encoding=encoding)
+    if cols is None:
+        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+    df = []
+    for column_index in range(len(columns.columns_list_maker(file=file, sep=sep, encoding=encoding))):
+        if cols[column_index][4] == '∆tg' and cols[column_index][3] == 'HV':
+            df.append(data[cols[column_index][0]].tolist())
+    list_of_all_values = list(itertools.chain.from_iterable(df))
+    list_of_filtered_values = []
+    for value in list_of_all_values:
+        if value not in exclude_values:
+            list_of_filtered_values.append(value)
+    list_of_filtered_abs_values = [abs(x) for x in list_of_filtered_values]  # уточнить по модулю отклонения
+    return list_of_filtered_abs_values
+
+
+#  ______ Archive _ Проверка срабатывания сигнализации срабатывания предупредительной сигнализации (1%)
+def delta_tg_checker_warning(operating_data=None,
+                             warning=1):
+    if operating_data is None:
+        operating_data = delta_tg_checker()
+    warning_list = []
+    for a_value in operating_data:
+        if abs(a_value) >= warning:
+            warning_list.append(a_value)
+    if not warning_list:
+        print(f"Превышение уровня ∆tgδ для срабатывания сигнализации не выявлено")  # убрать
+        return warning_list
+    else:
+        return warning_list
+
