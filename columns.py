@@ -60,7 +60,7 @@ def columns_analyzer(device_type='nkvv',
                 result_dict[i].append('overall')
             else:
                 codename = sadzax.Trimmer.right((sadzax.Trimmer.left(result_dict[i][0],
-                                                                    result_dict[i][0].find("_") + 3)), 2)
+                                                                     result_dict[i][0].find("_") + 3)), 2)
                 result_dict[i].append(codename)
             if sadzax.Trimmer.right(result_dict[i][2], 1) == '1':
                 result_dict[i].append('HV')
