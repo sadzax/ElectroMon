@@ -24,7 +24,7 @@ def flat_graph(input_x: str = None,
     axs.grid(axis='both', color='gray', linestyle='--')
     plt.title(title)
     df_x = analyzer.data_filter(input_x, cols=cols, data=data)
-    plt.xlabel(input_x)
+    plt.xlabel(str(df_x[df_x.columns[0]]))
     df_y = analyzer.data_filter(input_y, cols=cols, data=data)
     plt.ylabel(', '.join(input_y))
     legend = []

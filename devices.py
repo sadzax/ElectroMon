@@ -27,7 +27,7 @@ class Device:
     def work_file_picking(self, num=0):
         return self.work_file_folder + Device.work_file_listing(self)[num]
 
-    def return_attributes(self):  # Work on
+    def links(self):  # Work on
         return [self.name, self.work_file, self.work_file_sep, self.work_file_default_encoding]
 
 

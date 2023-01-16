@@ -7,30 +7,47 @@ import columns
 import devices
 
 
-#  1.0. Importing CSV
-def get_data(usecols: list = None,
-             file=devices.nkvv.work_file,
-             sep=devices.nkvv.work_file_sep,
-             encoding=devices.nkvv.work_file_default_encoding):
-    if usecols is None:
-        parse_dates = devices.nkvv.work_file_parse_dates
-    else:
-        parse_date_columns = []
-        for k in usecols:
-            if k in devices.nkvv.work_file_parse_dates:
-                parse_date_columns.append(k)
-        parse_dates = parse_date_columns
-    data = pd.read_csv(file,
-                       sep=sep,
-                       encoding=encoding,
-                       parse_dates=parse_dates,
-                       usecols=usecols,
-                       dayfirst=True)
+#  1.0. Importing data
+def get_data(device_type='nkvv',
+             usecols: list = None):
+    data = pd.DataFrame.empty
+    if device_type == 'nkvv':
+        file = devices.nkvv.work_file
+        sep = devices.nkvv.work_file_sep
+        encoding = devices.nkvv.work_file_default_encoding
+        if usecols is None:
+            parse_dates = devices.nkvv.work_file_parse_dates
+        else:
+            parse_date_columns = []
+            for k in usecols:
+                if k in devices.nkvv.work_file_parse_dates:
+                    parse_date_columns.append(k)
+            parse_dates = parse_date_columns
+        data = pd.read_csv(file,
+                           sep=sep,
+                           encoding=encoding,
+                           parse_dates=parse_dates,
+                           usecols=usecols,
+                           dayfirst=True)
+    if device_type == 'kiv':
+        file = devices.kiv.work_file
+        data_raw = pd.read_excel(file)
+        if data_raw.columns[0] == ' № ':
+            data = data_raw
+        else:
+            for i in range(data_raw.shape[0]):
+                if data_raw.iloc[i, 0] != ' № ':
+                    pass
+                else:
+                    data = data_raw.iloc[i]
+                    # noinspection PyUnreachableCode
+                    break
     return data
 
 
 #  2.0. Count the strings
-def total_log_counter(data: pd.core = None,
+def total_log_counter(device_type='nkvv',
+                      data: pd.core = None,
                       file=devices.nkvv.work_file,
                       sep=devices.nkvv.work_file_sep,
                       encoding=devices.nkvv.work_file_default_encoding):
@@ -156,9 +173,10 @@ def total_nan_counter_df(source_dict=None,
 
 
 #  3.1. Filtering
-def data_filter(filter_list,
-                cols=None,
+def data_filter(filter_list: list,
+                cols: dict = None,
                 data: pd.core = None,
+                device_type='nkvv',  # Work on
                 file=devices.nkvv.work_file,
                 sep=devices.nkvv.work_file_sep,
                 encoding=devices.nkvv.work_file_default_encoding):
@@ -166,12 +184,19 @@ def data_filter(filter_list,
         data = get_data(file=file, sep=sep, encoding=encoding)
     if cols is None:
         cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
-    filter_list_indexes = []
-    for a_column in range(len(cols)):
+    else:
+        cols_by_data = {k: [v] for v, k in enumerate(data.columns)}
+        if len(cols_by_data) > len(cols):
+            # Allows to filter already trimmed data
+            cols = {k: [v] for k, v in cols.items() if cols[k][0] in list(cols_by_data.values())}
+    filter_list_keys = []
+    for a_column in list(cols.keys()):
         for a_param in range(len(cols[0])):
             if cols[a_column][a_param] in filter_list:
-                filter_list_indexes.append(a_column)
-    filter_list_names = [cols[i][0] for i in filter_list_indexes]
+                filter_list_keys.append(a_column)
+    filter_list_names = [cols[i][0] for i in filter_list_keys]
+    # Prevent trying to add new columns to already trimmed data:
+    filter_list_names = [name for name in filter_list_names if name in list(data.columns)]
     return data[filter_list_names]
 
 

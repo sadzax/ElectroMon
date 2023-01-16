@@ -43,7 +43,7 @@ def columns_analyzer(device_type='nkvv',
     """
     if list_for_columns is None:
         list_for_columns = columns_list_maker(device_type=device_type)
-    source_dict = {v: [k] for v, k in enumerate(list_for_columns)}
+    source_dict = {k: [v] for k, v in enumerate(list_for_columns)}
     result_dict = source_dict.copy()
     if device_type == "nkvv":
         for i in range(len(result_dict)):
@@ -101,7 +101,7 @@ def columns_analyzer(device_type='nkvv',
             else:
                 result_dict[i].append('no_voltage')
             for a_key in devices.kiv.data_search_name:
-                if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key and 'ф.' in str(result_dict[i][0]):
+                if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key and 'ф.' or 'Дата' in str(result_dict[i][0]):
                     source_dict[i].append(devices.kiv.data_search_name[a_key][0])
                     source_dict[i].append(devices.kiv.data_search_name[a_key][1])
             if len(source_dict[i]) < 5:
