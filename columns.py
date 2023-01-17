@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 
+import analyzer
 import devices
 import sadzax
 
@@ -11,18 +12,20 @@ import sadzax
 
 #  Need to organize "file=devices.nkvv.work_file" etc... ->  to func.
 def columns_list_maker(device_type='nkvv',
-                       file=devices.nkvv.work_file,
-                       sep=devices.nkvv.work_file_sep,
-                       encoding=devices.nkvv.work_file_default_encoding,
-                       data: pd.core = pd.read_excel(devices.kiv.work_file)):
+                       data: pd.core = None,
+                       file=None,
+                       sep=None,
+                       encoding=None):
     """
     Need to take it to the class of Devices
     """
-    # attr = devices.Device.return_attributes(device_type)  # Why doesn't it work?
+    if file is None:
+        file, sep, encoding, parse_dates = devices.Device.links(eval(device_type))[1:]
     if device_type == 'nkvv':
-        # return list(pd.read_csv(attr[1], sep=attr[2], encoding=attr[3]))
         return list(pd.read_csv(file, sep=sep, encoding=encoding))
     elif device_type == 'kiv':
+        if data is None:
+            data = analyzer.get_data(device_type=device_type)
         if data.columns[0] == ' № ':
             return list(data.columns)
         else:
@@ -30,7 +33,7 @@ def columns_list_maker(device_type='nkvv',
                 if data.iloc[i, 0] != ' № ':
                     pass
                 else:
-                    return list(data.iloc[i])
+                    return list(data.iloc[i+1])
                     # noinspection PyUnreachableCode
                     break
 
@@ -109,4 +112,3 @@ def columns_analyzer(device_type='nkvv',
                 source_dict[i].append('no_name')
             source_dict[i].append(source_dict[i][4] + '_' + source_dict[i][3])
     return result_dict
-

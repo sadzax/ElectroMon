@@ -3,74 +3,76 @@ import itertools
 import numpy as np
 import pandas as pd
 
+
 import columns
 import devices
 
 
 #  1.0. Importing data
 def get_data(device_type='nkvv',
-             usecols: list = None):
+             file=None,
+             sep=None,
+             encoding=None,
+             parse_dates=None,
+             raw_param=0):
+    """
+    For a custom file usage you need to set all additional params
+    """
     data = pd.DataFrame.empty
-    if device_type == 'nkvv':
-        file = devices.nkvv.work_file
-        sep = devices.nkvv.work_file_sep
-        encoding = devices.nkvv.work_file_default_encoding
-        if usecols is None:
-            parse_dates = devices.nkvv.work_file_parse_dates
-        else:
-            parse_date_columns = []
-            for k in usecols:
-                if k in devices.nkvv.work_file_parse_dates:
-                    parse_date_columns.append(k)
-            parse_dates = parse_date_columns
+    if file is None:
+        file, sep, encoding, parse_dates = devices.Device.links(eval(device_type))[1:]
+    if device_type.lower() == 'nkvv':
         data = pd.read_csv(file,
                            sep=sep,
                            encoding=encoding,
                            parse_dates=parse_dates,
-                           usecols=usecols,
                            dayfirst=True)
-    if device_type == 'kiv':
-        file = devices.kiv.work_file
+    elif device_type == 'kiv':
         data_raw = pd.read_excel(file)
-        if data_raw.columns[0] == ' № ':
+        if data_raw.columns[0] == ' № ' or raw_param != 0:
             data = data_raw
         else:
             for i in range(data_raw.shape[0]):
                 if data_raw.iloc[i, 0] != ' № ':
                     pass
                 else:
-                    data = data_raw.iloc[i]
+                    data = data_raw.iloc[i+1:]
+                    data.columns = list(data_raw.iloc[i])
                     # noinspection PyUnreachableCode
                     break
+        for an_element_of_parse_dates in parse_dates:
+            for a_column in list(data.columns):
+                if a_column.startswith(an_element_of_parse_dates):
+                    # 'SettingWithCopyWarning' - A value is trying to be set on a copy of a slice from a DataFrame
+                    pd.options.mode.chained_assignment = None
+                    # Check mask @ https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+                    # data[a_column] = pd.to_datetime(data[a_column], format='%Y/%m/%d %H:%M:%S')
+                    data[a_column] = pd.to_datetime(data[a_column])
+                    data = data.sort_values(by=a_column)
     return data
 
 
 #  2.0. Count the strings
 def total_log_counter(device_type='nkvv',
-                      data: pd.core = None,
-                      file=devices.nkvv.work_file,
-                      sep=devices.nkvv.work_file_sep,
-                      encoding=devices.nkvv.work_file_default_encoding):
+                      data: pd.core = None):
     if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
+        data = get_data(device_type=device_type)
     return data.shape[0]
 
 
 #  2.1. Analysis of time of measurements
-def values_time_analyzer(col_number=0,
+def values_time_analyzer(device_type='nkvv',
+                         col_number=0,
                          time_sequence_min=1,
                          cols=None,
                          data: pd.core = None,
-                         file=devices.nkvv.work_file,
-                         sep=devices.nkvv.work_file_sep,
-                         encoding=devices.nkvv.work_file_default_encoding,
                          gap_const_day=1440,
                          gap_const_hour=60,
                          exact_gap=True):
     if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type)
     df = data[cols[col_number][0]].values
     error_dict = {}
     for a_row in range(df.shape[0] - 1):
