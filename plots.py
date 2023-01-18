@@ -5,21 +5,23 @@ import analyzer
 import columns
 import devices
 
-database = pd.read_pickle('main_dataframe.pkl')
 
-
-#  Simple Graph
-def flat_graph(input_x: str = None,
+def flat_graph(input_x: list = None,
                input_y: list = None,
-               cols: dict = columns.columns_analyzer(),
-               data: pd.core = analyzer.get_data(),
+               device_type='nkvv',
+               cols: dict = None,
+               data: pd.core = None,
                title='',
                size_x: int = 14,
                size_y: int = 6):
     if input_x is None:
-        input_x = 'Дата создания записи'
+        input_x = ['Дата создания записи']
     if input_y is None:
         input_y = ['∆tg_HV', '∆tg_MV']
+    if cols is None:
+        cols = columns.columns_analyzer(device_type=device_type)
+    if data is None:
+        data = analyzer.get_data(device_type=device_type)
     fig, axs = plt.subplots(figsize=(size_x, size_y))
     axs.grid(axis='both', color='gray', linestyle='--')
     plt.title(title)
@@ -39,18 +41,16 @@ def flat_graph(input_x: str = None,
 #  Histogram for raw data and distribution data
 def histogram(value,
               bins=333,
+              device_type='nkvv',
               title='',
               data_distribution_parameter=False,
               cols=None,
               data: pd.core = None,
-              unite_parameter=False,
-              file=devices.nkvv.work_file,
-              sep=devices.nkvv.work_file_sep,
-              encoding=devices.nkvv.work_file_default_encoding):
-    if data is None:
-        data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
+              unite_parameter=False):
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type)
+    if data is None:
+        data = analyzer.get_data(device_type=device_type)
     legend = []
     if isinstance(value, str) is True:
         data[value].hist(bins=bins)
@@ -76,6 +76,7 @@ def histogram(value,
 #  Correlation Plot
 def correlation_plot(filter_list1=None,
                      filter_list2=None,
+                     device_type='nkvv',
                      title='',
                      cols=None,
                      data: pd.core = None,
@@ -83,9 +84,9 @@ def correlation_plot(filter_list1=None,
                      sep=devices.nkvv.work_file_sep,
                      encoding=devices.nkvv.work_file_default_encoding):
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type)
     if data is None:
-        data = analyzer.get_data(file=file, sep=sep, encoding=encoding)
+        data = analyzer.get_data(device_type=device_type)
     if filter_list1 is None:
         filter_list1 = ['∆tg_HV']
     if filter_list2 is None:

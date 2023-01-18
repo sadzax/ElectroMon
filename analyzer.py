@@ -14,22 +14,22 @@ def get_data(device_type='nkvv',
              sep=None,
              encoding=None,
              parse_dates=None,
-             raw_param=0):
+             raw_param=False):
     """
     For a custom file usage you need to set all additional params
     """
     data = pd.DataFrame.empty
     if file is None:
-        file, sep, encoding, parse_dates = devices.Device.links(eval(device_type))[1:]
+        file, sep, encoding, parse_dates = devices.links(device_type.lower())[1:]
     if device_type.lower() == 'nkvv':
         data = pd.read_csv(file,
                            sep=sep,
                            encoding=encoding,
                            parse_dates=parse_dates,
                            dayfirst=True)
-    elif device_type == 'kiv':
+    if device_type.lower() == 'kiv':
         data_raw = pd.read_excel(file)
-        if data_raw.columns[0] == ' № ' or raw_param != 0:
+        if data_raw.columns[0] == ' № ' or raw_param is True:
             data = data_raw
         else:
             for i in range(data_raw.shape[0]):
@@ -56,27 +56,32 @@ def get_data(device_type='nkvv',
 def total_log_counter(device_type='nkvv',
                       data: pd.core = None):
     if data is None:
-        data = get_data(device_type=device_type)
+        data = get_data(device_type=device_type.lower())
     return data.shape[0]
 
 
 #  2.1. Analysis of time of measurements
 def values_time_analyzer(device_type='nkvv',
-                         col_number=0,
                          time_sequence_min=1,
-                         cols=None,
+                         inaccuracy_sec=2,
                          data: pd.core = None,
                          gap_const_day=1440,
                          gap_const_hour=60,
                          exact_gap=True):
     if data is None:
-        data = get_data(device_type=device_type)
-    if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type)
-    df = data[cols[col_number][0]].values
+        data = get_data(device_type=device_type.lower())
+    parse_dates = devices.links(device_type.lower())[4]
+    time_column = list(data.columns)[0]
+    for an_element_of_parse_dates in parse_dates:
+        for a_column in list(data.columns):
+            if a_column.startswith(an_element_of_parse_dates):
+                time_column = a_column
+                break
+    df = data[time_column].values
     error_dict = {}
     for a_row in range(df.shape[0] - 1):
-        if (df[a_row + 1] - df[a_row]).astype('timedelta64[m]') == time_sequence_min:
+        delta_time = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
+        if delta_time < (time_sequence_min*60 + inaccuracy_sec) or delta_time > (time_sequence_min*60 - inaccuracy_sec):
             pass
         else:
             if exact_gap is False:  # for console use

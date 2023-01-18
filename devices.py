@@ -253,3 +253,7 @@ nkvv.paste_values_rus_dict = {0: ['Дата создания записи', 'dat
                               46: ['Tcpu,°С', 'temperature', 'overall', 'no_voltage', 'tcpu', 'temperature_of_cpu', 'tcpu_no_voltage'],
                               47: ['Freq,Гц', 'frequency', 'overall', 'no_voltage', 'freq', 'frequency', 'freq_no_voltage'],
                               48: ['Unnamed: 48', 'other', 'overall', 'no_voltage', 'no_name', 'no_name', 'no_name_no_voltage']}
+
+# Avoid error of func inside class and/or before obj.init.
+def links(device_type):
+    return Device.links(eval(device_type))
