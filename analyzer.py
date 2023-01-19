@@ -1,4 +1,5 @@
 import itertools
+import datetime
 
 import numpy as np
 import pandas as pd
@@ -63,7 +64,7 @@ def total_log_counter(device_type='nkvv',
 #  2.1. Analysis of time of measurements
 def values_time_analyzer(device_type='nkvv',
                          time_sequence_min=1,
-                         inaccuracy_sec=2,
+                         inaccuracy_sec=3,
                          data: pd.core = None,
                          gap_const_day=1440,
                          gap_const_hour=60,
@@ -76,14 +77,13 @@ def values_time_analyzer(device_type='nkvv',
         for a_column in list(data.columns):
             if a_column.startswith(an_element_of_parse_dates):
                 time_column = a_column
-                break
+        break
     df = data[time_column].values
     error_dict = {}
     for a_row in range(df.shape[0] - 1):
         delta_time = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
-        if delta_time < (time_sequence_min*60 + inaccuracy_sec) or delta_time > (time_sequence_min*60 - inaccuracy_sec):
-            pass
-        else:
+        if delta_time > (time_sequence_min*60 + inaccuracy_sec) \
+                or delta_time < (time_sequence_min*60 - inaccuracy_sec):
             if exact_gap is False:  # for console use
                 gap = (df[a_row + 1] - df[a_row]).astype('timedelta64[m]')
                 if gap > gap_const_day:
@@ -96,7 +96,8 @@ def values_time_analyzer(device_type='nkvv',
                     err = gap
             else:
                 err = df[a_row + 1] - df[a_row]
-            error_dict[a_row + 1] = [pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y'),
+            error_dict[a_row + 1] = [a_row,
+                                     pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y'),
                                      pd.to_datetime(str(df[a_row])).strftime('%H.%M'),
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y'),
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M'),
@@ -104,15 +105,60 @@ def values_time_analyzer(device_type='nkvv',
     return error_dict
 
 
-#  2.1.1. Analysis of time of measurements to dataframe
+#  2.1.1. Analysis time of measurements to dataframe
 def values_time_analyzer_df(source_dict=None,
                             orient='index',
                             cols=None):
     if source_dict is None:
         source_dict = values_time_analyzer()
     if cols is None:
-        cols = ["Дата", "Время", "Дата след.", "Время след.", "Разница"]
+        cols = ["Строка в БД", "Дата", "Время", "Дата след.", "Время след.", "Разница"]
     return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols)
+
+
+#  2.1.2. Slice time of measurements for big differences
+def values_time_slicer(data=None,
+                       minutes_slice_mode=1439,
+                       min_values_required=300,
+                       device_type='nkvv'):
+    if data is None:
+        data = get_data(device_type=device_type.lower())
+    parse_dates = devices.links(device_type.lower())[4]
+    time_column = list(data.columns)[0]
+    for an_element_of_parse_dates in parse_dates:
+        for a_column in list(data.columns):
+            if a_column.startswith(an_element_of_parse_dates):
+                time_column = a_column
+        break
+    time_analyzer_df = values_time_analyzer_df(source_dict=values_time_analyzer(device_type=device_type.lower(),
+                                                                                data=data))
+    indexes_for_slicing = [-1]
+    for i in range(time_analyzer_df.shape[0]):
+        if time_analyzer_df.iloc[i, len(time_analyzer_df.columns)-1] > datetime.timedelta(minutes=minutes_slice_mode):
+            indexes_for_slicing.append(time_analyzer_df.iloc[i, 0])
+    indexes_for_slicing.append(int(data.shape[0]))
+    data_slices_list = []
+    for k in range(len(indexes_for_slicing)-1):
+        data_slices_list.append(data.iloc[indexes_for_slicing[k]+1:indexes_for_slicing[k+1]])
+    data_slices = {k: [v] for k, v in enumerate(data_slices_list)}
+    for i in range(len(data_slices)):
+        time_array = data_slices[i][0][time_column].values
+        if data_slices[i][0].shape[0] > 0:
+            data_slices[i].append(min(time_array))
+            data_slices[i].append(max(time_array))
+        else:
+            data_slices[i].append(np.datetime64('NaT'))
+            data_slices[i].append(np.datetime64('NaT'))
+        data_slices[i].append(data_slices[i][0].shape[0])
+    #  Questioning about necessity of cycle-end to save appended elements in dictionary list
+    for i in range(len(data_slices)):
+        if data_slices[i][0].shape[0] > min_values_required:
+            str_min = pd.to_datetime(str(data_slices[i][1])).strftime('%d.%m.%y %H:%M')
+            str_max = pd.to_datetime(str(data_slices[i][2])).strftime('%d.%m.%y %H:%M')
+            str_quantity = data_slices[i][3]
+            data_slices[i].append(f'Всего {str_quantity} записей с {str_min} по {str_max}')
+        else:
+            data_slices[i].append(f'Не включается в анализ')
 
 
 #  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS LISTS!
