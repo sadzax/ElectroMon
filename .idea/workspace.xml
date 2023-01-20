@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv analyzers and get_data updated">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/temp_exec_kiv.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp_exec_kiv.py" afterDir="false" />
-    </list>
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="functions refactored w/devices class" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -205,13 +200,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00016" summary="1.4">
-      <created>1669723660861</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1669723660861</updated>
     </task>
     <task id="LOCAL-00017" summary="1.5">
       <created>1669746165933</created>
@@ -549,7 +537,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674147265995</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="functions refactored w/devices class">
+      <created>1674233655974</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1674233655974</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -564,7 +559,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.6.3" />
     <MESSAGE value="1.7" />
     <MESSAGE value="1.7.1" />
     <MESSAGE value="1.7.2" />
@@ -589,6 +583,7 @@
     <MESSAGE value="kiv first plotting" />
     <MESSAGE value="kiv analyzers" />
     <MESSAGE value="kiv analyzers and get_data updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="kiv analyzers and get_data updated" />
+    <MESSAGE value="functions refactored w/devices class" />
+    <option name="LAST_COMMIT_MESSAGE" value="functions refactored w/devices class" />
   </component>
 </project>
