@@ -4,18 +4,17 @@ import datetime
 import numpy as np
 import pandas as pd
 
-
 import columns
 import devices
 
 
 #  1.0. Importing data
-def get_data(device_type='nkvv',
-             file=None,
-             sep=None,
-             encoding=None,
-             parse_dates=None,
-             raw_param=False):
+def get_data(device_type: str = 'nkvv',
+             file: str = None,
+             sep: str = None,
+             encoding: str = None,
+             parse_dates: list = None,
+             raw_param: bool = False):
     """
     For a custom file usage you need to set all additional params
     """
@@ -54,7 +53,7 @@ def get_data(device_type='nkvv',
 
 
 #  2.0. Count the strings
-def total_log_counter(device_type='nkvv',
+def total_log_counter(device_type: str = 'nkvv',
                       data: pd.core = None):
     if data is None:
         data = get_data(device_type=device_type.lower())
@@ -62,13 +61,13 @@ def total_log_counter(device_type='nkvv',
 
 
 #  2.1. Analysis of time of measurements
-def values_time_analyzer(device_type='nkvv',
-                         time_sequence_min=1,
-                         inaccuracy_sec=3,
+def values_time_analyzer(device_type: str = 'nkvv',
                          data: pd.core = None,
-                         gap_const_day=1440,
-                         gap_const_hour=60,
-                         exact_gap=True):
+                         time_sequence_min: int = 1,
+                         inaccuracy_sec: int = 3,
+                         gap_const_day: int = 1440,
+                         gap_const_hour: int = 60,
+                         exact_gap: bool = True):
     if data is None:
         data = get_data(device_type=device_type.lower())
     parse_dates = devices.links(device_type.lower())[4]
@@ -106,9 +105,9 @@ def values_time_analyzer(device_type='nkvv',
 
 
 #  2.1.1. Analysis time of measurements to dataframe
-def values_time_analyzer_df(source_dict=None,
+def values_time_analyzer_df(source_dict: dict = None,
                             orient='index',
-                            cols=None):
+                            cols: dict = None):
     if source_dict is None:
         source_dict = values_time_analyzer()
     if cols is None:
@@ -117,12 +116,14 @@ def values_time_analyzer_df(source_dict=None,
 
 
 #  2.1.2. Slice time of measurements for big differences
-def values_time_slicer(data=None,
-                       minutes_slice_mode=1439,
-                       min_values_required=300,
-                       device_type='nkvv'):
+def values_time_slicer(device_type: str = 'nkvv',
+                       data: pd.core = None,
+                       minutes_slice_mode: int = 1439,
+                       min_values_required: int = 300,
+                       full_param: bool = False):
     if data is None:
         data = get_data(device_type=device_type.lower())
+    data_result = {}
     parse_dates = devices.links(device_type.lower())[4]
     time_column = list(data.columns)[0]
     for an_element_of_parse_dates in parse_dates:
@@ -159,21 +160,26 @@ def values_time_slicer(data=None,
             data_slices[i].append(f'Всего {str_quantity} записей с {str_min} по {str_max}')
         else:
             data_slices[i].append(f'Не включается в анализ')
+    if full_param is False:
+        for i in data_slices.keys():
+            if data_slices[i][3] >= min_values_required:
+                data_result[i] = data_slices[i]
+    else:
+        data_result = data_slices
+    return data_result
 
 
 #  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS LISTS!
-def pass_the_nan(default_dict_for_replacement=None,
-                 cols=None,
+def pass_the_nan(device_type: str = 'nkvv',
                  data: pd.core = None,
-                 file=devices.nkvv.work_file,
-                 sep=devices.nkvv.work_file_sep,
-                 encoding=devices.nkvv.work_file_default_encoding):
+                 cols: dict = None,
+                 default_dict_for_replacement: dict = None):
     if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
+        data = get_data(device_type=device_type.lower())
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type.lower())
     if default_dict_for_replacement is None:
-        default_dict_for_replacement = devices.nkvv.default_dict_for_replacement_to_nan
+        default_dict_for_replacement = devices.links_replacement(device_type.lower())
     for i in range(len(default_dict_for_replacement)):
         seeking_param = [x for x in default_dict_for_replacement.keys()][i]
         replacing_value = [x for x in default_dict_for_replacement.values()][i]
@@ -192,15 +198,13 @@ def pass_the_nan(default_dict_for_replacement=None,
 
 
 #  2.3. Counting the nan_strings:
-def total_nan_counter(data=None,
-                      cols=None,
-                      file=devices.nkvv.work_file,
-                      sep=devices.nkvv.work_file_sep,
-                      encoding=devices.nkvv.work_file_default_encoding):
+def total_nan_counter(device_type='nkvv',
+                      data: pd.core = None,
+                      cols: dict = None):
     if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
+        data = get_data(device_type=device_type.lower())
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type.lower())
     nans_dict = {}
     for a_row in range(data.shape[0]):
         nan_counter = 0
@@ -215,9 +219,9 @@ def total_nan_counter(data=None,
 
 
 #  2.3.1.  Counting the nan_strings to dataframe:
-def total_nan_counter_df(source_dict=None,
-                         orient='index',
-                         cols=None):
+def total_nan_counter_df(source_dict: dict = None,
+                         cols: list = None,
+                         orient: str = 'index'):
     if source_dict is None:
         source_dict = total_nan_counter()
     if cols is None:
@@ -227,16 +231,13 @@ def total_nan_counter_df(source_dict=None,
 
 #  3.1. Filtering
 def data_filter(filter_list: list,
-                cols: dict = None,
+                device_type: str = 'nkvv',
                 data: pd.core = None,
-                device_type='nkvv',  # Work on
-                file=devices.nkvv.work_file,
-                sep=devices.nkvv.work_file_sep,
-                encoding=devices.nkvv.work_file_default_encoding):
+                cols: dict = None):
     if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
+        data = get_data(device_type=device_type.lower())
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type.lower())
     else:
         cols_by_data = {k: [v] for v, k in enumerate(data.columns)}
         if len(cols_by_data) > len(cols):
@@ -254,34 +255,31 @@ def data_filter(filter_list: list,
 
 
 # 4.1. Main averager
-def data_average_finder(filter_list=None,
-                        abs_parameter=True,
-                        unite_parameter=False,
-                        round_parameter=3,
-                        list_of_non_math=None,
-                        cols=None,
+def data_average_finder(filter_list: list = None,
+                        device_type: str = 'nkvv',
                         data: pd.core = None,
-                        file=devices.nkvv.work_file,
-                        sep=devices.nkvv.work_file_sep,
-                        encoding=devices.nkvv.work_file_default_encoding):
+                        cols: dict = None,
+                        abs_parameter: bool = True,
+                        unite_parameter: bool = False,
+                        round_parameter: int = 3,
+                        list_of_non_math: list = None):
+    if data is None:
+        data = get_data(device_type=device_type.lower())
+    if cols is None:
+        cols = columns.columns_analyzer(device_type=device_type.lower())
     if filter_list is None:
         filter_list = ['time', '∆tg_HV']
     if list_of_non_math is None:
-        list_of_non_math = ['Дата создания записи',
-                            'Дата сохранения в БД']
-    if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
-    if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        list_of_non_math = devices.links(device_type)[4]
     df = data_filter(filter_list, cols=cols, data=data)
     func_columns_list = list(df.columns)
     func_result_prev = []
     func_result = {}
     for i in range(df.shape[1]):
         for k in list_of_non_math:
-            if k == func_columns_list[i]:
+            if func_columns_list[i].startswith(k) is True:
                 break
-        else:
+        else:  # For-Else - ?
             columns_list_of_values = df[func_columns_list[i]].tolist()
             if unite_parameter is False:
                 if abs_parameter is True:
@@ -302,30 +300,27 @@ def data_average_finder(filter_list=None,
 
 
 #  4.2. Search for distributions
-def data_distribution_finder(filter_list,
-                             unite_parameter=False,
-                             cols=None,
+def data_distribution_finder(filter_list: list,
+                             device_type: str = 'nkvv',
                              data: pd.core = None,
-                             list_of_non_math=None,
-                             file=devices.nkvv.work_file,
-                             sep=devices.nkvv.work_file_sep,
-                             encoding=devices.nkvv.work_file_default_encoding):
+                             cols: dict = None,
+                             unite_parameter: bool = False,
+                             list_of_non_math: list = None):
     if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
+        data = get_data(device_type=device_type.lower())
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type.lower())
     if list_of_non_math is None:
-        list_of_non_math = ['Дата создания записи',
-                            'Дата сохранения в БД']
+        list_of_non_math = devices.links(device_type)[4]
     df = data_filter(filter_list, cols=cols, data=data)
     func_columns_list = list(df.columns)
     func_result_prev = pd.Series([], dtype=pd.StringDtype())
     func_result = {}
     for i in range(df.shape[1]):
         for k in list_of_non_math:
-            if k == func_columns_list[i]:
+            if func_columns_list[i].startswith(k) is True:
                 break
-        else:
+        else:  # For-Else - ?
             if unite_parameter is False:
                 func_result[func_columns_list[i]] = data[func_columns_list[i]].value_counts(normalize=True,
                                                                                             sort=True)
@@ -337,17 +332,15 @@ def data_distribution_finder(filter_list,
 
 
 #  4.3. Correlations
-def data_correlation(filter_list1=None,
-                     filter_list2=None,
-                     cols=None,
-                     data: pd.core = None,  # Unite similar functions
-                     file=devices.nkvv.work_file,
-                     sep=devices.nkvv.work_file_sep,
-                     encoding=devices.nkvv.work_file_default_encoding):
+def data_correlation(filter_list1: list = None,
+                     filter_list2: list = None,
+                     device_type: str = 'nkvv',
+                     data: pd.core = None,
+                     cols: dict = None):
     if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
+        data = get_data(device_type=device_type.lower())
     if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        cols = columns.columns_analyzer(device_type=device_type.lower())
     if filter_list1 is None:
         filter_list1 = ['∆tg_HV']
     if filter_list2 is None:
@@ -382,29 +375,30 @@ def data_correlation(filter_list1=None,
 
 
 #  4.4. Warning Notes
-def warning_finder(filter_list=None,
-                   warning_amount=1,
-                   abs_parameter=True,
-                   cols=None,
+def warning_finder(filter_list: str = None,
+                   device_type: str = 'nkvv',
                    data: pd.core = None,
-                   list_of_non_math=None,
-                   file=devices.nkvv.work_file,
-                   sep=devices.nkvv.work_file_sep,
-                   encoding=devices.nkvv.work_file_default_encoding):
+                   cols: dict = None,
+                   warning_amount: int = 1,
+                   abs_parameter: bool = True,
+                   list_of_non_math: list = None):
+    """
+    Need to put a 'time' in filter_list
+    """
+    if data is None:
+        data = get_data(device_type=device_type.lower())
+    if cols is None:
+        cols = columns.columns_analyzer(device_type=device_type.lower())
     if filter_list is None:
         filter_list = ['time', '∆tgδ_MV']
     if list_of_non_math is None:
-        list_of_non_math = ['Дата создания записи', 'Дата сохранения в БД']
-    if data is None:
-        data = get_data(file=file, sep=sep, encoding=encoding)
-    if cols is None:
-        cols = columns.columns_analyzer(file=file, sep=sep, encoding=encoding)
+        list_of_non_math = devices.links(device_type)[4]
     df = data_filter(filter_list, cols=cols, data=data)
     cols_list = list(df.columns)
     date_index = 0
-    for k in list_of_non_math:
-        for i in range(df.shape[1]):
-            if k == cols_list[i]:
+    for i in range(df.shape[1]):
+        for k in list_of_non_math:
+            if cols_list[i].startswith(k) is True:
                 date_index = i
     func_result = []
     for i in range(df.shape[1]):
@@ -460,4 +454,3 @@ def delta_tg_checker_warning(operating_data=None,
         return warning_list
     else:
         return warning_list
-

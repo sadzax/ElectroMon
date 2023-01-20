@@ -1,5 +1,3 @@
-import csv
-import datetime
 import os
 
 
@@ -30,6 +28,9 @@ class Device:
     def links(self):  # Work on
         return [self.name, self.work_file, self.work_file_sep, self.work_file_default_encoding,
                 self.work_file_parse_dates]
+
+    def links_replacement(self):
+        return self.default_dict_for_replacement_to_nan
 
 
 nkvv = Device('nkvv')
@@ -254,6 +255,12 @@ nkvv.paste_values_rus_dict = {0: ['Дата создания записи', 'dat
                               47: ['Freq,Гц', 'frequency', 'overall', 'no_voltage', 'freq', 'frequency', 'freq_no_voltage'],
                               48: ['Unnamed: 48', 'other', 'overall', 'no_voltage', 'no_name', 'no_name', 'no_name_no_voltage']}
 
+
 # Avoid error of func inside class and/or before obj.init.
 def links(device_type):
     return Device.links(eval(device_type))
+
+
+# Avoid error of func inside class and/or before obj.init.
+def links_replacement(device_type):
+    return Device.links_replacement(eval(device_type))
