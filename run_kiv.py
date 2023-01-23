@@ -39,7 +39,6 @@ prints.total_log_counter(device_type=device_type, data=data)
 prints.values_time_analyzer_df(device_type=device_type, data=data)
 prints.total_nan_counter_df(device_type=device_type, data=data, cols=cols)
 
-
 prints.info('Анализ трендов стороны СН')
 ex3 = '∆tg_MV'
 ex4 = '∆C_MV'
