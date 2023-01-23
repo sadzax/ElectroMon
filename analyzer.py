@@ -20,15 +20,16 @@ def get_data(device_type: str = 'nkvv',
     For a custom file usage you need to set all additional params
     """
     data = pd.DataFrame.empty
+    device_type = device_type.lower()
     if file is None:
-        file, sep, encoding, parse_dates = devices.links(device_type.lower())[1:]
-    if device_type.lower() == 'nkvv':
+        file, sep, encoding, parse_dates = devices.links(device_type)[1:]
+    if device_type == 'nkvv':
         data = pd.read_csv(file,
                            sep=sep,
                            encoding=encoding,
                            parse_dates=parse_dates,
                            dayfirst=True)
-    if device_type.lower() == 'kiv':
+    if device_type == 'kiv':
         data_raw = pd.read_excel(file)
         if data_raw.columns[0] == ' № ' or raw_param is True:
             data = data_raw
@@ -69,9 +70,10 @@ def values_time_analyzer(device_type: str = 'nkvv',
                          gap_const_day: int = 1440,
                          gap_const_hour: int = 60,
                          exact_gap: bool = True):
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
-    parse_dates = devices.links(device_type.lower())[4]
+        data = get_data(device_type=device_type)
+    parse_dates = devices.links(device_type)[4]
     time_column = list(data.columns)[0]
     for an_element_of_parse_dates in parse_dates:
         for a_column in list(data.columns):
@@ -122,18 +124,18 @@ def values_time_slicer(device_type: str = 'nkvv',
                        minutes_slice_mode: int = 1439,
                        min_values_required: int = 300,
                        full_param: bool = False):
+    device_type=device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     data_result = {}
-    parse_dates = devices.links(device_type.lower())[4]
+    parse_dates = devices.links(device_type)[4]
     time_column = list(data.columns)[0]
     for an_element_of_parse_dates in parse_dates:
         for a_column in list(data.columns):
             if a_column.startswith(an_element_of_parse_dates):
                 time_column = a_column
         break
-    time_analyzer_df = values_time_analyzer_df(source_dict=values_time_analyzer(device_type=device_type.lower(),
-                                                                                data=data))
+    time_analyzer_df = values_time_analyzer_df(source_dict=values_time_analyzer(device_type=device_type, data=data))
     indexes_for_slicing = [-1]
     for i in range(time_analyzer_df.shape[0]):
         if time_analyzer_df.iloc[i, len(time_analyzer_df.columns)-1] > datetime.timedelta(minutes=minutes_slice_mode):
@@ -199,12 +201,13 @@ def pass_the_nan(device_type: str = 'nkvv',
                  data: pd.core = None,
                  cols: dict = None,
                  default_dict_for_replacement: dict = None):
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type.lower())
+        cols = columns.columns_analyzer(device_type=device_type)
     if default_dict_for_replacement is None:
-        default_dict_for_replacement = devices.links_replacement(device_type.lower())
+        default_dict_for_replacement = devices.links_replacement(device_type)
     for i in range(len(default_dict_for_replacement)):
         seeking_param = [x for x in default_dict_for_replacement.keys()][i]
         replacing_value = [x for x in default_dict_for_replacement.values()][i]
@@ -226,10 +229,11 @@ def pass_the_nan(device_type: str = 'nkvv',
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
                       cols: dict = None):
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type.lower())
+        cols = columns.columns_analyzer(device_type=device_type)
     nans_dict = {}
     for a_row in range(data.shape[0]):
         nan_counter = 0
@@ -259,10 +263,11 @@ def data_filter(filter_list: list,
                 device_type: str = 'nkvv',
                 data: pd.core = None,
                 cols: dict = None):
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type.lower())
+        cols = columns.columns_analyzer(device_type=device_type)
     else:
         cols_by_data = {k: [v] for v, k in enumerate(data.columns)}
         if len(cols_by_data) > len(cols):
@@ -288,10 +293,11 @@ def data_average_finder(filter_list: list = None,
                         unite_parameter: bool = False,
                         round_parameter: int = 3,
                         list_of_non_math: list = None):
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type.lower())
+        cols = columns.columns_analyzer(device_type=device_type)
     if filter_list is None:
         filter_list = ['time', '∆tg_HV']
     if list_of_non_math is None:
@@ -331,10 +337,11 @@ def data_distribution_finder(filter_list: list,
                              cols: dict = None,
                              unite_parameter: bool = False,
                              list_of_non_math: list = None):
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type.lower())
+        cols = columns.columns_analyzer(device_type=device_type)
     if list_of_non_math is None:
         list_of_non_math = devices.links(device_type)[4]
     df = data_filter(filter_list, cols=cols, data=data)
@@ -362,10 +369,11 @@ def data_correlation(filter_list1: list = None,
                      device_type: str = 'nkvv',
                      data: pd.core = None,
                      cols: dict = None):
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type.lower())
+        cols = columns.columns_analyzer(device_type=device_type)
     if filter_list1 is None:
         filter_list1 = ['∆tg_HV']
     if filter_list2 is None:
@@ -410,10 +418,11 @@ def warning_finder(filter_list: str = None,
     """
     Need to put a 'time' in filter_list
     """
+    device_type = device_type.lower()
     if data is None:
-        data = get_data(device_type=device_type.lower())
+        data = get_data(device_type=device_type)
     if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type.lower())
+        cols = columns.columns_analyzer(device_type=device_type)
     if filter_list is None:
         filter_list = ['time', '∆tgδ_MV']
     if list_of_non_math is None:

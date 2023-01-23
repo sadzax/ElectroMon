@@ -14,6 +14,9 @@ def clearing_script():
     sys.stdout.reconfigure(encoding='utf-8')
 
 
+clearing_script()
+
+
 def info(the_string):
     print(f'\n\n          {the_string}...\r')
 
@@ -42,7 +45,7 @@ def work_file_picking(device_type='kiv'):
         print(f"Файл № {files_list.index(i) + 1}. {i}")
     if l == 1:
         print(f"Данный файл выбран для анализа")
-        return files_list[0]
+        return devices.work_file_picking(device_type)
     elif l > 1:
         while True:
             try:
@@ -51,10 +54,24 @@ def work_file_picking(device_type='kiv'):
                     print(error)
                     continue
                 print(f"Выбран файл {files_list[choice-1]}")
-                return files_list[choice-1]
+                return devices.work_file_picking(device_type, choice-1)
             except:
                 print(error)
                 continue
 
 
-clearing_script()
+def total_log_counter(device_type, data):
+    info('Подсчёт общего количества записей')
+    log_total = analyzer.total_log_counter(device_type=device_type, data=data)
+    print(f'Общее число записей в журнале измерений составило {log_total}')
+
+
+def values_time_analyzer_df(data, device_type):
+    info('Анализ периодичности и неразрывности измерений')
+    log_time = analyzer.values_time_analyzer(data=data, device_type=device_type)
+    log_time_df = analyzer.values_time_analyzer_df(source_dict=log_time, orient='index')
+    if len(log_time) == 0:
+        print(f'Периоды измерений не нарушены')
+    else:
+        print(f'Выявлено {len(log_time)} нарушений периодов измерений')
+        print(answering('Хотите вывести подробные данные?', yes=log_time_df, no=''))
