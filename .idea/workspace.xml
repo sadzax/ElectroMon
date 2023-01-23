@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="functions refactored w/devices class">
-      <change afterPath="$PROJECT_DIR$/run_kiv.py" afterDir="false" />
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv runner">
+      <change afterPath="$PROJECT_DIR$/prints.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/events.py" beforeDir="false" afterPath="$PROJECT_DIR$/arch/events.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_nkvv.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sadzax.py" beforeDir="false" afterPath="$PROJECT_DIR$/sadzax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_kiv.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_kiv.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,13 +206,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00019" summary="1.5">
-      <created>1669746351357</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1669746351357</updated>
     </task>
     <task id="LOCAL-00020" summary="1.6.1">
       <created>1669821212160</created>
@@ -551,7 +543,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674234664599</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068" summary="kiv runner">
+      <created>1674468059420</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1674468059420</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -566,7 +565,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.7" />
     <MESSAGE value="1.7.1" />
     <MESSAGE value="1.7.2" />
     <MESSAGE value="1.7.3" />
@@ -591,6 +589,7 @@
     <MESSAGE value="kiv analyzers" />
     <MESSAGE value="kiv analyzers and get_data updated" />
     <MESSAGE value="functions refactored w/devices class" />
-    <option name="LAST_COMMIT_MESSAGE" value="functions refactored w/devices class" />
+    <MESSAGE value="kiv runner" />
+    <option name="LAST_COMMIT_MESSAGE" value="kiv runner" />
   </component>
 </project>

@@ -257,6 +257,17 @@ nkvv.paste_values_rus_dict = {0: ['Дата создания записи', 'dat
 
 
 # Avoid error of func inside class and/or before obj.init.
+def work_file_listing(device_type):
+    return [filename for filename in os.listdir(eval(device_type).work_file_folder)
+            if filename.startswith(eval(device_type).work_file_name_starts['measure'])]
+
+
+# Avoid error of func inside class and/or before obj.init.
+def work_file_picking(device_type, num=0):
+    return eval(device_type).work_file_folder + Device.work_file_listing(eval(device_type))[num]
+
+
+# Avoid error of func inside class and/or before obj.init.
 def links(device_type):
     return Device.links(eval(device_type))
 
