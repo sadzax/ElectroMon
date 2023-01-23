@@ -38,3 +38,10 @@ data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
 prints.total_log_counter(device_type=device_type, data=data)
 prints.values_time_analyzer_df(device_type=device_type, data=data)
 prints.total_nan_counter_df(device_type=device_type, data=data, cols=cols)
+
+
+prints.info('Анализ трендов стороны СН')
+ex3 = '∆tg_MV'
+ex4 = '∆C_MV'
+print(f"Анализ корреляции данных {ex3}, {ex4} от температуры воздуха (при корреляции изменения на графике синхронны)")
+plots.correlation_plot(filter_list1=[ex3, ex4], filter_list2=['tair'], device_type=device_type, data=data, cols=cols)

@@ -103,7 +103,11 @@ kiv.data_search_name = {'Дата': ['time', 'time_of_measure'],
                         'C1': ['C', 'c_deviation'],
                         'tg': ['tg', 'tangent'],
                         '∆C': ['∆C', 'c_delta'],
-                        '∆tg': ['∆tg', 'tangent_delta']}
+                        '∆tg': ['∆tg', 'tangent_delta'],
+                        'Iunb': ['', ''],
+                        'Phy_unb': ['', ''],
+                        'Tmk': ['tcpu', 'temperature_of_cpu'],
+                        'Tamb': ['tair', 'temperature_of_air']}
 
 
 # russian_date_parser = lambda x: datetime.strptime(x, "DD.MM.YYY HH:MM:SS")
