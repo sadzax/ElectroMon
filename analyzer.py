@@ -254,7 +254,7 @@ def total_nan_counter_df(source_dict: dict = None,
     if source_dict is None:
         source_dict = total_nan_counter()
     if cols is None:
-        cols = ['Дата', 'Время', '% некорректных замеров']
+        cols = ['Дата', 'Время', '% некорректных данных на момент замера']
     return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols)
 
 

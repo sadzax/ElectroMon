@@ -66,7 +66,7 @@ def total_log_counter(device_type, data):
     print(f'Общее число записей в журнале измерений составило {log_total}')
 
 
-def values_time_analyzer_df(data, device_type):
+def values_time_analyzer_df(device_type, data):
     info('Анализ периодичности и неразрывности измерений')
     log_time = analyzer.values_time_analyzer(data=data, device_type=device_type)
     log_time_df = analyzer.values_time_analyzer_df(source_dict=log_time, orient='index')
@@ -75,3 +75,16 @@ def values_time_analyzer_df(data, device_type):
     else:
         print(f'Выявлено {len(log_time)} нарушений периодов измерений')
         print(answering('Хотите вывести подробные данные?', yes=log_time_df, no=''))
+
+
+def total_nan_counter_df(device_type, data, cols):
+    info('Анализ периодов массовой некорректности измерений')
+    log_nans = analyzer.total_nan_counter(device_type, data=data, cols=cols)
+    log_nans_df = analyzer.total_nan_counter_df(source_dict=log_nans, orient='index')
+    w1 = sadzax.Rus.cases(len(log_nans), "Выявлен", "Выявлено", "Выявлено")
+    w2 = sadzax.Rus.cases(len(log_nans), "замер", "замера", "замеров")
+    if len(log_nans) == 0:
+        print(f"\n Периоды некорректных измерений не выявлены")
+    else:
+        print(f"\n {w1} {len(log_nans)} {w2} с некорректными данными")
+        print(answering('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no=''))
