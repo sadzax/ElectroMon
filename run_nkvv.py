@@ -33,10 +33,10 @@ def answering(question, yes='', no='', answer_list=None):
             return no
 
 
-def saving_pkl(dataframe: pd.core, name_file):
+def save_pkl(dataframe: pd.core, name_file):
     save_path = '/save/' + name_file + '.pkl'
     dataframe.to_pickle(save_path)
-    
+
 
 def average_printer(ex, abs_parameter=True):
     print(f'Среднее значение по {ex}: \r')

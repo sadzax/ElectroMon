@@ -6,6 +6,7 @@ import pandas as pd
 
 import columns
 import devices
+import sadzax
 
 
 #  1.0. Importing data
@@ -167,6 +168,30 @@ def values_time_slicer(device_type: str = 'nkvv',
     else:
         data_result = data_slices
     return data_result
+
+
+#  2.1.2.1. Choose one of the slices of time of measurements
+def values_time_slicer_choose(sliced_dict=None, device_type: str = 'kiv'):
+    if sliced_dict is None:
+        sliced_dict = values_time_slicer(device_type=device_type)
+    error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
+    l = len(sliced_dict)
+    w = sadzax.Rus.cases(l, 'срез', 'среза', 'срезов')
+    print(f"По заданным параметрам найдено {l} {w} данных")
+    k = [i for i in sliced_dict.keys()]
+    for i in sliced_dict:
+        print(f"Срез данных № {k.index(i)+1}. " + sliced_dict[i][4])
+    while True:
+        try:
+            choice = int(input('Введите срез для анализа: '))
+            if choice <= 0 or choice > len(k):
+                print(error)
+                continue
+            print(f"Вы выбрали срез данных № {choice}. " + sliced_dict[k[choice - 1]][4])
+            return sliced_dict[k[choice - 1]][0]
+        except:
+            print(error)
+            continue
 
 
 #  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS LISTS!

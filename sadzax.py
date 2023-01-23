@@ -1,3 +1,6 @@
+import math
+
+
 class Enter(object):
     def int(input_descripton, arg_error, arg_min, arg_max, arg_isnt):
         while True:
@@ -66,6 +69,7 @@ class Enter(object):
         else:
             return True
 
+
 class Digits_operator(object):
     def find_number_of_digits(dgt):
         dgt = abs(dgt)
@@ -85,9 +89,23 @@ class Digits_operator(object):
             lst.append(int(dgt % 10))
             return Digits_operator.find_digits_and_print_them_out(dgt // 10, lst)
 
+
 class Trimmer(object):
     def left(string, amount):
         return string[:amount]
 
     def right(string, amount):
         return string[-amount:]
+
+
+class Rus(object):
+    def cases(dgt, one, two, five):
+        x = math.trunc(abs(float(dgt)))
+        if 5 <= x <= 20:
+            return five
+        elif (x % 10) == 1:
+            return one
+        elif (x % 10) >= 2 or (x % 10) <= 4:
+            return two
+        else:
+            return five
