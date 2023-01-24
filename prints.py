@@ -88,3 +88,16 @@ def total_nan_counter_df(device_type, data, cols):
     else:
         print(f"\n {w1} {len(log_nans)} {w2} с некорректными данными")
         print(answering('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no=''))
+
+
+def average_printer(ex, data, cols, abs_parameter=True):
+    print(f'Среднее значение по {ex}: \r')
+    df_average = analyzer.data_average_finder(filter_list=[ex], data=data, cols=cols, abs_parameter=abs_parameter)
+    if abs_parameter is True:
+        str_adder = 'по модулю '
+    else:
+        str_adder = ''
+    for every_value in df_average:
+        print(f'Среднее {str_adder}по {every_value} составило {df_average[every_value]}')
+    print(f'Распределение значений {ex} (гистограмма): \r')
+    plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')

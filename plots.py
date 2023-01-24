@@ -79,10 +79,7 @@ def correlation_plot(filter_list1=None,
                      device_type='nkvv',
                      title='',
                      cols=None,
-                     data: pd.core = None,
-                     file=devices.nkvv.work_file,
-                     sep=devices.nkvv.work_file_sep,
-                     encoding=devices.nkvv.work_file_default_encoding):
+                     data: pd.core = None):
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
     if data is None:
@@ -94,10 +91,7 @@ def correlation_plot(filter_list1=None,
     cr = analyzer.data_correlation(filter_list1=filter_list1,
                                    filter_list2=filter_list2,
                                    cols=cols,
-                                   data=data,
-                                   file=file,
-                                   sep=sep,
-                                   encoding=encoding)
+                                   data=data)
     keys_list = [key for key in cr.keys()]
     fig, axs = plt.subplots()
     axs.grid(axis='both', color='gray', linestyle='--')
@@ -110,8 +104,8 @@ def correlation_plot(filter_list1=None,
             axs.set_ylim(max_len * -1, max_len)
             axs.set_xlim(0, max_len)
             legend.append(keys_list[i])
-        plt.xlabel('Steps')
-        plt.ylabel('Matches')
+        plt.xlabel('Шаги')
+        plt.ylabel('Совпадения')
         y = cr[keys_list[i]]
         legend.append(keys_list[i])
         axs.plot([i for i in range(max_len)], y)

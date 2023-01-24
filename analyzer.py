@@ -1,4 +1,3 @@
-import itertools
 import datetime
 
 import numpy as np
@@ -10,7 +9,7 @@ import sadzax
 
 
 #  1.0. Importing data
-def get_data(device_type: str = 'nkvv',
+def get_data(device_type: str = 'kiv',
              file: str = None,
              sep: str = None,
              encoding: str = None,
@@ -18,6 +17,7 @@ def get_data(device_type: str = 'nkvv',
              raw_param: bool = False):
     """
     For a custom file usage you need to set all additional params
+    Need to switch to classes
     """
     data = pd.DataFrame.empty
     device_type = device_type.lower()
@@ -51,6 +51,8 @@ def get_data(device_type: str = 'nkvv',
                     # data[a_column] = pd.to_datetime(data[a_column], format='%Y/%m/%d %H:%M:%S')
                     data[a_column] = pd.to_datetime(data[a_column])
                     data = data.sort_values(by=a_column)
+                else:
+                    data[a_column] = data[a_column].astype(float)
     return data
 
 
@@ -298,10 +300,19 @@ def data_average_finder(filter_list: list = None,
         data = get_data(device_type=device_type)
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
-    if filter_list is None:
-        filter_list = ['time', '∆tg_HV']
     if list_of_non_math is None:
         list_of_non_math = devices.links(device_type)[4]
+    if filter_list is None:
+        filter_list = ['∆tg_MV']
+    # else:
+    #     df = data_filter(filter_list, cols=cols, data=data)
+    #     func_columns_list = list(df.columns)
+    #     for k in list_of_non_math:
+    #         for i in range(df.shape[1]):
+    #             if func_columns_list[i].startswith(k) is True:
+    #                 break
+    #     else:
+    #         filter_list.append('time')
     df = data_filter(filter_list, cols=cols, data=data)
     func_columns_list = list(df.columns)
     func_result_prev = []
@@ -369,6 +380,10 @@ def data_correlation(filter_list1: list = None,
                      device_type: str = 'nkvv',
                      data: pd.core = None,
                      cols: dict = None):
+    """
+    Returns dictionary of { Corr.Params : [ Sequence of correlation]  }
+    100% strict correlation is a x=y type of a graph
+    """
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -381,16 +396,11 @@ def data_correlation(filter_list1: list = None,
     func_result = {}
     df1 = data_filter(filter_list1, cols=cols, data=data)
     df2 = data_filter(filter_list2, cols=cols, data=data)
-    shape1 = data_filter(filter_list1, cols=cols, data=data).shape[1]
-    shape2 = data_filter(filter_list2, cols=cols, data=data).shape[1]
     df = pd.concat([df1, df2], axis=1)
-    for h in range(shape1):
-        for g in range(shape2):
+    for h in range(df1.shape[1]):
+        for g in range(df2.shape[1]):
             a_values = df[df.columns.values[h]].tolist()
-            b_values = df[df.columns.values[g + shape1]].tolist()
-            # a_values_without_nan = [x for x in a_values if not np.isnan(x)]
-            # NaNs can cause different amount of indexes
-            # b_values_without_nan = [x for x in b_values if not np.isnan(x)]
+            b_values = df[df.columns.values[g + df1.shape[1]]].tolist()
             correlation_integer = 0
             correlation_sequence = []
             for j in range(len(a_values) - 1):
@@ -403,7 +413,7 @@ def data_correlation(filter_list1: list = None,
                 else:
                     correlation_integer = correlation_integer - 1
                 correlation_sequence.append(correlation_integer)
-            func_result[str(df.columns[h] + ' correlation with ' + df.columns[g + shape1])] = correlation_sequence
+            func_result[str(df.columns[h] + ' correlation with ' + df.columns[g + df1.shape[1]])] = correlation_sequence
     return func_result
 
 
