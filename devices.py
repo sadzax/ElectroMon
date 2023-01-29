@@ -85,10 +85,10 @@ kiv.work_file_sep = None
 kiv.work_file_default_encoding = None
 kiv.work_file_parse_dates = ['Дата/Время']  # Starts with
 kiv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
-                                           'tg': -10.0,
-                                           '∆tg': -10.0,
-                                           'c_delta': -10.0,
-                                           'c_deviation': 0.0,
+                                           'tg': [-10.0, 0.0],
+                                           '∆tg': [-10.0, 0.0],
+                                           'c_delta': [-10.0, 0.0],
+                                           'c_deviation': [0.0, 0.0],
                                            'voltage_difference': 0.0}
 kiv.data_types = {'°С': 'temperature',
                   'Дата': 'datetime',
@@ -105,8 +105,8 @@ kiv.data_search_name = {'Дата': ['time', 'time_of_measure'],
                         'tg': ['tg', 'tangent'],
                         '∆C': ['∆C', 'c_delta'],
                         '∆tg': ['∆tg', 'tangent_delta'],
-                        'Iunb': ['', ''],
-                        'Phy_unb': ['', ''],
+                        'Iunb': ['Ia', 'power_unbalanced'],
+                        'Phy_unb': ['phy', 'angle__unbalanced'],
                         'Tmk': ['tcpu', 'temperature_of_cpu'],
                         'Tamb': ['tair', 'temperature_of_air']}
 
