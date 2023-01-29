@@ -97,14 +97,15 @@ def columns_analyzer(device_type='nkvv',
                 result_dict[i].append('overall')
             else:
                 codename = sadzax.Trimmer.right((sadzax.Trimmer.left(source_dict[i][0],
-                                                                    source_dict[i][0].find("ф.") + 3)), 1) + '0'
+                                                                     source_dict[i][0].find("ф.") + 3)), 1) + '0'
                 source_dict[i].append(codename)
             if 'ф.' in str(result_dict[i][0]):  # Works with kiv.xlsx for a phase-parameters
                 result_dict[i].append("MV")
             else:
                 result_dict[i].append('no_voltage')
             for a_key in devices.kiv.data_search_name:
-                if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key and 'ф.' or 'Дата' in str(result_dict[i][0]):
+                # if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key and 'ф.' or 'Дата' in str(result_dict[i][0]):  #
+                if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key:
                     source_dict[i].append(devices.kiv.data_search_name[a_key][0])
                     source_dict[i].append(devices.kiv.data_search_name[a_key][1])
             if len(source_dict[i]) < 5:

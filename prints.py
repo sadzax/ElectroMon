@@ -103,8 +103,8 @@ def average_printer(ex, data, cols, abs_parameter=True):
     plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
 
 
-def warning_printer(filter_list_append, warning_param1=1.0, warning_param2=1.5, warn_type='accident',
-                    abs_parameter=True, data=database):
+def warning_printer(filter_list_append, data: pd.core = None, warning_param1=1.0, warning_param2=1.5, warn_type='accident',
+                    abs_parameter=True):
     filter_list = ['time']
     for x in filter_list_append:
         filter_list.append(x)

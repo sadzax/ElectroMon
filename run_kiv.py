@@ -10,13 +10,17 @@ device_type: str = 'kiv'
 devices.kiv.work_file = prints.work_file_picking(device_type)
 
 print('Чтение и обработка файла...')
-database = analyzer.get_data(device_type=device_type)
-data = database.copy()
-data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
-# # noinspection PyTypeChecker
+# __ Correct method
+# database = analyzer.get_data(device_type=device_type)
+# data = database.copy()
+# cols_list = columns.columns_list_maker(device_type=device_type, data=data)
+# cols = columns.columns_analyzer(device_type=device_type, list_for_columns=cols_list)
+# data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
+# __ Quick method for debugging
+# noinspection PyTypeChecker
 # devices.Pkl.save(device_type=device_type, data=data)
-# # noinspection PyTypeChecker
-# data = devices.Pkl.load(device_type=device_type)
+# noinspection PyTypeChecker
+data = devices.Pkl.load(device_type=device_type)
 cols_list = columns.columns_list_maker(device_type=device_type, data=data)
 cols = columns.columns_analyzer(device_type=device_type, list_for_columns=cols_list)
 del cols_list
