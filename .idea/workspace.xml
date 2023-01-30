@@ -209,13 +209,6 @@
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
     </task>
-    <task id="LOCAL-00033" summary="1.12&#10;Filtering debugged">
-      <created>1670675086885</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1670675086885</updated>
-    </task>
     <task id="LOCAL-00034" summary="1.13&#10;Warnings">
       <created>1670920660459</created>
       <option name="number" value="00034" />
@@ -552,7 +545,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675097637086</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="kiv plots and prints">
+      <created>1675097887177</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1675097887177</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
