@@ -446,8 +446,9 @@ def warning_finder(filter_list: list = None,
     func_result = []
     for i in range(df.shape[1]):
         if i == date_index:
-            break
+            pass
         else:
+            #  PROBLEM!
             df_temp = data_filter(filter_list=[cols_list[date_index], cols_list[i]], data=df)
             if abs_parameter is True:
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount) |
