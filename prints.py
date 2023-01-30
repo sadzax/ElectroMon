@@ -1,3 +1,4 @@
+
 import pandas as pd
 import analyzer
 import columns
@@ -106,32 +107,45 @@ def average_printer(ex, data, cols, abs_parameter=True):
     plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
 
 
-def warning_printer(filter_list_append, data: pd.core = None, cols: dict = None, warning_param1=1.0, warning_param2=1.5,
-                    warn_type='accident', abs_parameter=True):
+def warning_printer(filter_list_append,
+                    device_type: str = 'kiv',
+                    data: pd.core = None,
+                    cols: dict = None,
+                    warning_param1=1.0,
+                    warning_param2=1.5,
+                    warn_type='accident',
+                    abs_parameter=True):
     filter_list = ['time']
     if isinstance(filter_list, list) is False:
         filter_list_append = [filter_list_append]
     for x in filter_list_append:
         filter_list.append(x)
+    warning_param = 0.0
     if warn_type == 'warning':
         warning_param = warning_param1
         warn_str = 'предупредительной'
     elif warn_type == 'accident':
         warning_param = warning_param2
         warn_str = 'аварийной'
-    log_warn = analyzer.warning_finder(filter_list=filter_list, abs_parameter=abs_parameter, data=data,
-                                       cols=cols, warning_amount=warning_param)
+    log_warn = analyzer.warning_finder(filter_list=filter_list,
+                                       device_type=device_type,
+                                       data=data,
+                                       cols=cols,
+                                       warning_amount=warning_param,
+                                       abs_parameter=abs_parameter)
     for every_df in log_warn:
         if every_df.empty is True:
             print(f'Превышение уровней {every_df.axes[1].values[1]} '
                   f'для срабатывания {warn_str} (±{warning_param}) сигнализации не выявлено')
         else:
-            print(f'Выявлено превышений (±{warning_param}): {every_df.shape[0]} '
+            num = every_df.shape[0]
+            print(f'Выявлено {num} {sadzax.Rus.cases(num,"превышение","превышения","превышений")} (±{warning_param}):'
                   f'уровней {every_df.axes[1].values[1]} для срабатывания {warn_str} сигнализации. '
-                  f'\n Процент срабатывания {round((every_df.shape[0] / log_total ) * 100, 3)}%')
+                  f'\n Процент срабатывания {round((every_df.shape[0] / data.shape[0] ) * 100, 3)}% (от общего'
+                  f' количества замеров')
             print(answering('Вывести список?', every_df))
 
 
-def print_flat_graph(title, input_y, data):
+def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, cols=None, title=None):
     info(title)
-    plots.flat_graph(title=title, input_y=input_y, data=data)
+    plots.flat_graph(input_x=input_x, input_y=input_y, device_type=device_type, data=data, cols=cols, title=title)

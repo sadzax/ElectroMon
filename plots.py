@@ -9,24 +9,24 @@ import devices
 def flat_graph(input_x: list = None,
                input_y: list = None,
                device_type='nkvv',
-               cols: dict = None,
                data: pd.core = None,
+               cols: dict = None,
                title='',
                size_x: int = 14,
                size_y: int = 6):
-    if input_x is None:
-        input_x = ['Дата создания записи']
-    if input_y is None:
-        input_y = ['∆tg_HV', '∆tg_MV']
-    if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type)
     if data is None:
         data = analyzer.get_data(device_type=device_type)
+    if cols is None:
+        cols = columns.columns_analyzer(device_type=device_type)
+    if input_x is None:
+        input_x = [columns.time_column(device_type=device_type, data=data)]
+    if input_y is None:
+        input_y = ['∆tg_HV', '∆tg_MV']
     fig, axs = plt.subplots(figsize=(size_x, size_y))
     axs.grid(axis='both', color='gray', linestyle='--')
     plt.title(title)
     df_x = analyzer.data_filter(input_x, cols=cols, data=data)
-    plt.xlabel(str(df_x[df_x.columns[0]]))
+    plt.xlabel(str(df_x.columns[0]))
     df_y = analyzer.data_filter(input_y, cols=cols, data=data)
     plt.ylabel(', '.join(input_y))
     legend = []

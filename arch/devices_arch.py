@@ -151,7 +151,7 @@ devices.nkvv.paste_values_rus_dict = {0: ['Дата создания запис�
                               47: ['Freq,Гц', 'frequency', 'overall', 'no_voltage', 'freq', 'frequency', 'freq_no_voltage'],
                               48: ['Unnamed: 48', 'other', 'overall', 'no_voltage', 'no_name', 'no_name', 'no_name_no_voltage']}
 
-devices.nkvv.paste_values_rus_dict = {
+devices.kiv.paste_values_rus_dict = {
     0: [' № ', 'other', 'overall', 'no_voltage', 'no_name', 'no_name', 'no_name_no_voltage'],
     1: ['Дата/Время UTC+03:00', 'datetime', 'overall', 'no_voltage', 'time', 'time_of_measure', 'time_no_voltage'],
     2: ['U ф.A', 'voltage', 'A0', 'MV', 'U', 'voltage_difference', 'U_MV'],

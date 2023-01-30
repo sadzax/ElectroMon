@@ -421,7 +421,7 @@ def warning_finder(filter_list: list = None,
                    device_type: str = 'nkvv',
                    data: pd.core = None,
                    cols: dict = None,
-                   warning_amount: int = 1,
+                   warning_amount: float = 1.0,
                    abs_parameter: bool = True,
                    list_of_non_math: list = None):
     """
@@ -449,6 +449,9 @@ def warning_finder(filter_list: list = None,
             pass
         else:
             df_temp = data_filter(filter_list=[cols_list[date_index], cols_list[i]], data=df, cols=cols)
+            # arr = df_temp[cols_list[i]]
+            # arr = np.array(arr)
+            # arr[arr >= warning_amount]
             if abs_parameter is True:
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount) |
                                              (df_temp[cols_list[i]] <= warning_amount * -1)]
