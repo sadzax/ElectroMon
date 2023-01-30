@@ -18,7 +18,7 @@ print('Чтение и обработка файла...')
 # data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
 # __ Quick method for debugging
 # noinspection PyTypeChecker
-# devices.Pkl.save(device_type=device_type, data=data)
+# devices.Pkl.save(device_type=device_type, data=data2)
 # noinspection PyTypeChecker
 data = devices.Pkl.load(device_type=device_type)
 cols_list = columns.columns_list_maker(device_type=device_type, data=data)

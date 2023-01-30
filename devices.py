@@ -89,7 +89,7 @@ kiv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                            '∆tg': [-10.0, 0.0],
                                            'c_delta': [-10.0, 0.0],
                                            'c_deviation': [0.0, 0.0],
-                                           'voltage_difference': 0.0}
+                                           'voltage_difference': [0.0]}
 kiv.data_types = {'°С': 'temperature',
                   'Дата': 'datetime',
                   'U': 'voltage',
@@ -106,7 +106,7 @@ kiv.data_search_name = {'Дата': ['time', 'time_of_measure'],
                         '∆C': ['∆C', 'c_delta'],
                         '∆tg': ['∆tg', 'tangent_delta'],
                         'Iunb': ['Ia', 'power_unbalanced'],
-                        'Phy_unb': ['phy', 'angle__unbalanced'],
+                        'Phy_unb': ['phy', 'angle_unbalanced'],
                         'Tmk': ['tcpu', 'temperature_of_cpu'],
                         'Tamb': ['tair', 'temperature_of_air']}
 

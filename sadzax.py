@@ -105,7 +105,7 @@ class Rus(object):
             return five
         elif (x % 10) == 1:
             return one
-        elif (x % 10) >= 2 or (x % 10) <= 4:
+        elif (x % 10) == 2 or (x % 10) == 3 or (x % 10) == 4:
             return two
         else:
             return five

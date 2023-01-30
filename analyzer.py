@@ -130,13 +130,7 @@ def values_time_slicer(device_type: str = 'nkvv',
     if data is None:
         data = get_data(device_type=device_type)
     data_result = {}
-    parse_dates = devices.links(device_type)[4]
-    time_column = list(data.columns)[0]
-    for an_element_of_parse_dates in parse_dates:
-        for a_column in list(data.columns):
-            if a_column.startswith(an_element_of_parse_dates):
-                time_column = a_column
-        break
+    time_column = columns.time_column(device_type=device_type, data=data)
     time_analyzer_df = values_time_analyzer_df(source_dict=values_time_analyzer(device_type=device_type, data=data))
     indexes_for_slicing = [-1]
     for i in range(time_analyzer_df.shape[0]):
@@ -211,17 +205,18 @@ def pass_the_nan(device_type: str = 'nkvv',
     if default_dict_for_replacement is None:
         default_dict_for_replacement = devices.links_replacement(device_type)
     for i in range(len(default_dict_for_replacement)):
-        seeking_param = [x for x in default_dict_for_replacement.keys()][i]
-        replacing_value = [x for x in default_dict_for_replacement.values()][i]
+        seeking_params = [x for x in default_dict_for_replacement.keys()][i]
+        replacing_values = [x for x in default_dict_for_replacement.values()][i]
         for a_column in range(len(cols)):
             for a_param in range(len(cols[0])):
-                if cols[a_column][a_param] == seeking_param:
+                if cols[a_column][a_param] == seeking_params:
+                    # data[a_column in replacing_values] = np.NaN
                     for a_row in range(data.shape[0]):  # Need to optimize memory usage
-                        if isinstance(replacing_value, list) is False:
-                            if data.iloc[a_row, a_column] == replacing_value:
+                        if isinstance(replacing_values, list) is False:
+                            if data.iloc[a_row, a_column] == replacing_values:
                                 data.iloc[a_row, a_column] = np.NaN
                         else:
-                            for every_replacing_value in replacing_value:
+                            for every_replacing_value in replacing_values:
                                 if data.iloc[a_row, a_column] == every_replacing_value:
                                     data.iloc[a_row, a_column] = np.NaN
     return data
@@ -230,21 +225,27 @@ def pass_the_nan(device_type: str = 'nkvv',
 #  2.3. Counting the nan_strings:
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
-                      cols: dict = None):
+                      cols: dict = None,
+                      false_data_percentage: float = 30.0):
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
     nans_dict = {}
+    time_column = columns.time_column(device_type=device_type, data=data)
+    time_index = 0
+    for i in range(len(cols)):
+        if cols[i][0] == time_column:
+            time_index = i
     for a_row in range(data.shape[0]):
         nan_counter = 0
         for a_column in range(len(cols)):
             if pd.isna(data.iloc[a_row, a_column]) is True:
                 nan_counter += 1
-        if nan_counter > (len(cols)/3):
-            nans_dict[a_row] = [pd.to_datetime(str(data.iloc[a_row, 0])).strftime('%d.%m.%y'),
-                                pd.to_datetime(str(data.iloc[a_row, 0])).strftime('%H.%M'),
+        if nan_counter > (len(cols)*(false_data_percentage/100)):
+            nans_dict[a_row] = [pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%d.%m.%y'),
+                                pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%H.%M'),
                                 round((nan_counter/len(cols))*100, 0)]  # correct percentage
     return nans_dict
 
@@ -256,7 +257,7 @@ def total_nan_counter_df(source_dict: dict = None,
     if source_dict is None:
         source_dict = total_nan_counter()
     if cols is None:
-        cols = ['Дата', 'Время', '% некорректных данных на момент замера']
+        cols = ['Дата', 'Время', '% некорректных данных (из общего числа считываемых) в момент замера']
     return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols)
 
 

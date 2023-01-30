@@ -24,8 +24,9 @@ def info(the_string):
 def answering(question, yes='', no='', answer_list=None):
     answer = input(f'  {question}  ')
     if answer_list is None:
-        answer_list = {'yes': ['yes', 'ye', 'yeah', 'ok', 'y', 'да', 'ага', 'ок', 'хорошо', 'давай', 'го', 'д', 'lf'],
-                       'no': ['no', 'nope', 'nah', 'n', 'нет', 'не', 'не надо', 'н', 'не-а', 'yt', 'ytn']}
+        answer_list = {'yes': ['yes', 'ye', 'yeah', 'ok', 'y', 'да', 'ага', 'ок', 'хорошо', 'давай', 'го', 'д', 'lf',
+                               'da', 'нуы'],
+                       'no': ['no', 'nope', 'nah', 'n', 'нет', 'не', 'не надо', 'н', 'не-а', 'yt', 'ytn', 'тщ']}
     for answer_example in answer_list['yes']:
         if answer == answer_example:
             return yes
@@ -79,7 +80,7 @@ def values_time_analyzer_df(device_type, data):
 
 def total_nan_counter_df(device_type, data, cols):
     info('Анализ периодов массовой некорректности измерений')
-    log_nans = analyzer.total_nan_counter(device_type, data=data, cols=cols)
+    log_nans = analyzer.total_nan_counter(device_type=device_type, data=data, cols=cols)
     log_nans_df = analyzer.total_nan_counter_df(source_dict=log_nans, orient='index')
     w1 = sadzax.Rus.cases(len(log_nans), "Выявлен", "Выявлено", "Выявлено")
     w2 = sadzax.Rus.cases(len(log_nans), "замер", "замера", "замеров")
@@ -87,6 +88,8 @@ def total_nan_counter_df(device_type, data, cols):
         print(f"\n Периоды некорректных измерений не выявлены")
     else:
         print(f"\n {w1} {len(log_nans)} {w2} с некорректными данными")
+        print(f"Замеры с некорректными данными составили {round((len(log_nans)/data.shape[0]) * 100, 1)}%"
+              f" от общего числа произведённых замеров")
         print(answering('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no=''))
 
 

@@ -11,11 +11,11 @@ import sadzax
 
 
 #  Need to organize "file=devices.nkvv.work_file" etc... ->  to func.
-def columns_list_maker(device_type='nkvv',
+def columns_list_maker(device_type: str = 'nkvv',
                        data: pd.core = None,
-                       file=None,
-                       sep=None,
-                       encoding=None):
+                       file: str = None,
+                       sep: str = None,
+                       encoding: str = None):
     """
     Need to take it to the class of Devices
     """
@@ -39,8 +39,8 @@ def columns_list_maker(device_type='nkvv',
 
 
 #  Analyze all columns
-def columns_analyzer(device_type='nkvv',
-                     list_for_columns=None):
+def columns_analyzer(device_type: str ='nkvv',
+                     list_for_columns: list = None):
     """
     Need to take it to the class of Devices
     """
@@ -121,3 +121,18 @@ def columns_analyzer(device_type='nkvv',
                 source_dict[i].append('no_name')
             source_dict[i].append(source_dict[i][4] + '_' + source_dict[i][3])
     return result_dict
+
+
+def time_column(device_type='nkvv',
+                data: pd.core = None):
+    device_type = device_type.lower()
+    if data is None:
+        data = analyzer.get_data(device_type=device_type)
+    parse_dates = devices.links(device_type)[4]
+    the_time_column = list(data.columns)[0]
+    for an_element_of_parse_dates in parse_dates:
+        for a_column in list(data.columns):
+            if a_column.startswith(an_element_of_parse_dates):
+                the_time_column = a_column
+        break
+    return the_time_column
