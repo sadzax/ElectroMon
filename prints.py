@@ -106,19 +106,21 @@ def average_printer(ex, data, cols, abs_parameter=True):
     plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
 
 
-def warning_printer(filter_list_append, data: pd.core = None, warning_param1=1.0, warning_param2=1.5, warn_type='accident',
-                    abs_parameter=True):
+def warning_printer(filter_list_append, data: pd.core = None, cols: dict = None, warning_param1=1.0, warning_param2=1.5,
+                    warn_type='accident', abs_parameter=True):
     filter_list = ['time']
+    if isinstance(filter_list, list) is False:
+        filter_list_append = [filter_list_append]
     for x in filter_list_append:
         filter_list.append(x)
-    if warn_type == 'accident':
-        warning_param = warning_param2
-        warn_str = 'аварийной'
-    elif warn_type == 'warning':
+    if warn_type == 'warning':
         warning_param = warning_param1
         warn_str = 'предупредительной'
+    elif warn_type == 'accident':
+        warning_param = warning_param2
+        warn_str = 'аварийной'
     log_warn = analyzer.warning_finder(filter_list=filter_list, abs_parameter=abs_parameter, data=data,
-                                       warning_amount=warning_param)
+                                       cols=cols, warning_amount=warning_param)
     for every_df in log_warn:
         if every_df.empty is True:
             print(f'Превышение уровней {every_df.axes[1].values[1]} '
@@ -126,7 +128,7 @@ def warning_printer(filter_list_append, data: pd.core = None, warning_param1=1.0
         else:
             print(f'Выявлено превышений (±{warning_param}): {every_df.shape[0]} '
                   f'уровней {every_df.axes[1].values[1]} для срабатывания {warn_str} сигнализации. '
-                  f'\n Процент срабатывания {round((every_df.shape[0] / log_total) * 100, 3)}%')
+                  f'\n Процент срабатывания {round((every_df.shape[0] / log_total ) * 100, 3)}%')
             print(answering('Вывести список?', every_df))
 
 

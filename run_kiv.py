@@ -18,7 +18,7 @@ print('Чтение и обработка файла...')
 # data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
 # __ Quick method for debugging
 # noinspection PyTypeChecker
-# devices.Pkl.save(device_type=device_type, data=data2)
+# devices.Pkl.save(device_type=device_type, data=data)
 # noinspection PyTypeChecker
 data = devices.Pkl.load(device_type=device_type)
 cols_list = columns.columns_list_maker(device_type=device_type, data=data)
@@ -48,8 +48,6 @@ plots.correlation_plot(filter_list1=[ex1, ex2], filter_list2=['tair'], device_ty
 
 prints.average_printer(ex=ex1, data=data, cols=cols)
 
-# Averages
-zzz = analyzer.data_average_finder(filter_list=[ex1], data=data, cols=cols)
 
 # _______
 

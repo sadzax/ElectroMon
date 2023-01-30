@@ -205,20 +205,18 @@ def pass_the_nan(device_type: str = 'nkvv',
     if default_dict_for_replacement is None:
         default_dict_for_replacement = devices.links_replacement(device_type)
     for i in range(len(default_dict_for_replacement)):
-        seeking_params = [x for x in default_dict_for_replacement.keys()][i]
+        seeking_param = [x for x in default_dict_for_replacement.keys()][i]
         replacing_values = [x for x in default_dict_for_replacement.values()][i]
-        for a_column in range(len(cols)):
-            for a_param in range(len(cols[0])):
-                if cols[a_column][a_param] == seeking_params:
-                    # data[a_column in replacing_values] = np.NaN
-                    for a_row in range(data.shape[0]):  # Need to optimize memory usage
-                        if isinstance(replacing_values, list) is False:
-                            if data.iloc[a_row, a_column] == replacing_values:
-                                data.iloc[a_row, a_column] = np.NaN
-                        else:
-                            for every_replacing_value in replacing_values:
-                                if data.iloc[a_row, a_column] == every_replacing_value:
-                                    data.iloc[a_row, a_column] = np.NaN
+        for a_column_index in range(len(cols)):
+            for a_param_index in range(len(cols[0])):
+                if cols[a_column_index][a_param_index] == seeking_param:
+                    arr = data[cols[a_column_index][0]]
+                    arr = np.array(arr)
+                    if isinstance(replacing_values, list) is False:
+                        replacing_values = list(replacing_values)
+                    for every_replacing_value in replacing_values:
+                        arr[arr == every_replacing_value] = np.NaN
+                    data[cols[a_column_index][0]] = arr
     return data
 
 
@@ -419,7 +417,7 @@ def data_correlation(filter_list1: list = None,
 
 
 #  4.4. Warning Notes
-def warning_finder(filter_list: str = None,
+def warning_finder(filter_list: list = None,
                    device_type: str = 'nkvv',
                    data: pd.core = None,
                    cols: dict = None,
@@ -438,7 +436,7 @@ def warning_finder(filter_list: str = None,
         filter_list = ['time', '∆tgδ_MV']
     if list_of_non_math is None:
         list_of_non_math = devices.links(device_type)[4]
-    df = data_filter(filter_list, cols=cols, data=data)
+    df = data_filter(filter_list=filter_list, cols=cols, data=data)
     cols_list = list(df.columns)
     date_index = 0
     for i in range(df.shape[1]):
@@ -447,9 +445,8 @@ def warning_finder(filter_list: str = None,
                 date_index = i
     func_result = []
     for i in range(df.shape[1]):
-        for k in list_of_non_math:
-            if k == cols_list[i]:
-                break
+        if i == date_index:
+            break
         else:
             df_temp = data_filter(filter_list=[cols_list[date_index], cols_list[i]], data=df)
             if abs_parameter is True:
