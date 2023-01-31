@@ -12,7 +12,7 @@ def clearing_script():
     import warnings
     warnings.simplefilter(action='ignore', category=FutureWarning)
     sys.stdin.reconfigure(encoding='utf-8')
-    sys.stdout.reconfigure(encoding='utf-8')
+    # sys.stdout.reconfigure(encoding='utf-8')
 
 
 clearing_script()

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv plots and prints">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_kiv.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_kiv.py" afterDir="false" />
-    </list>
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv done" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -208,13 +205,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00036" summary="1.13.1&#10;Warnings">
-      <created>1670926865689</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1670926865689</updated>
     </task>
     <task id="LOCAL-00037" summary="1.13.2&#10;values_time_analyzer updated">
       <created>1671032257544</created>
@@ -552,7 +542,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675108150605</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="kiv done">
+      <created>1675108864421</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1675108864422</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -567,7 +564,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.7.2" />
     <MESSAGE value="1.7.3" />
     <MESSAGE value="1.8&#10;Replaced delta_tg_checker()" />
     <MESSAGE value="1.8.1.bug&#10;correclations" />
@@ -592,6 +588,7 @@
     <MESSAGE value="functions refactored w/devices class" />
     <MESSAGE value="kiv runner" />
     <MESSAGE value="kiv plots and prints" />
-    <option name="LAST_COMMIT_MESSAGE" value="kiv plots and prints" />
+    <MESSAGE value="kiv done" />
+    <option name="LAST_COMMIT_MESSAGE" value="kiv done" />
   </component>
 </project>
