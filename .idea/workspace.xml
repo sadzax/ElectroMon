@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="kiv done">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="SettingwithCopyWarning solved">
       <change afterPath="$PROJECT_DIR$/edits/methods.MD" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/edits/proj.MD" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_kiv.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_kiv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,13 +209,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00039" summary="1.14.1">
-      <created>1671135791540</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1671135791540</updated>
     </task>
     <task id="LOCAL-00040" summary="added list handler for passing the nans in main DF">
       <created>1671703903211</created>
@@ -553,7 +546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675754349042</updated>
     </task>
-    <option name="localTasksCounter" value="88" />
+    <task id="LOCAL-00088" summary="SettingwithCopyWarning solved">
+      <created>1675754434506</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1675754434506</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -568,7 +568,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.7.3" />
     <MESSAGE value="1.8&#10;Replaced delta_tg_checker()" />
     <MESSAGE value="1.8.1.bug&#10;correclations" />
     <MESSAGE value="1.8.2&#10;Refactored" />
@@ -593,6 +592,7 @@
     <MESSAGE value="kiv runner" />
     <MESSAGE value="kiv plots and prints" />
     <MESSAGE value="kiv done" />
-    <option name="LAST_COMMIT_MESSAGE" value="kiv done" />
+    <MESSAGE value="SettingwithCopyWarning solved" />
+    <option name="LAST_COMMIT_MESSAGE" value="SettingwithCopyWarning solved" />
   </component>
 </project>
