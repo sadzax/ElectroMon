@@ -13,8 +13,7 @@ devices.kiv.work_file = prints.work_file_picking(device_type)
 
 print('Чтение и обработка файла...')
 # __ Correct method
-database = analyzer.get_data(device_type=device_type)
-data = database.copy()
+data = analyzer.get_data(device_type=device_type)
 cols_list = columns.columns_list_maker(device_type=device_type, data=data)
 cols = columns.columns_analyzer(device_type=device_type, list_for_columns=cols_list)
 data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
@@ -107,3 +106,6 @@ prints.print_flat_graph(input_y=['∆tg_MV'], device_type=device_type, data=data
 mv7 = 'Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений) высоковольтных вводов' \
       ' фаз А, В и С стороны СН-110кВ'
 prints.print_flat_graph(input_y=['∆C_MV'], device_type=device_type, data=data, cols=cols, title=mv7)
+
+import pandas as pd
+a = pd.read_sql_table('./db/22_06/21217004.I', con='')

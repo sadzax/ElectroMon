@@ -17,7 +17,7 @@ def get_data(device_type: str = 'kiv',
              raw_param: bool = False):
     """
     For a custom file usage you need to set all additional params
-    Need to switch to classes
+    Need to switch to classes of devices
     """
     data = pd.DataFrame.empty
     device_type = device_type.lower()
@@ -38,21 +38,25 @@ def get_data(device_type: str = 'kiv',
                 if data_raw.iloc[i, 0] != ' № ':
                     pass
                 else:
-                    data = data_raw.iloc[i+1:]
+                    data = data_raw.iloc[i+1:].copy()
                     data.columns = list(data_raw.iloc[i])
+                    del data_raw
                     # noinspection PyUnreachableCode
                     break
         for an_element_of_parse_dates in parse_dates:
             for a_column in list(data.columns):
                 if a_column.startswith(an_element_of_parse_dates):
                     # 'SettingWithCopyWarning' - A value is trying to be set on a copy of a slice from a DataFrame
-                    pd.options.mode.chained_assignment = None
+                    pd.options.mode.chained_assignment = 'raise'
                     # Check mask @ https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
                     # data[a_column] = pd.to_datetime(data[a_column], format='%Y/%m/%d %H:%M:%S')
                     data[a_column] = pd.to_datetime(data[a_column])
                     data = data.sort_values(by=a_column)
                 else:
-                    data[a_column] = data[a_column].astype(float)
+                    try:
+                        data[a_column] = data[a_column].astype(float)
+                    except ValueError:
+                        pass
     return data
 
 
