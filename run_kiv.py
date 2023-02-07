@@ -106,3 +106,7 @@ prints.print_flat_graph(input_y=['∆tg_MV'], device_type=device_type, data=data
 mv7 = 'Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений) высоковольтных вводов' \
       ' фаз А, В и С стороны СН-110кВ'
 prints.print_flat_graph(input_y=['∆C_MV'], device_type=device_type, data=data, cols=cols, title=mv7)
+
+prints.print_flat_graph(input_y=['U_no_voltage'], device_type=device_type, data=data, cols=cols)
+
+prints.print_flat_graph(input_y=['Ia_no_voltage'], device_type=device_type, data=data, cols=cols)
