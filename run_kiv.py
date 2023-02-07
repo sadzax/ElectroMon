@@ -5,11 +5,11 @@ import plots
 import prints
 prints.clearing_script()
 
-
-#  ______________________________________ OBTAINING DATA ___________________________________________
-
 device_type: str = 'kiv'
 devices.kiv.work_file = prints.work_file_picking(device_type)
+
+
+#  ______________________________________ OBTAINING DATA ___________________________________________
 
 print('Чтение и обработка файла...')
 # __ Correct method
@@ -106,6 +106,3 @@ prints.print_flat_graph(input_y=['∆tg_MV'], device_type=device_type, data=data
 mv7 = 'Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений) высоковольтных вводов' \
       ' фаз А, В и С стороны СН-110кВ'
 prints.print_flat_graph(input_y=['∆C_MV'], device_type=device_type, data=data, cols=cols, title=mv7)
-
-import pandas as pd
-a = pd.read_sql_table('./db/22_06/21217004.I', con='')
