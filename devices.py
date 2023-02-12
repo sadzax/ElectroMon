@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import pathlib
 
 
 class Device:
@@ -110,6 +111,44 @@ kiv.data_search_name = {'Дата': ['time', 'time_of_measure'],
                         'Tmk': ['tcpu', 'temperature_of_cpu'],
                         'Tamb': ['tair', 'temperature_of_air']}
 
+
+mon = Device('mon')
+mon.full_name = 'Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов'
+mon.monitoring_params = {'input': 220000, 'output': 110000}
+mon.log_types = {'measure': 'csv', 'event': 'csv'}
+mon.work_file_folder = 'upload/mon/'
+mon.work_file_name_ends = {'measure': '.I'}
+mon.work_file_list = ''
+mon.work_file = ''
+mon.work_file_sep = r"\s+"
+mon.work_file_default_encoding = 'WINDOWS-1251'
+mon.work_file_parse_dates = ['Дата и время']
+mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
+                                            'tg': -10.0,
+                                            '∆tg': -10.0,
+                                            'c_delta': -10.0,
+                                            'c_deviation': 0.0,
+                                            'voltage_difference': 0.0}
+mon.data_types = {'кВ': 'voltage',
+                   'мА': 'power',
+                   ',%': 'percentage',
+                   'От': 'deviation',
+                   '°С': 'temperature',
+                   'Гц': 'frequency',
+                   'Дата': 'datetime',}
+mon.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
+                         'DeltaC_': ['∆C', 'c_delta'],
+                         'Tg_': ['tg', 'tangent'],
+                         'C_': ['C', 'c_deviation'],
+                         'Дата создания записи': ['time', 'time_of_measure'],
+                         'Дата сохранения в БД': ['save', 'time_of_saving'],
+                         'U_': ['U', 'voltage_difference'],
+                         'Ia_': ['Ia', 'power_active'],
+                         'Ir_': ['Ir', 'power_reactive'],
+                         'Freq': ['freq', 'frequency'],
+                         'Tair': ['tair', 'temperature_of_air'],
+                         'Tdev': ['tdev', 'temperature_of_device'],
+                         'Tcpu': ['tcpu', 'temperature_of_cpu']}
 
 
 # Avoid error of func inside class and/or before obj.init.
