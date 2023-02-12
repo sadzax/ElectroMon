@@ -1,4 +1,3 @@
-
 import pandas as pd
 import analyzer
 import columns
@@ -41,25 +40,24 @@ def answering(question, yes='', no='', answer_list=None):
 
 def work_file_picking(device_type='kiv'):
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
-    files_list = devices.work_file_listing(device_type)
-    l = len(files_list)
-    w1 = sadzax.Rus.cases(l, "Доступен", "Доступно", "Доступно")
-    w2 = sadzax.Rus.cases(l, 'файл', 'файла', 'файлов')
-    print(f"{w1} {l} {w2} для анализа: ")
+    files_list = eval(device_type).work_file_list
+    w1 = sadzax.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
+    w2 = sadzax.Rus.cases(len(files_list), 'файл', 'файла', 'файлов')
+    print(f"{w1} {len(files_list)} {w2} для анализа: ")
     for i in files_list:
         print(f"Файл № {files_list.index(i) + 1}. {i}")
-    if l == 1:
+    if len(files_list) == 1:
         print(f"Данный файл выбран для анализа")
-        return devices.work_file_picking(device_type)
-    elif l > 1:
+        return eval(device_type).work_file_pick(device_type, 0)
+    elif len(files_list) > 1:
         while True:
             try:
                 choice = int(input('Выберите № файла: '))
-                if choice <= 0 or choice > l:
+                if choice <= 0 or choice > len(files_list):
                     print(error)
                     continue
-                print(f"Выбран файл {files_list[choice-1]}")
-                return devices.work_file_picking(device_type, choice-1)
+                print(f"Выбран файл {files_list[choice - 1]}")
+                return eval(device_type).work_file_pick(choice - 1)
             except:
                 print(error)
                 continue
@@ -92,7 +90,7 @@ def total_nan_counter_df(device_type, data, cols):
         print(f"\n Периоды некорректных измерений не выявлены")
     else:
         print(f"\n {w1} {len(log_nans)} {w2} с некорректными данными")
-        print(f"Замеры с некорректными данными составили {round((len(log_nans)/data.shape[0]) * 100, 1)}%"
+        print(f"Замеры с некорректными данными составили {round((len(log_nans) / data.shape[0]) * 100, 1)}%"
               f" от общего числа произведённых замеров")
         print(answering('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no=''))
 
@@ -142,10 +140,11 @@ def warning_printer(filter_list_append,
                   f'для срабатывания {warn_str} (±{warning_param}) сигнализации не выявлено')
         else:
             num = every_df.shape[0]
-            print(f'Выявлено {num} {sadzax.Rus.cases(num,"превышение","превышения","превышений")} (±{warning_param}):'
-                  f'уровней {every_df.axes[1].values[1]} для срабатывания {warn_str} сигнализации. '
-                  f'\n Процент срабатывания {round((every_df.shape[0] / data.shape[0] ) * 100, 3)}% (от общего'
-                  f' количества замеров')
+            print(
+                f'Выявлено {num} {sadzax.Rus.cases(num, "превышение", "превышения", "превышений")} (±{warning_param}):'
+                f'уровней {every_df.axes[1].values[1]} для срабатывания {warn_str} сигнализации. '
+                f'\n Процент срабатывания {round((every_df.shape[0] / data.shape[0]) * 100, 3)}% (от общего'
+                f' количества замеров')
             print(answering('Вывести список?', every_df))
 
 

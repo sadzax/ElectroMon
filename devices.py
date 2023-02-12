@@ -6,26 +6,34 @@ import pathlib
 class Device:
     def __init__(self, name):
         self.name = name
-        # self.full_name = name
-        # self.monitoring_params = None
-        # self.log_types = None
-        # self.work_file_name_starts = None
-        # self.work_file_folder = None
-        # self.work_file_list = Device.work_file_listing(name)  # Why doesn't it work?
-        # self.work_file = Device.work_file_picking(name, 0)  # Why doesn't it work?
-        # self.work_file_sep = None
-        # self.work_file_default_encoding = None
-        # self.work_file_parse_dates = None
-        # self.default_dict_for_replacement_to_nan = None
-        # self.data_types = None
-        # self.data_search_name = None
+        self.full_name = name
+        self.monitoring_params = None
+        self.log_types = None
+        self.work_file_name_starts = None
+        self.work_file_name_ends = None
+        self.work_file_folder = 'upload/' + name + '/'
+        self.work_file_sep = None
+        self.work_file_default_encoding = None
+        self.work_file_parse_dates = None
+        self.default_dict_for_replacement_to_nan = None
+        self.data_types = None
+        self.data_search_name = None
 
-    def work_file_listing(self):
+    @property
+    def work_file_list(self):  # Write for ending
         return [filename for filename in os.listdir(self.work_file_folder)
                 if filename.startswith(self.work_file_name_starts['measure'])]
 
-    def work_file_picking(self, num=0):
-        return self.work_file_folder + Device.work_file_listing(self)[num]
+    @property
+    def work_file(self):
+        return self.work_file_folder + self.work_file_list[0]
+
+    def work_file_pick(self, num=0):
+        work_file = self.work_file_folder + self.work_file_list[num]
+        @property
+        def work_file(self):
+            return work_file
+        return work_file
 
     def links(self):  # Work on
         return [self.name, self.work_file, self.work_file_sep, self.work_file_default_encoding,
@@ -34,6 +42,10 @@ class Device:
     def links_replacement(self):
         return self.default_dict_for_replacement_to_nan
 
+    @work_file.setter
+    def work_file(self, value):
+        self._work_file = value
+
 
 nkvv = Device('nkvv')
 nkvv.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
@@ -41,8 +53,6 @@ nkvv.monitoring_params = {'input': 220000, 'output': 110000}
 nkvv.log_types = {'measure': 'csv', 'event': 'csv'}
 nkvv.work_file_folder = 'upload/nkvv/'
 nkvv.work_file_name_starts = {'measure': 'DB_i'}
-nkvv.work_file_list = Device.work_file_listing(nkvv)  # Need to put a self.name in here
-nkvv.work_file = Device.work_file_picking(nkvv, 0)  # Need to put a self.name in here
 nkvv.work_file_sep = ';'
 nkvv.work_file_default_encoding = 'WINDOWS-1251'
 nkvv.work_file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
@@ -80,8 +90,6 @@ kiv.monitoring_params = {}  # Need to update
 kiv.log_types = {'measure': 'xlsx', 'event': 'xlsx'}
 kiv.work_file_folder = 'upload/kiv/'
 kiv.work_file_name_starts = {'measure': 'MeasJ', 'event': 'WorkJ'}
-kiv.work_file_list = Device.work_file_listing(kiv)  # Need to put a self.name in here
-kiv.work_file = Device.work_file_picking(kiv, 0)  # Need to put a self.name in here
 kiv.work_file_sep = None
 kiv.work_file_default_encoding = None
 kiv.work_file_parse_dates = ['Дата/Время']  # Starts with
@@ -118,8 +126,6 @@ mon.monitoring_params = {'input': 220000, 'output': 110000}
 mon.log_types = {'measure': 'csv', 'event': 'csv'}
 mon.work_file_folder = 'upload/mon/'
 mon.work_file_name_ends = {'measure': '.I'}
-mon.work_file_list = ''
-mon.work_file = ''
 mon.work_file_sep = r"\s+"
 mon.work_file_default_encoding = 'WINDOWS-1251'
 mon.work_file_parse_dates = ['Дата и время']
@@ -149,17 +155,6 @@ mon.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
                          'Tair': ['tair', 'temperature_of_air'],
                          'Tdev': ['tdev', 'temperature_of_device'],
                          'Tcpu': ['tcpu', 'temperature_of_cpu']}
-
-
-# Avoid error of func inside class and/or before obj.init.
-def work_file_listing(device_type):
-    return [filename for filename in os.listdir(eval(device_type).work_file_folder)
-            if filename.startswith(eval(device_type).work_file_name_starts['measure'])]
-
-
-# Avoid error of func inside class and/or before obj.init.
-def work_file_picking(device_type, num=0):
-    return eval(device_type).work_file_folder + Device.work_file_listing(eval(device_type))[num]
 
 
 # Avoid error of func inside class and/or before obj.init.
