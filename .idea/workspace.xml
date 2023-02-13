@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="SettingwithCopyWarning solved">
-      <change afterPath="$PROJECT_DIR$/dev2.py" afterDir="false" />
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Devices classes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/columns.py" beforeDir="false" afterPath="$PROJECT_DIR$/columns.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prints.py" beforeDir="false" afterPath="$PROJECT_DIR$/prints.py" afterDir="false" />
     </list>
@@ -209,13 +210,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00042" summary="printouts">
-      <created>1671730172141</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1671730172141</updated>
     </task>
     <task id="LOCAL-00043" summary="printouts">
       <created>1671733676225</created>
@@ -553,7 +547,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675786780013</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="Devices classes">
+      <created>1676217012314</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1676217012314</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -568,7 +569,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.8&#10;Replaced delta_tg_checker()" />
     <MESSAGE value="1.8.1.bug&#10;correclations" />
     <MESSAGE value="1.8.2&#10;Refactored" />
     <MESSAGE value="1.8.4&#10;Plots histograms" />
@@ -593,6 +593,7 @@
     <MESSAGE value="kiv plots and prints" />
     <MESSAGE value="kiv done" />
     <MESSAGE value="SettingwithCopyWarning solved" />
-    <option name="LAST_COMMIT_MESSAGE" value="SettingwithCopyWarning solved" />
+    <MESSAGE value="Devices classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Devices classes" />
   </component>
 </project>

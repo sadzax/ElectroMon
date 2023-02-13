@@ -40,7 +40,7 @@ def answering(question, yes='', no='', answer_list=None):
 
 def work_file_picking(device_type='kiv'):
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
-    files_list = eval(device_type).work_file_list
+    files_list = devices.links(device_type)[5]
     w1 = sadzax.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
     w2 = sadzax.Rus.cases(len(files_list), 'файл', 'файла', 'файлов')
     print(f"{w1} {len(files_list)} {w2} для анализа: ")
@@ -48,7 +48,7 @@ def work_file_picking(device_type='kiv'):
         print(f"Файл № {files_list.index(i) + 1}. {i}")
     if len(files_list) == 1:
         print(f"Данный файл выбран для анализа")
-        return eval(device_type).work_file_pick(device_type, 0)
+        return devices.work_file_pick(device_type, 0)
     elif len(files_list) > 1:
         while True:
             try:
@@ -56,8 +56,8 @@ def work_file_picking(device_type='kiv'):
                 if choice <= 0 or choice > len(files_list):
                     print(error)
                     continue
-                print(f"Выбран файл {files_list[choice - 1]}")
-                return eval(device_type).work_file_pick(choice - 1)
+                print(f"Выбран файл № {choice} - {files_list[choice - 1]}")
+                return devices.work_file_pick(device_type, choice - 1)
             except:
                 print(error)
                 continue

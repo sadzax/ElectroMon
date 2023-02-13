@@ -20,7 +20,7 @@ def columns_list_maker(device_type: str = 'nkvv',
     Need to take it to the class of Devices
     """
     if file is None:
-        file, sep, encoding, parse_dates = devices.links(device_type)[1:]
+        file, sep, encoding, parse_dates = devices.links(device_type)[1:5]
     if device_type == 'nkvv':
         return list(pd.read_csv(file, sep=sep, encoding=encoding))
     elif device_type == 'kiv':

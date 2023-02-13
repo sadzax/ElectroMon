@@ -22,7 +22,7 @@ def get_data(device_type: str = 'kiv',
     data = pd.DataFrame.empty
     device_type = device_type.lower()
     if file is None:
-        file, sep, encoding, parse_dates = devices.links(device_type)[1:]
+        file, sep, encoding, parse_dates = devices.links(device_type)[1:4]
     if device_type == 'nkvv':
         data = pd.read_csv(file,
                            sep=sep,
@@ -130,7 +130,7 @@ def values_time_slicer(device_type: str = 'nkvv',
                        minutes_slice_mode: int = 1439,
                        min_values_required: int = 300,
                        full_param: bool = False):
-    device_type=device_type.lower()
+    device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
     data_result = {}
@@ -207,7 +207,7 @@ def pass_the_nan(device_type: str = 'nkvv',
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
     if default_dict_for_replacement is None:
-        default_dict_for_replacement = devices.links_replacement(device_type)
+        default_dict_for_replacement = devices.links(device_type)[6]
     for i in range(len(default_dict_for_replacement)):
         seeking_param = [x for x in default_dict_for_replacement.keys()][i]
         replacing_values = [x for x in default_dict_for_replacement.values()][i]

@@ -5,10 +5,15 @@ import pathlib
 
 class Device:
     def __init__(self, name):
+        """
+        Инициализация устройства, поля:
+        1. Краткое имя
+        """
         self.name = name
         self.full_name = name
         self.monitoring_params = None
         self.log_types = None
+        self.work_file_list_choice = 0  # default
         self.work_file_name_starts = None
         self.work_file_name_ends = None
         self.work_file_folder = 'upload/' + name + '/'
@@ -20,31 +25,25 @@ class Device:
         self.data_search_name = None
 
     @property
-    def work_file_list(self):  # Write for ending
+    def work_file_list(self):  # Прописать для окончания
         return [filename for filename in os.listdir(self.work_file_folder)
                 if filename.startswith(self.work_file_name_starts['measure'])]
 
     @property
     def work_file(self):
-        return self.work_file_folder + self.work_file_list[0]
+        return self.work_file_folder + self.work_file_list[self.work_file_list_choice]
 
-    def work_file_pick(self, num=0):
+    def work_file_pick(self, num=0):  # Отдаёт значения в ./prints
         work_file = self.work_file_folder + self.work_file_list[num]
-        @property
-        def work_file(self):
-            return work_file
+        self.work_file_list_choice = num
         return work_file
 
-    def links(self):  # Work on
-        return [self.name, self.work_file, self.work_file_sep, self.work_file_default_encoding,
-                self.work_file_parse_dates]
-
-    def links_replacement(self):
-        return self.default_dict_for_replacement_to_nan
-
-    @work_file.setter
-    def work_file(self, value):
-        self._work_file = value
+    def links(self):  # Можно добавлять значения
+        return [
+            self.name, self.work_file, self.work_file_sep, self.work_file_default_encoding,  # 0-3
+            self.work_file_parse_dates, self.work_file_list,  # 4-5
+            self.default_dict_for_replacement_to_nan  # 6
+                ]
 
 
 nkvv = Device('nkvv')
@@ -85,13 +84,10 @@ nkvv.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
 
 
 kiv = Device('kiv')
-kiv.full_name = 'Устройство КИВ'  # Need to update
-kiv.monitoring_params = {}  # Need to update
+kiv.full_name = 'Устройство контроля изоляции вводов'
 kiv.log_types = {'measure': 'xlsx', 'event': 'xlsx'}
 kiv.work_file_folder = 'upload/kiv/'
 kiv.work_file_name_starts = {'measure': 'MeasJ', 'event': 'WorkJ'}
-kiv.work_file_sep = None
-kiv.work_file_default_encoding = None
 kiv.work_file_parse_dates = ['Дата/Время']  # Starts with
 kiv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                            'tg': [-10.0, 0.0],
@@ -158,13 +154,13 @@ mon.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
 
 
 # Avoid error of func inside class and/or before obj.init.
-def links(device_type):
-    return Device.links(eval(device_type))
+def work_file_pick(device_type, num=0):
+    return Device.work_file_pick(eval(device_type), num)
 
 
 # Avoid error of func inside class and/or before obj.init.
-def links_replacement(device_type):
-    return Device.links_replacement(eval(device_type))
+def links(device_type):
+    return Device.links(eval(device_type))
 
 
 class Pkl:
