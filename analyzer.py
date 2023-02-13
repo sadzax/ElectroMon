@@ -29,7 +29,7 @@ def get_data(device_type: str = 'kiv',
                            encoding=encoding,
                            parse_dates=parse_dates,
                            dayfirst=True)
-    if device_type == 'kiv':
+    elif device_type == 'kiv':
         data_raw = pd.read_excel(file)
         if data_raw.columns[0] == ' № ' or raw_param is True:
             data = data_raw
@@ -57,6 +57,12 @@ def get_data(device_type: str = 'kiv',
                         data[a_column] = data[a_column].astype(float)
                     except ValueError:
                         pass
+    elif device_type == 'mon':
+        data = pd.read_csv(file,
+                           delimiter=sep,
+                           encoding=encoding,
+                           parse_dates=parse_dates,
+                           dayfirst=True)
     return data
 
 

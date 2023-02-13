@@ -7,15 +7,13 @@ import os
 import columns
 import devices
 import plots
+import prints
 import sadzax
 import analyzer
 warnings.simplefilter(action='ignore', category=FutureWarning)
-import pathlib
+prints.clearing_script()
 
 device_type = 'mon'
 
-d = pd.read_csv('ffile', delimiter=r"\s+", encoding='WINDOWS-1251')
-
-for filepath in pathlib.Path('db').glob('**/*'):
-    print(filepath.name)
+data = analyzer.get_data(device_type=device_type)
 

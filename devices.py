@@ -30,6 +30,14 @@ class Device:
                 if filename.startswith(self.work_file_name_starts['measure'])]
 
     @property
+    def file_list(self):
+        if self.work_file_name_starts is None:
+            endwith = self.work_file_name_ends['measure']
+            return [str(filepath) for filepath  # Без обращения в str возвращает объект класса "Windows Path"
+                    in pathlib.Path(self.work_file_folder).glob('**/*')
+                    if str(filepath)[len(str(filepath))-len(endwith):] == endwith]
+
+    @property
     def work_file(self):
         return self.work_file_folder + self.work_file_list[self.work_file_list_choice]
 
@@ -125,7 +133,7 @@ mon.work_file_name_ends = {'measure': '.I'}
 mon.work_file_sep = r"\s+"
 mon.work_file_default_encoding = 'WINDOWS-1251'
 mon.work_file_parse_dates = ['Дата и время']
-mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
+mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],  # добавить стринг ****
                                             'tg': -10.0,
                                             '∆tg': -10.0,
                                             'c_delta': -10.0,
