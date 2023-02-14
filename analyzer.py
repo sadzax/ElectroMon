@@ -5,6 +5,7 @@ import pandas as pd
 
 import columns
 import devices
+import prints
 import sadzax
 
 
@@ -59,6 +60,7 @@ def get_data(device_type: str = 'kiv',
                         pass
     elif device_type == 'mon':
         data = pd.read_csv(file,
+                           low_memory=False,
                            delimiter=sep,
                            encoding=encoding)
         conc = devices.links(device_type)[7]
@@ -70,14 +72,21 @@ def get_data(device_type: str = 'kiv',
                     pd.options.mode.chained_assignment = 'raise'
                     # Check mask @ https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
                     # data[a_column] = pd.to_datetime(data[a_column], format='%Y/%m/%d %H:%M:%S')
-                    data[a_column] = pd.to_datetime(data[a_column])
+                    data[a_column] = pd.to_datetime(data[a_column], format='%d.%m.%Y %H:%M:%S')
                     data = data.sort_values(by=a_column)
     return data
 
 
-def stack_data(device_type: str = 'mon'):
-
-
+def stack_data(device_type: str = 'mon', method: str = 'all'):  # !!! DBGING
+    error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
+    files_list = devices.links(device_type)[5]
+    if method == "all":
+        devices.file_pick(device_type, 0)
+        data = analyzer.get_data(device_type=device_type)
+        for i in range(len(files_list)):
+            devices.file_pick(device_type, i)
+            iterated_data = analyzer.get_data(device_type=device_type)
+            data = pd.concat([data, iterated_data])
 
 
 #  2.0. Count the strings

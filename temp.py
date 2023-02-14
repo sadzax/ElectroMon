@@ -14,6 +14,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 prints.clearing_script()
 
 device_type = 'mon'
+
+
+
 data = analyzer.get_data(device_type=device_type)
 file, sep, encoding, parse_dates = devices.links(device_type)[1:5]
 
