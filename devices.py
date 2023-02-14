@@ -26,19 +26,29 @@ class Device:
 
     @property
     def file_list(self):
-        if self.file_name_starts is None:
-            endwith = self.file_name_ends['measure']
-            return ['/'.join([i for i in filepath.parts]) for filepath
-                    in pathlib.Path(self.file_folder).glob('**/*')
-                    if str(filepath)[-len(endwith):] == endwith]
+        error = f'У устройства "{self.full_name}" в папке {self.file_folder} нет подходящих файлов.' \
+                f' Загрузите их, пожалуйста'
+        all_files = ['/'.join([i for i in filepath.parts]) for filepath
+                     in pathlib.Path(self.file_folder).glob('**/*')]
+        if self.file_name_starts is None and self.file_name_ends is None:
+            if not all_files:
+                print(error)
+            else:
+                return all_files
+        elif self.file_name_starts is None:
+            endswith = self.file_name_ends['measure']
+            return [filepath for filepath in all_files
+                    if str(filepath)[-len(endswith):] == endswith]
+        elif self.file_name_ends is None:
+            startswith = self.file_name_starts['measure']
+            return [filepath for filepath in all_files
+                    if filepath[filepath.find('/', 7) + 1:].startswith(startswith)]
         else:
-            all_files = ['/'.join([i for i in filepath.parts]) for filepath
-                         in pathlib.Path(self.file_folder).glob('**/*')]
-            return [item for item in all_files
-                    if item[item.find('/', 7) + 1:].startswith(self.file_name_starts['measure'])]
-            # return ['/'.join([i for i in filepath.parts]) for filepath
-            #         in pathlib.Path(self.file_folder).glob('**/*')
-            #         if '/'.join([i for i in filepath.parts])['/'.join([i for i in filepath.parts]).find('/', 7) + 1:].startswith(self.file_name_starts['measure'])]
+            endswith = self.file_name_ends['measure']
+            startswith = self.file_name_starts['measure']
+            return [filepath for filepath in all_files
+                    if str(filepath)[-len(endswith):] == endswith
+                    and filepath[filepath.find('/', 7) + 1:].startswith(startswith)]
 
     @property
     def file(self):
@@ -135,7 +145,8 @@ mon.file_folder = 'upload/mon/'
 mon.file_name_ends = {'measure': '.I'}
 mon.file_sep = r"\s+"
 mon.file_default_encoding = 'WINDOWS-1251'
-mon.file_parse_dates = ['дата','Дата и время']
+mon.file_parse_dates_basis = ['дата', 'время']
+mon.file_parse_dates = ['Дата и время']
 mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],  # добавить стринг ****
                                             'tg': -10.0,
                                             '∆tg': -10.0,

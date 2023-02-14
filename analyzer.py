@@ -60,9 +60,7 @@ def get_data(device_type: str = 'kiv',
     elif device_type == 'mon':
         data = pd.read_csv(file,
                            delimiter=sep,
-                           encoding=encoding,
-                           parse_dates=parse_dates,
-                           dayfirst=True)
+                           encoding=encoding)
     return data
 
 
