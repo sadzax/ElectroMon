@@ -61,7 +61,23 @@ def get_data(device_type: str = 'kiv',
         data = pd.read_csv(file,
                            delimiter=sep,
                            encoding=encoding)
+        conc = devices.links(device_type)[7]
+        data[parse_dates[0]] = (data[conc[0]] + ' ' + data[conc[1]])
+        for an_element_of_parse_dates in parse_dates:
+            for a_column in list(data.columns):
+                if a_column.startswith(an_element_of_parse_dates):
+                    # 'SettingWithCopyWarning' - A value is trying to be set on a copy of a slice from a DataFrame
+                    pd.options.mode.chained_assignment = 'raise'
+                    # Check mask @ https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+                    # data[a_column] = pd.to_datetime(data[a_column], format='%Y/%m/%d %H:%M:%S')
+                    data[a_column] = pd.to_datetime(data[a_column])
+                    data = data.sort_values(by=a_column)
     return data
+
+
+def stack_data(device_type: str = 'mon'):
+
+
 
 
 #  2.0. Count the strings

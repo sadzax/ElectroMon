@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Devices classes">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
@@ -209,13 +209,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00046" summary="printouts">
-      <created>1671879396349</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1671879396349</updated>
     </task>
     <task id="LOCAL-00047" summary="printouts">
       <created>1671879960398</created>
@@ -553,7 +546,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676361597589</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="Monitoring-db added">
+      <created>1676374553772</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1676374553773</updated>
+    </task>
+    <option name="localTasksCounter" value="96" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -568,7 +568,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.8.1.bug&#10;correclations" />
     <MESSAGE value="1.8.2&#10;Refactored" />
     <MESSAGE value="1.8.4&#10;Plots histograms" />
     <MESSAGE value="1.9&#10;Correlations" />
@@ -593,6 +592,7 @@
     <MESSAGE value="kiv done" />
     <MESSAGE value="SettingwithCopyWarning solved" />
     <MESSAGE value="Devices classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Devices classes" />
+    <MESSAGE value="Monitoring-db added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added" />
   </component>
 </project>

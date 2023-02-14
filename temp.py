@@ -16,4 +16,6 @@ prints.clearing_script()
 device_type = 'mon'
 data = analyzer.get_data(device_type=device_type)
 file, sep, encoding, parse_dates = devices.links(device_type)[1:5]
-data[parse_dates[0]] = eval(device_type).file_parse_dates_basis[0] +eval(device_type).file_parse_dates_basis[1]
+
+conc = devices.links(device_type)[7]
+data[parse_dates[0]] = (data[conc[0]] + ' ' + data[conc[1]])

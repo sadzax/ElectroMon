@@ -19,6 +19,7 @@ class Device:
         self.file_folder = 'upload/' + name + '/'
         self.file_sep = None
         self.file_default_encoding = None
+        self.file_parse_dates_basis = None
         self.file_parse_dates = None
         self.default_dict_for_replacement_to_nan = None
         self.data_types = None
@@ -63,7 +64,7 @@ class Device:
         return [
             self.name, self.file, self.file_sep, self.file_default_encoding,
             self.file_parse_dates, self.file_list,
-            self.default_dict_for_replacement_to_nan
+            self.default_dict_for_replacement_to_nan, self.file_parse_dates_basis
                 ]
 
 
