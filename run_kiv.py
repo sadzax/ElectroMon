@@ -6,7 +6,7 @@ import prints
 prints.clearing_script()
 
 device_type: str = 'kiv'
-devices.kiv.work_file = prints.work_file_picking(device_type)
+devices.kiv.file = prints.file_picking(device_type)
 
 
 #  ______________________________________ OBTAINING DATA ___________________________________________

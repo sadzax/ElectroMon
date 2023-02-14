@@ -13,44 +13,47 @@ class Device:
         self.full_name = name
         self.monitoring_params = None
         self.log_types = None
-        self.work_file_list_choice = 0  # default
-        self.work_file_name_starts = None
-        self.work_file_name_ends = None
-        self.work_file_folder = 'upload/' + name + '/'
-        self.work_file_sep = None
-        self.work_file_default_encoding = None
-        self.work_file_parse_dates = None
+        self.file_list_choice = 0  # default
+        self.file_name_starts = None
+        self.file_name_ends = None
+        self.file_folder = 'upload/' + name + '/'
+        self.file_sep = None
+        self.file_default_encoding = None
+        self.file_parse_dates = None
         self.default_dict_for_replacement_to_nan = None
         self.data_types = None
         self.data_search_name = None
 
     @property
-    def work_file_list(self):  # Прописать для окончания
-        return [filename for filename in os.listdir(self.work_file_folder)
-                if filename.startswith(self.work_file_name_starts['measure'])]
-
-    @property
     def file_list(self):
-        if self.work_file_name_starts is None:
-            endwith = self.work_file_name_ends['measure']
-            return [str(filepath) for filepath  # Без обращения в str возвращает объект класса "Windows Path"
-                    in pathlib.Path(self.work_file_folder).glob('**/*')
-                    if str(filepath)[len(str(filepath))-len(endwith):] == endwith]
+        if self.file_name_starts is None:
+            endwith = self.file_name_ends['measure']
+            return ['/'.join([i for i in filepath.parts]) for filepath
+                    in pathlib.Path(self.file_folder).glob('**/*')
+                    if str(filepath)[-len(endwith):] == endwith]
+        else:
+            all_files = ['/'.join([i for i in filepath.parts]) for filepath
+                         in pathlib.Path(self.file_folder).glob('**/*')]
+            return [item for item in all_files
+                    if item[item.find('/', 7) + 1:].startswith(self.file_name_starts['measure'])]
+            # return ['/'.join([i for i in filepath.parts]) for filepath
+            #         in pathlib.Path(self.file_folder).glob('**/*')
+            #         if '/'.join([i for i in filepath.parts])['/'.join([i for i in filepath.parts]).find('/', 7) + 1:].startswith(self.file_name_starts['measure'])]
 
     @property
-    def work_file(self):
-        return self.work_file_folder + self.work_file_list[self.work_file_list_choice]
+    def file(self):
+        return self.file_list[self.file_list_choice]
 
-    def work_file_pick(self, num=0):  # Отдаёт значения в ./prints
-        work_file = self.work_file_folder + self.work_file_list[num]
-        self.work_file_list_choice = num
-        return work_file
+    def file_pick(self, num=0):  # Отдаёт значения в ./prints
+        file = self.file_list[num]
+        self.file_list_choice = num
+        return file
 
     def links(self):  # Можно добавлять значения
         return [
-            self.name, self.work_file, self.work_file_sep, self.work_file_default_encoding,  # 0-3
-            self.work_file_parse_dates, self.work_file_list,  # 4-5
-            self.default_dict_for_replacement_to_nan  # 6
+            self.name, self.file, self.file_sep, self.file_default_encoding,
+            self.file_parse_dates, self.file_list,
+            self.default_dict_for_replacement_to_nan
                 ]
 
 
@@ -58,11 +61,11 @@ nkvv = Device('nkvv')
 nkvv.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
 nkvv.monitoring_params = {'input': 220000, 'output': 110000}
 nkvv.log_types = {'measure': 'csv', 'event': 'csv'}
-nkvv.work_file_folder = 'upload/nkvv/'
-nkvv.work_file_name_starts = {'measure': 'DB_i'}
-nkvv.work_file_sep = ';'
-nkvv.work_file_default_encoding = 'WINDOWS-1251'
-nkvv.work_file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
+nkvv.file_folder = 'upload/nkvv/'
+nkvv.file_name_starts = {'measure': 'DB_i'}
+nkvv.file_sep = ';'
+nkvv.file_default_encoding = 'WINDOWS-1251'
+nkvv.file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
 nkvv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                             'tg': -10.0,
                                             '∆tg': -10.0,
@@ -94,9 +97,9 @@ nkvv.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
 kiv = Device('kiv')
 kiv.full_name = 'Устройство контроля изоляции вводов'
 kiv.log_types = {'measure': 'xlsx', 'event': 'xlsx'}
-kiv.work_file_folder = 'upload/kiv/'
-kiv.work_file_name_starts = {'measure': 'MeasJ', 'event': 'WorkJ'}
-kiv.work_file_parse_dates = ['Дата/Время']  # Starts with
+kiv.file_folder = 'upload/kiv/'
+kiv.file_name_starts = {'measure': 'MeasJ', 'event': 'WorkJ'}
+kiv.file_parse_dates = ['Дата/Время']  # Starts with
 kiv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                            'tg': [-10.0, 0.0],
                                            '∆tg': [-10.0, 0.0],
@@ -128,11 +131,11 @@ mon = Device('mon')
 mon.full_name = 'Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов'
 mon.monitoring_params = {'input': 220000, 'output': 110000}
 mon.log_types = {'measure': 'csv', 'event': 'csv'}
-mon.work_file_folder = 'upload/mon/'
-mon.work_file_name_ends = {'measure': '.I'}
-mon.work_file_sep = r"\s+"
-mon.work_file_default_encoding = 'WINDOWS-1251'
-mon.work_file_parse_dates = ['Дата и время']
+mon.file_folder = 'upload/mon/'
+mon.file_name_ends = {'measure': '.I'}
+mon.file_sep = r"\s+"
+mon.file_default_encoding = 'WINDOWS-1251'
+mon.file_parse_dates = ['дата','Дата и время']
 mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],  # добавить стринг ****
                                             'tg': -10.0,
                                             '∆tg': -10.0,
@@ -162,8 +165,8 @@ mon.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
 
 
 # Avoid error of func inside class and/or before obj.init.
-def work_file_pick(device_type, num=0):
-    return Device.work_file_pick(eval(device_type), num)
+def file_pick(device_type, num=0):
+    return Device.file_pick(eval(device_type), num)
 
 
 # Avoid error of func inside class and/or before obj.init.
@@ -177,12 +180,12 @@ class Pkl:
         isExist = os.path.exists(path)
         if not isExist:
             os.makedirs(path)
-        name_file = eval(device_type).work_file[eval(device_type).work_file.find('/', 7) + 1:]
+        name_file = eval(device_type).file[eval(device_type).file.find('/', 7) + 1:]
         total_path = path + name_file + '.pkl'
         data.to_pickle(total_path)
 
     def load(device_type):
-        name_file = eval(device_type).work_file[eval(device_type).work_file.find('/', 7) + 1:]
+        name_file = eval(device_type).file[eval(device_type).file.find('/', 7) + 1:]
         path = './save/' + device_type + '/'
         total_path = path + name_file + '.pkl'
         return pd.read_pickle(total_path)

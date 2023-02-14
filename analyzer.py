@@ -22,7 +22,7 @@ def get_data(device_type: str = 'kiv',
     data = pd.DataFrame.empty
     device_type = device_type.lower()
     if file is None:
-        file, sep, encoding, parse_dates = devices.links(device_type)[1:4]
+        file, sep, encoding, parse_dates = devices.links(device_type)[1:5]
     if device_type == 'nkvv':
         data = pd.read_csv(file,
                            sep=sep,
