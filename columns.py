@@ -36,6 +36,10 @@ def columns_list_maker(device_type: str = 'nkvv',
                     return list(data.iloc[i+1])
                     # noinspection PyUnreachableCode
                     break
+    elif device_type == 'mon':
+        if data is None:
+            data = analyzer.get_data(device_type=device_type)
+        return list(data.columns)
 
 
 #  Analyze all columns

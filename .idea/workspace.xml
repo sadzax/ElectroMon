@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added - stacking">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added - stacking data &amp; resolving problems">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_06/21217004.A" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_06/21217004.I" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_07/21217004.I" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_08/21217004.A" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_08/21217004.I" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_09/21217004.A" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_09/21217004.I" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_10/21217004.A" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_10/21217004.I" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_11/21217004.A" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_11/21217004.I" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_12/21217004.A" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/22_12/21217004.I" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/23_01/21217004.A" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/upload/mon/23_01/21217004.I" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/columns.py" beforeDir="false" afterPath="$PROJECT_DIR$/columns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -221,13 +208,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00050" summary="printouts">
-      <created>1672085388803</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1672085388804</updated>
     </task>
     <task id="LOCAL-00051" summary="printouts">
       <created>1672570977320</created>
@@ -565,7 +545,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676458819935</updated>
     </task>
-    <option name="localTasksCounter" value="99" />
+    <task id="LOCAL-00099" summary="Monitoring-db added - stacking data &amp; resolving problems">
+      <created>1676459881564</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1676459881564</updated>
+    </task>
+    <option name="localTasksCounter" value="100" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -580,7 +567,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.8.4&#10;Plots histograms" />
     <MESSAGE value="1.9&#10;Correlations" />
     <MESSAGE value="1.11&#10;Correlations" />
     <MESSAGE value="1.12&#10;Filtering debugged" />
@@ -605,6 +591,7 @@
     <MESSAGE value="Devices classes" />
     <MESSAGE value="Monitoring-db added" />
     <MESSAGE value="Monitoring-db added - stacking" />
-    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added - stacking" />
+    <MESSAGE value="Monitoring-db added - stacking data &amp; resolving problems" />
+    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added - stacking data &amp; resolving problems" />
   </component>
 </project>
