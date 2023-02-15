@@ -77,16 +77,36 @@ def get_data(device_type: str = 'kiv',
     return data
 
 
-def stack_data(device_type: str = 'mon', method: str = 'all'):  # !!! DBGING
-    error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
+def stack_data(device_type: str = 'mon'):  # !!! DBGING
     files_list = devices.links(device_type)[5]
-    if method == "all":
+    if len(files_list) == 1:
+        print(f"Доступен всего 1 файл для анализа")
         devices.file_pick(device_type, 0)
-        data = analyzer.get_data(device_type=device_type)
-        for i in range(len(files_list)):
+        data = get_data(device_type=device_type)
+    else:
+        data = pd.DataFrame.empty
+        w1 = sadzax.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
+        w2 = sadzax.Rus.cases(len(files_list), 'файл', 'файла', 'файлов')
+        print(f"{w1} {len(files_list)} {w2} для соединения данных: ")
+        for i in files_list:
+            print(f"Файл № {files_list.index(i) + 1}. {i}")
+        try:
+            inputs = list(map(int, input(f'Введите номера файлов через пробел, которые нужно соединить для общего'
+                                         f' анализа (либо введите любой текст для соединения всех): ').split()))
+            indexes = [x-1 for x in inputs if x in list(range(len(files_list)))]
+        except ValueError:
+            indexes = list(range(len(files_list)))
+        for i in indexes:
             devices.file_pick(device_type, i)
-            iterated_data = analyzer.get_data(device_type=device_type)
-            data = pd.concat([data, iterated_data])
+            if data is pd.DataFrame.empty:
+                data = get_data(device_type=device_type)
+            else:
+                iterated_data = get_data(device_type=device_type)
+                data = pd.concat([data, iterated_data])
+    parse_date = devices.links(device_type)[4][0]
+    data = data.sort_values(by=parse_date)
+    print('Соединение файлов завершено')
+    return data
 
 
 #  2.0. Count the strings

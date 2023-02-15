@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added - stacking">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
@@ -208,13 +208,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00048" summary="printouts">
-      <created>1671880647867</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1671880647867</updated>
     </task>
     <task id="LOCAL-00049" summary="printouts">
       <created>1671957147614</created>
@@ -552,7 +545,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676376942521</updated>
     </task>
-    <option name="localTasksCounter" value="97" />
+    <task id="LOCAL-00097" summary="Monitoring-db added - stacking">
+      <created>1676380766192</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1676380766192</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -567,7 +567,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.8.2&#10;Refactored" />
     <MESSAGE value="1.8.4&#10;Plots histograms" />
     <MESSAGE value="1.9&#10;Correlations" />
     <MESSAGE value="1.11&#10;Correlations" />
@@ -592,6 +591,7 @@
     <MESSAGE value="SettingwithCopyWarning solved" />
     <MESSAGE value="Devices classes" />
     <MESSAGE value="Monitoring-db added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added" />
+    <MESSAGE value="Monitoring-db added - stacking" />
+    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added - stacking" />
   </component>
 </project>
