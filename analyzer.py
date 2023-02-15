@@ -129,13 +129,15 @@ def values_time_analyzer(device_type: str = 'nkvv',
     if data is None:
         data = get_data(device_type=device_type)
     parse_dates = devices.links(device_type)[4]
-    time_column = list(data.columns)[0]
     for an_element_of_parse_dates in parse_dates:
         for a_column in list(data.columns):
             if a_column.startswith(an_element_of_parse_dates):
                 time_column = a_column
         break
-    df = data[time_column].values
+    try:
+        df = data[time_column].values
+    except:
+        print('Ошибка поиска колонки с временем замера')
     error_dict = {}
     for a_row in range(df.shape[0] - 1):
         delta_time = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
@@ -176,6 +178,7 @@ def values_time_analyzer_df(source_dict: dict = None,
 #  2.1.2. Slice time of measurements for big differences
 def values_time_slicer(device_type: str = 'nkvv',
                        data: pd.core = None,
+                       time_column: str = None,
                        minutes_slice_mode: int = 1439,
                        min_values_required: int = 300,
                        full_param: bool = False):
@@ -183,7 +186,8 @@ def values_time_slicer(device_type: str = 'nkvv',
     if data is None:
         data = get_data(device_type=device_type)
     data_result = {}
-    time_column = columns.time_column(device_type=device_type, data=data)
+    if time_column is None:
+        time_column = columns.time_column(device_type=device_type, data=data)
     time_analyzer_df = values_time_analyzer_df(source_dict=values_time_analyzer(device_type=device_type, data=data))
     indexes_for_slicing = [-1]
     for i in range(time_analyzer_df.shape[0]):

@@ -114,7 +114,7 @@ kiv.file_parse_dates = ['Дата/Время']  # Starts with
 kiv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                            'tg': [-10.0, 0.0],
                                            '∆tg': [-10.0, 0.0],
-                                           'c_delta': [-10.0, 0.0],
+                                           'c_delta': [-10.0, 0.0],  # проверить edits!!!
                                            'c_deviation': [0.0, 0.0],
                                            'voltage_difference': [0.0]}
 kiv.data_types = {'°С': 'temperature',
@@ -161,19 +161,18 @@ mon.data_types = {'кВ': 'voltage',
                    '°С': 'temperature',
                    'Гц': 'frequency',
                    'Дата': 'datetime',}
-mon.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
-                         'DeltaC_': ['∆C', 'c_delta'],
-                         'Tg_': ['tg', 'tangent'],
-                         'C_': ['C', 'c_deviation'],
-                         'Дата создания записи': ['time', 'time_of_measure'],
-                         'Дата сохранения в БД': ['save', 'time_of_saving'],
-                         'U_': ['U', 'voltage_difference'],
-                         'Ia_': ['Ia', 'power_active'],
-                         'Ir_': ['Ir', 'power_reactive'],
-                         'Freq': ['freq', 'frequency'],
-                         'Tair': ['tair', 'temperature_of_air'],
-                         'Tdev': ['tdev', 'temperature_of_device'],
-                         'Tcpu': ['tcpu', 'temperature_of_cpu']}
+mon.data_search_name = {'dC': ['∆tg', 'tangent_delta'],
+                        'dC_': ['∆C', 'c_delta'],
+                        'tan_': ['tg', 'tangent'],
+                        'C_': ['C', 'c_deviation'],
+                        'Дата и время': ['time', 'time_of_measure'],
+                        'U_': ['U', 'voltage_difference'],
+                        'Ia_': ['Ia', 'power_active'],
+                        'Ip_': ['Ir', 'power_reactive'],
+                        'Freq': ['freq', 'frequency'],
+                        'Tair': ['tair', 'temperature_of_air'],
+                        'Tdev': ['tdev', 'temperature_of_device'],
+                        'Tcpu': ['tcpu', 'temperature_of_cpu']}
 
 
 # Avoid error of func inside class and/or before obj.init.

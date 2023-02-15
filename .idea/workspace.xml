@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added - stacking data &amp; resolving problems">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added - making columns">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/columns.py" beforeDir="false" afterPath="$PROJECT_DIR$/columns.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -208,13 +210,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00051" summary="printouts">
-      <created>1672570977320</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1672570977320</updated>
     </task>
     <task id="LOCAL-00052" summary="kiv start">
       <created>1672788808719</created>
@@ -552,7 +547,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676459881564</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="Monitoring-db added - making columns">
+      <created>1676469340870</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1676469340870</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -567,7 +569,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.9&#10;Correlations" />
     <MESSAGE value="1.11&#10;Correlations" />
     <MESSAGE value="1.12&#10;Filtering debugged" />
     <MESSAGE value="1.13&#10;Warnings" />
@@ -592,6 +593,7 @@
     <MESSAGE value="Monitoring-db added" />
     <MESSAGE value="Monitoring-db added - stacking" />
     <MESSAGE value="Monitoring-db added - stacking data &amp; resolving problems" />
-    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added - stacking data &amp; resolving problems" />
+    <MESSAGE value="Monitoring-db added - making columns" />
+    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added - making columns" />
   </component>
 </project>
