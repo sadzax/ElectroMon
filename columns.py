@@ -160,14 +160,19 @@ def columns_analyzer(device_type: str ='nkvv',
 
 def time_column(device_type='nkvv',
                 data: pd.core = None):
+    the_time_column = None
     device_type = device_type.lower()
     if data is None:
         data = analyzer.get_data(device_type=device_type)
     parse_dates = devices.links(device_type)[4]
-    the_time_column = list(data.columns)[0]
     for an_element_of_parse_dates in parse_dates:
         for a_column in list(data.columns):
             if a_column.startswith(an_element_of_parse_dates):
                 the_time_column = a_column
         break
+    try:
+        type(data[the_time_column]) == pd.core.series.Series
+    except KeyError:
+        print(f'Ошибка поиска колонки с временем замера, проверьте свойства устройства и атрибут'
+              f' "self.file_parse_dates" в модуле устройств "devices.py"')
     return the_time_column

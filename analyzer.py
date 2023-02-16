@@ -20,6 +20,7 @@ def get_data(device_type: str = 'kiv',
     For a custom file usage you need to set all additional params
     Need to switch to classes of devices
     """
+    print('Начало обработки файла...')
     data = pd.DataFrame.empty
     device_type = device_type.lower()
     if file is None:
@@ -74,6 +75,7 @@ def get_data(device_type: str = 'kiv',
                     # data[a_column] = pd.to_datetime(data[a_column], format='%Y/%m/%d %H:%M:%S')
                     data[a_column] = pd.to_datetime(data[a_column], format='%d.%m.%Y %H:%M:%S')
                     data = data.sort_values(by=a_column)
+    print('Обработка файла окончена')
     return data
 
 
@@ -124,20 +126,14 @@ def values_time_analyzer(device_type: str = 'nkvv',
                          inaccuracy_sec: int = 3,
                          gap_const_day: int = 1440,
                          gap_const_hour: int = 60,
+                         time_column: str = None,
                          exact_gap: bool = True):
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
-    parse_dates = devices.links(device_type)[4]
-    for an_element_of_parse_dates in parse_dates:
-        for a_column in list(data.columns):
-            if a_column.startswith(an_element_of_parse_dates):
-                time_column = a_column
-        break
-    try:
-        df = data[time_column].values
-    except:
-        print('Ошибка поиска колонки с временем замера')
+    if time_column is None:
+        time_column = columns.time_column(device_type=device_type, data=data)
+    df = data[time_column].values
     error_dict = {}
     for a_row in range(df.shape[0] - 1):
         delta_time = (df[a_row + 1] - df[a_row]).astype('timedelta64[s]')
@@ -167,27 +163,27 @@ def values_time_analyzer(device_type: str = 'nkvv',
 #  2.1.1. Analysis time of measurements to dataframe
 def values_time_analyzer_df(source_dict: dict = None,
                             orient='index',
-                            cols: dict = None):
+                            cols_t: dict = None):
     if source_dict is None:
         source_dict = values_time_analyzer()
-    if cols is None:
-        cols = ["Строка в БД", "Дата", "Время", "Дата след.", "Время след.", "Разница"]
-    return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols)
+    if cols_t is None:
+        cols_t = ["Строка в БД", "Дата", "Время", "Дата след.", "Время след.", "Разница"]
+    return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols_t)
 
 
 #  2.1.2. Slice time of measurements for big differences
 def values_time_slicer(device_type: str = 'nkvv',
                        data: pd.core = None,
-                       time_column: str = None,
                        minutes_slice_mode: int = 1439,
                        min_values_required: int = 300,
+                       time_column: str = None,
                        full_param: bool = False):
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
-    data_result = {}
     if time_column is None:
         time_column = columns.time_column(device_type=device_type, data=data)
+    data_result = {}
     time_analyzer_df = values_time_analyzer_df(source_dict=values_time_analyzer(device_type=device_type, data=data))
     indexes_for_slicing = [-1]
     for i in range(time_analyzer_df.shape[0]):
