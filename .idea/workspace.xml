@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Documentation file added">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Documentation file updated">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Readme.MD" beforeDir="false" afterPath="$PROJECT_DIR$/Readme.MD" afterDir="false" />
     </list>
@@ -220,20 +220,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00055" summary="kiv columns debugging">
-      <created>1673098167044</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1673098167044</updated>
-    </task>
-    <task id="LOCAL-00056" summary="kiv columns debugging">
-      <created>1673271935001</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1673271935001</updated>
     </task>
     <task id="LOCAL-00057" summary="kiv columns done">
       <created>1673366557697</created>
@@ -564,7 +550,21 @@
       <option name="project" value="LOCAL" />
       <updated>1676611358055</updated>
     </task>
-    <option name="localTasksCounter" value="104" />
+    <task id="LOCAL-00104" summary="Documentation file updated">
+      <created>1676613865997</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1676613865997</updated>
+    </task>
+    <task id="LOCAL-00105" summary="Documentation file updated">
+      <created>1676613871895</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1676613871895</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -579,7 +579,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.13&#10;Warnings" />
     <MESSAGE value="1.13.1&#10;Warnings" />
     <MESSAGE value="1.13.2&#10;values_time_analyzer updated" />
     <MESSAGE value="1.14" />
@@ -604,6 +603,7 @@
     <MESSAGE value="Monitoring-db added - making columns" />
     <MESSAGE value="Added exclusion of empty file choose field" />
     <MESSAGE value="Documentation file added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Documentation file added" />
+    <MESSAGE value="Documentation file updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="Documentation file updated" />
   </component>
 </project>
