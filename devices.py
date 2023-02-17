@@ -68,6 +68,7 @@ class Device:
                 ]
 
 
+# Can I reorganize this module?
 nkvv = Device('nkvv')
 nkvv.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
 nkvv.monitoring_params = {'input': 220000, 'output': 110000}

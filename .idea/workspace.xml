@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Monitoring-db added - making columns">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Added exclusion of empty file choose field">
+      <change afterPath="$PROJECT_DIR$/Readme.MD" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -207,13 +208,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00053" summary="kiv start">
-      <created>1672788868039</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1672788868039</updated>
     </task>
     <task id="LOCAL-00054" summary="kiv start">
       <created>1672955326876</created>
@@ -551,7 +545,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676474617136</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="Added exclusion of empty file choose field">
+      <created>1676611011891</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1676611011891</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -566,7 +567,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.11&#10;Correlations" />
     <MESSAGE value="1.12&#10;Filtering debugged" />
     <MESSAGE value="1.13&#10;Warnings" />
     <MESSAGE value="1.13.1&#10;Warnings" />
@@ -591,6 +591,7 @@
     <MESSAGE value="Monitoring-db added - stacking" />
     <MESSAGE value="Monitoring-db added - stacking data &amp; resolving problems" />
     <MESSAGE value="Monitoring-db added - making columns" />
-    <option name="LAST_COMMIT_MESSAGE" value="Monitoring-db added - making columns" />
+    <MESSAGE value="Added exclusion of empty file choose field" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added exclusion of empty file choose field" />
   </component>
 </project>
