@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import pathlib
+import glob
 
 
 class Device:
@@ -65,7 +66,7 @@ class Device:
             self.name, self.file, self.file_sep, self.file_default_encoding,
             self.file_parse_dates, self.file_list,
             self.default_dict_for_replacement_to_nan, self.file_parse_dates_basis
-                ]
+        ]
 
 
 # Can I reorganize this module?
@@ -90,7 +91,7 @@ nkvv.data_types = {'кВ': 'voltage',
                    'От': 'deviation',
                    '°С': 'temperature',
                    'Гц': 'frequency',
-                   'Дата': 'datetime',}
+                   'Дата': 'datetime', }
 nkvv.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
                          'DeltaC_': ['∆C', 'c_delta'],
                          'Tg_': ['tg', 'tangent'],
@@ -104,7 +105,6 @@ nkvv.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
                          'Tair': ['tair', 'temperature_of_air'],
                          'Tdev': ['tdev', 'temperature_of_device'],
                          'Tcpu': ['tcpu', 'temperature_of_cpu']}
-
 
 kiv = Device('kiv')
 kiv.full_name = 'Устройство контроля изоляции вводов'
@@ -138,7 +138,6 @@ kiv.data_search_name = {'Дата': ['time', 'time_of_measure'],
                         'Tmk': ['tcpu', 'temperature_of_cpu'],
                         'Tamb': ['tair', 'temperature_of_air']}
 
-
 mon = Device('mon')
 mon.full_name = 'Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов'
 mon.monitoring_params = {'input': 220000, 'output': 110000}
@@ -150,18 +149,18 @@ mon.file_default_encoding = 'WINDOWS-1251'
 mon.file_parse_dates_basis = ['дата', 'время']
 mon.file_parse_dates = ['Дата и время']
 mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],  # добавить стринг ****
-                                            'tg': -10.0,
-                                            '∆tg': -10.0,
-                                            'c_delta': -10.0,
-                                            'c_deviation': 0.0,
-                                            'voltage_difference': 0.0}
+                                           'tg': -10.0,
+                                           '∆tg': -10.0,
+                                           'c_delta': -10.0,
+                                           'c_deviation': 0.0,
+                                           'voltage_difference': 0.0}
 mon.data_types = {'кВ': 'voltage',
-                   'мА': 'power',
-                   ',%': 'percentage',
-                   'От': 'deviation',
-                   '°С': 'temperature',
-                   'Гц': 'frequency',
-                   'Дата': 'datetime',}
+                  'мА': 'power',
+                  ',%': 'percentage',
+                  'От': 'deviation',
+                  '°С': 'temperature',
+                  'Гц': 'frequency',
+                  'Дата': 'datetime', }
 mon.data_search_name = {'dC': ['∆tg', 'tangent_delta'],
                         'dC_': ['∆C', 'c_delta'],
                         'tan_': ['tg', 'tangent'],
@@ -197,9 +196,8 @@ class Pkl:
         try:
             data.to_pickle(total_path)
         except OSError:
-            total_path = path + name_file.replace('/','_') + '.pkl'
+            total_path = path + name_file.replace('/', '_') + '.pkl'
             data.to_pickle(total_path)
-
 
     def load(device_type):
         name_file = eval(device_type).file[eval(device_type).file.find('/', 7) + 1:]
@@ -208,5 +206,6 @@ class Pkl:
         try:
             return pd.read_pickle(total_path)
         except FileNotFoundError:
-            total_path = path  # work
-            return
+            list_of_files = glob.glob(path + '*pkl')
+            latest_file = max(list_of_files, key=os.path.getctime)
+            return pd.read_pickle(latest_file)

@@ -107,8 +107,8 @@ def stack_data(device_type: str = 'mon'):  # !!! DBGING
             else:
                 iterated_data = get_data(device_type=device_type)
                 data = pd.concat([data, iterated_data])
-    parse_date = devices.links(device_type)[4][0]
-    data = data.sort_values(by=parse_date)
+    the_time_column = columns.time_column(device_type)
+    data = data.sort_values(by=the_time_column)
     print('Соединение файлов завершено')
     return data
 

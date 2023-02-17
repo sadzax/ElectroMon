@@ -13,7 +13,7 @@ devices.kiv.file = prints.file_picking(device_type)
 
 print('Чтение и обработка файла...')
 # __ Correct method
-data = analyzer.get_data(device_type=device_type)
+data = analyzer.stack_data(device_type=device_type)
 cols_list = columns.columns_list_maker(device_type=device_type, data=data)
 cols = columns.columns_analyzer(device_type=device_type, list_for_columns=cols_list)
 data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
