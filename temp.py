@@ -14,9 +14,17 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 prints.clearing_script()
 
 device_type = 'mon'
-data = analyzer.stack_data(device_type=device_type)
+data = pd.read_pickle('save/mon/23_01_21217004.I.pkl')
+
+# data = analyzer.stack_data(device_type=device_type)
 cols_list = columns.columns_list_maker(device_type=device_type, data=data)
 cols = columns.columns_analyzer(device_type=device_type, list_for_columns=cols_list)
+
+# devices.Pkl.save(device_type=device_type, data=data)
+# data = devices.Pkl.load(device_type=device_type)  # work
+
+# ___
+
 # data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
 
 data_slices = analyzer.values_time_slicer(device_type, data)

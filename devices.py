@@ -187,17 +187,26 @@ def links(device_type):
 
 
 class Pkl:
-    def save(device_type, data):
+    def save(device_type, data: object) -> object:
         path = './save/' + device_type + '/'
         isExist = os.path.exists(path)
         if not isExist:
             os.makedirs(path)
         name_file = eval(device_type).file[eval(device_type).file.find('/', 7) + 1:]
         total_path = path + name_file + '.pkl'
-        data.to_pickle(total_path)
+        try:
+            data.to_pickle(total_path)
+        except OSError:
+            total_path = path + name_file.replace('/','_') + '.pkl'
+            data.to_pickle(total_path)
+
 
     def load(device_type):
         name_file = eval(device_type).file[eval(device_type).file.find('/', 7) + 1:]
         path = './save/' + device_type + '/'
         total_path = path + name_file + '.pkl'
-        return pd.read_pickle(total_path)
+        try:
+            return pd.read_pickle(total_path)
+        except FileNotFoundError:
+            total_path = path  # work
+            return
