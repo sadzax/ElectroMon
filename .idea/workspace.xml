@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Added exclusion of empty file choose field">
-      <change afterPath="$PROJECT_DIR$/Readme.MD" afterDir="false" />
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Documentation file added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Readme.MD" beforeDir="false" afterPath="$PROJECT_DIR$/Readme.MD" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +18,19 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="REMOTE">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="NKVV/master" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="master" />
@@ -208,13 +220,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00054" summary="kiv start">
-      <created>1672955326876</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1672955326876</updated>
     </task>
     <task id="LOCAL-00055" summary="kiv columns debugging">
       <created>1673098167044</created>
@@ -552,7 +557,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676611011891</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="Documentation file added">
+      <created>1676611358055</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1676611358055</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -567,7 +579,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.12&#10;Filtering debugged" />
     <MESSAGE value="1.13&#10;Warnings" />
     <MESSAGE value="1.13.1&#10;Warnings" />
     <MESSAGE value="1.13.2&#10;values_time_analyzer updated" />
@@ -592,6 +603,7 @@
     <MESSAGE value="Monitoring-db added - stacking data &amp; resolving problems" />
     <MESSAGE value="Monitoring-db added - making columns" />
     <MESSAGE value="Added exclusion of empty file choose field" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added exclusion of empty file choose field" />
+    <MESSAGE value="Documentation file added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Documentation file added" />
   </component>
 </project>
