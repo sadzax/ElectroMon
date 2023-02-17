@@ -20,11 +20,11 @@ def get_data(device_type: str = 'kiv',
     For a custom file usage you need to set all additional params
     Need to switch to classes of devices
     """
-    print('Начало обработки файла...')
     data = pd.DataFrame.empty
     device_type = device_type.lower()
     if file is None:
         file, sep, encoding, parse_dates = devices.links(device_type)[1:5]
+    print(f'Начало обработки файла "{file}"')
     if device_type == 'nkvv':
         data = pd.read_csv(file,
                            sep=sep,
@@ -95,9 +95,11 @@ def stack_data(device_type: str = 'mon'):  # !!! DBGING
         try:
             inputs = list(map(int, input(f'Введите номера файлов через пробел, которые нужно соединить для общего'
                                          f' анализа (либо введите любой текст для соединения всех): ').split()))
+            if len(inputs) == 0:
+                inputs = list(range(len(files_list)))  # all
             indexes = [x-1 for x in inputs if x in list(range(len(files_list)))]
         except ValueError:
-            indexes = list(range(len(files_list)))
+            indexes = list(range(len(files_list)))  # all files
         for i in indexes:
             devices.file_pick(device_type, i)
             if data is pd.DataFrame.empty:
