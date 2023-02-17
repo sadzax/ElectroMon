@@ -15,17 +15,19 @@ graphs and plots are provided by **Jupyter Notebook**
 &nbsp;
 
 ## Requirements and peculiarities
-Requires some Python additional classic libs, all can be downloaded via `pip install`:
+Requires some Python additional classic libs, all of which can be downloaded via `pip install`:
 
 Check [requirements.txt](requirements.txt) in root directory
 
-The actual devices are applied with usage of cyrillic characters.
+The actual devices are applied with usage of cyrillic characters. 
 Encoding and translational features should be considered.
+
+Data source located in `upload/`
 
 &nbsp;
 
 ## App Structure
-### &nbsp;&nbsp; 1. Device initialisation ([devices.py](devices.py))
+### &nbsp;&nbsp; Device initialisation ([devices.py](devices.py))
 ElectroMon bases on actual physical devices-measurers, described in file 
 [devices.py](devices.py)
 
@@ -64,18 +66,18 @@ Module consist of methods setting properties and statuses of device, such as:
                                                 'voltage_difference': 0.0}
 </details>
 
-### &nbsp;&nbsp; 2. Columns processing ([columns.py](columns.py)) 
+### &nbsp;&nbsp; Columns processing ([columns.py](columns.py)) 
 Based on [devices](devices) attributes
 [сolumns](columns.py)
 processes data columns into Python dictionary with enumerated keys (can be used as indexes too) 
 and values as list of parameters:
-1. original name of the column
-2. measurement used
-3. code of sensor and a phase 
-4. voltage parameter 
-5. short search name
-6. full search name
-7. concatenation of short search name and voltage parameter
+1. Original name of the column passed as string
+2. Measurement used
+3. Code of sensor and a phase 
+4. Voltage parameter 
+5. Short search name
+6. Full search name
+7. Concatenation of short search name and voltage parameter
 
 [Columns](columns.py) are set to cover column's parameters across as many viewpoints as possible
 
@@ -131,3 +133,7 @@ and values as list of parameters:
     47: ['Freq,Гц', 'frequency', 'overall', 'no_voltage', 'freq', 'frequency', 'freq_no_voltage'],
     48: ['Unnamed: 48', 'other', 'overall', 'no_voltage', 'no_name', 'no_name', 'no_name_no_voltage']
 </details>
+
+### &nbsp;&nbsp; Analyzers and processors ([analyzer.py](analyzer.py))
+
+*to be updated...*
