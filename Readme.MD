@@ -4,11 +4,15 @@ ElectroMon is the app that monitors high-voltage parameters.
 It uses data uploaded from devices that make minute-by-minute measurements 
 in power plants, transformers and other electrical appliances.
 
+&nbsp;
+
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation
 ## Tech-stack
 Backend is written in 
 **Python**,
 graphs and plots are provided by **Jupyter Notebook** 
+
+&nbsp;
 
 ## Requirements and peculiarities
 Requires some Python additional classic libs, all can be downloaded via `pip install`:
@@ -18,8 +22,10 @@ Check [requirements.txt](requirements.txt) in root directory
 The actual devices are applied with usage of cyrillic characters.
 Encoding and translational features should be considered.
 
+&nbsp;
+
 ## App Structure
-### &nbsp;&nbsp; 1. Devices: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; staged in [devices.py](devices.py)
+### &nbsp;&nbsp; 1. Device initialisation ([devices.py](devices.py))
 ElectroMon bases on actual physical devices-measurers, described in file 
 [devices.py](devices.py)
 
@@ -58,7 +64,7 @@ Module consist of methods setting properties and statuses of device, such as:
                                                 'voltage_difference': 0.0}
 </details>
 
-### &nbsp;&nbsp; 2. Columns: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; staged in [columns.py](columns.py) 
+### &nbsp;&nbsp; 2. Columns processing ([columns.py](columns.py)) 
 Based on [devices](devices) attributes
 [сolumns](columns.py)
 processes data columns into Python dictionary with enumerated keys (can be used as indexes too) 
@@ -68,8 +74,8 @@ and values as list of parameters:
 3. code of sensor and a phase 
 4. voltage parameter 
 5. short search name
-6. full_search_name,
-7. concat_of_short_search_name_and_voltage_param,
+6. full search name
+7. concatenation of short search name and voltage parameter
 
 [Columns](columns.py) are set to cover column's parameters across as many viewpoints as possible
 
