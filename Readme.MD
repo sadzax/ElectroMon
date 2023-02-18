@@ -20,7 +20,7 @@ Requires some Python additional classic libs, all of which can be downloaded via
 Check [requirements.txt](requirements.txt) in root directory
 
 The actual devices are applied with usage of cyrillic characters. 
-Encoding and translational features should be considered.
+Encoding and translation features should be considered.
 
 Data source located in `upload/`
 
@@ -30,8 +30,6 @@ Data source located in `upload/`
 ### &nbsp;&nbsp; Device initialisation ([devices.py](devices.py))
 ElectroMon bases on actual physical devices-measurers, described in file 
 [devices.py](devices.py)
-
-It also able to content
 
 &nbsp;&nbsp; There is a list of them:
 - ``nkvv`` - Device for continuous monitoring and protection of high-voltage inputs<details><summary>cyrillic</summary>Устройство непрерывного контроля и защиты высоковольтных вводов</details>
