@@ -5,7 +5,7 @@ import plots
 import prints
 prints.clearing_script()
 
-device_type: str = 'kiv'
+device_type: str = 'mon'
 devices.kiv.file = prints.file_picking(device_type)
 
 

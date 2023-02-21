@@ -14,7 +14,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 prints.clearing_script()
 
 device_type = 'mon'
-data = devices.Pkl.load(device_type=device_type)
+data = devices.Pkl.load(device_type)
 
 # data = analyzer.stack_data(device_type=device_type)
 cols_list = columns.columns_list_maker(device_type=device_type, data=data)
