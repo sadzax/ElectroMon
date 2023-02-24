@@ -148,12 +148,12 @@ mon.file_sep = r"\s+"
 mon.file_default_encoding = 'WINDOWS-1251'
 mon.file_parse_dates_basis = ['дата', 'время']
 mon.file_parse_dates = ['Дата и время']
-mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],  # добавить стринг ****
-                                           'tg': -10.0,
-                                           '∆tg': -10.0,
-                                           'c_delta': -10.0,
-                                           'c_deviation': 0.0,
-                                           'voltage_difference': 0.0}
+mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0, '****'],  # добавить стринг ****
+                                           'tg': [-10.0, '****'],
+                                           '∆tg': [-10.0, '****'],
+                                           'c_delta': [-10.0, '****'],
+                                           'c_deviation': [0.0, '****'],
+                                           'voltage_difference': [0.0, '****']}
 mon.data_types = {'кВ': 'voltage',
                   'мА': 'power',
                   ',%': 'percentage',
