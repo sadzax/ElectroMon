@@ -24,7 +24,7 @@ del cols_list
 
 # ___
 
-# data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
+data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
 
 data_slices = analyzer.values_time_slicer(device_type, data)
 data_slices_choose = analyzer.values_time_slicer_choose(device_type, data_slices)
