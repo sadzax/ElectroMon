@@ -16,9 +16,9 @@ prints.clearing_script()
 
 device_type = 'mon'
 dev = device_type
-# data = devices.Pkl.load(dev)
+data = devices.Pkl.load(dev)
 
-data = analyzer.stack_data(dev)
+# data = analyzer.stack_data(dev)
 
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
