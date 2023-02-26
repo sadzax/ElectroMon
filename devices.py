@@ -148,12 +148,17 @@ mon.file_sep = r"\s+"
 mon.file_default_encoding = 'WINDOWS-1251'
 mon.file_parse_dates_basis = ['дата', 'время']
 mon.file_parse_dates = ['Дата и время']
-mon.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0, '****'],  # добавить стринг ****
-                                           'tg': [-10.0, '****'],
-                                           '∆tg': [-10.0, '****'],
-                                           'c_delta': [-10.0, '****'],
-                                           'c_deviation': [0.0, '****'],
-                                           'voltage_difference': [0.0, '****']}
+mon.default_dict_for_replacement_to_nan = {'power': [-300.0],
+                                           'power_active': [-300.0],
+                                           'power_reactive': [-300.0],
+                                           'tg': [-10.0],
+                                           'tangent': [-10.0],
+                                           '∆tg': [-10.0],
+                                           'tangent_delta': [-10.0],
+                                           'c_delta': [-10.0],
+                                           'c_deviation': [0.0],
+                                           'other': ['****'],
+                                           'overall': ['****']}
 mon.data_types = {'кВ': 'voltage',
                   'мА': 'power',
                   ',%': 'percentage',
@@ -161,7 +166,7 @@ mon.data_types = {'кВ': 'voltage',
                   '°С': 'temperature',
                   'Гц': 'frequency',
                   'Дата': 'datetime', }
-mon.data_search_name = {'dC': ['∆tg', 'tangent_delta'],
+mon.data_search_name = {'dtan_': ['∆tg', 'tangent_delta'],
                         'dC_': ['∆C', 'c_delta'],
                         'tan_': ['tg', 'tangent'],
                         'C_': ['C', 'c_deviation'],

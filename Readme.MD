@@ -134,4 +134,4 @@ and values as list of parameters:
 
 ### &nbsp;&nbsp; Analyzers and processors ([analyzer.py](analyzer.py))
 
-*to be updated...*
+*to 

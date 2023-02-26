@@ -79,7 +79,16 @@ def get_data(device_type: str = 'kiv',
     return data
 
 
-def stack_data(device_type: str = 'mon'):  # !!! DBGING
+#  1.1. Importing Data with stacking
+def stack_data(device_type: str = 'mon',
+               file: str = None,
+               sep: str = None,
+               encoding: str = None,
+               parse_dates: list = None,
+               raw_param: bool = False):
+    """
+    For a custom file usage you need to set all additional params
+    """
     files_list = devices.links(device_type)[5]
     if len(files_list) == 1:
         print(f"Доступен всего 1 файл для анализа")
@@ -103,9 +112,9 @@ def stack_data(device_type: str = 'mon'):  # !!! DBGING
         for i in indexes:
             devices.file_pick(device_type, i)
             if data is pd.DataFrame.empty:
-                data = get_data(device_type=device_type)
+                data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
             else:
-                iterated_data = get_data(device_type=device_type)
+                iterated_data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
                 data = pd.concat([data, iterated_data])
     the_time_column = columns.time_column(device_type)
     data = data.sort_values(by=the_time_column)
