@@ -27,16 +27,11 @@ del cols_list
 
 data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
 
-prints.total_log_counter(device_type=device_type, data=data)
-
-data_slices = analyzer.values_time_slicer(device_type, data)
-data_slices_choose = analyzer.values_time_slicer_choose(device_type, data_slices)
-
-
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ______________________________
+prints.total_log_counter(dev, data)
+values_time_analyzer = analyzer.values_time_analyzer(dev, data)
+values_time_analyzer_df = analyzer.values_time_analyzer_df(values_time_analyzer)
+values_time_slicer = analyzer.values_time_slicer(dev, data)
+values_time_slicer_choose = analyzer.values_time_slicer_choose(device_type, values_time_slicer)
 
-prints.total_log_counter(device_type=device_type, data=data)
-prints.values_time_analyzer_df(device_type=device_type, data=data)
-prints.total_nan_counter_df(device_type=device_type, data=data, cols=cols)  # optimize
-
-
+data = values_time_slicer_choose
