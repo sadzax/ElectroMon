@@ -3,9 +3,10 @@ import columns
 import devices
 import plots
 import prints
-prints.clearing_script()
+import sadzax
+sadzax.Out.reconfigure_encoding()
 
-device_type: str = 'mon'
+device_type: str = 'kiv'
 devices.kiv.file = prints.file_picking(device_type)
 
 
@@ -34,7 +35,7 @@ data = analyzer.values_time_slicer_choose(sliced_dict=data_slices)
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ______________________________
 
 prints.total_log_counter(device_type=device_type, data=data)
-prints.values_time_analyzer_df(device_type=device_type, data=data)
+prints.values_time_analyzer(device_type=device_type, data=data)
 prints.total_nan_counter_df(device_type=device_type, data=data, cols=cols)  # optimize
 
 
@@ -62,8 +63,8 @@ prints.info('Анализ сигнализации со стороны ВН')
 w1 = 0.35
 w2 = 0.5
 print(f'\nПревышение уровней {ex} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r')
-status = prints.answering('\n Вывести в кратком виде? Краткий вид - это только срабатывания аварийной сигнализации'
-                          ' (без предупредительной)', yes='y', no='n')
+status = sadzax.question('\n Вывести в кратком виде? Краткий вид - это только срабатывания аварийной сигнализации'
+                           ' (без предупредительной)', yes='y', no='n')
 if status == 'y':
     prints.warning_printer(filter_list, device_type, data, cols, w1, w2, 'accident')
 elif status == 'n':
@@ -76,8 +77,8 @@ prints.info('Анализ сигнализации со стороны ВН')
 w1 = 0.35
 w2 = 0.5
 print(f'\nПревышение уровней {ex} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r')
-status = prints.answering('\n Вывести в кратком виде? Краткий вид - это только срабатывания аварийной сигнализации'
-                          ' (без предупредительной)', yes='y', no='n')
+status = sadzax.question('\n Вывести в кратком виде? Краткий вид - это только срабатывания аварийной сигнализации'
+                           ' (без предупредительной)', yes='y', no='n')
 if status == 'y':
     prints.warning_printer(filter_list, device_type, data, cols, w1, w2, 'accident')
 elif status == 'n':

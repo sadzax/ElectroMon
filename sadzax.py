@@ -109,3 +109,36 @@ class Rus(object):
             return two
         else:
             return five
+
+
+def question(quest: str, yes='', no='', other=''):
+    """
+    :rtype: object, str
+    """
+    answer = str(input(f'  {quest}  ')).lower()
+    answer_list = {
+            'yes': ['yes', 'ye', 'yeah', 'ok', 'y', 'да', 'ага', 'ок', 'хорошо', 'давай', 'го', 'д', 'lf',
+                    'da', 'нуы'],
+            'no': ['no', 'nope', 'nah', 'n', 'нет', 'не', 'не надо', 'н', 'не-а', 'yt', 'ytn', 'тщ']}
+    if answer in answer_list['yes']:
+        return yes
+    elif answer in answer_list['no']:
+        return no
+    else:
+        return other
+
+
+class Out:
+    @staticmethod
+    def reconfigure_encoding():
+        import sys
+        sys.stdin.reconfigure(encoding='utf-8')
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except AttributeError:
+            pass
+
+    @staticmethod
+    def clear_future_warning():
+        import warnings
+        warnings.simplefilter(action='ignore', category=FutureWarning)

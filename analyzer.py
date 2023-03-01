@@ -5,9 +5,10 @@ import pandas as pd
 
 import columns
 import devices
-import prints
 import sadzax
 
+
+#  ____________ 1. DATA PROCESSING ________________________________________________
 
 #  1.0. Importing data
 def get_data(device_type: str = 'kiv',
@@ -71,15 +72,13 @@ def get_data(device_type: str = 'kiv',
                 if a_column.startswith(an_element_of_parse_dates):
                     # 'SettingWithCopyWarning' - A value is trying to be set on a copy of a slice from a DataFrame
                     pd.options.mode.chained_assignment = 'raise'
-                    # Check mask @ https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
-                    # data[a_column] = pd.to_datetime(data[a_column], format='%Y/%m/%d %H:%M:%S')
                     data[a_column] = pd.to_datetime(data[a_column], format='%d.%m.%Y %H:%M:%S')
                     data = data.sort_values(by=a_column)
     print('Обработка файла окончена')
     return data
 
 
-#  1.1. Importing Data with stacking
+#  1.0.1. Importing Data with stacking
 def stack_data(device_type: str = 'mon',
                file: str = None,
                sep: str = None,
@@ -122,6 +121,39 @@ def stack_data(device_type: str = 'mon',
     return data
 
 
+#  1.2. Exclude false measures
+def pass_the_nan(device_type: str = 'nkvv',
+                 data: pd.core = None,
+                 cols: dict = None,
+                 default_dict_for_replacement: dict = None):
+    device_type = device_type.lower()
+    if data is None:
+        data = get_data(device_type=device_type)
+    if cols is None:
+        cols = columns.columns_analyzer(device_type=device_type)
+    if default_dict_for_replacement is None:
+        default_dict_for_replacement = devices.links(device_type)[6]
+    for i in range(len(default_dict_for_replacement)):
+        seeking_param = [x for x in default_dict_for_replacement.keys()][i]
+        replacing_values = [x for x in default_dict_for_replacement.values()][i]
+        for a_column_index in range(len(cols)):
+            for a_param_index in range(len(cols[0])):
+                if cols[a_column_index][a_param_index] == seeking_param:
+                    arr = data[cols[a_column_index][0]]
+                    arr = np.array(arr)
+                    if isinstance(replacing_values, list) is False:
+                        replacing_values = list(replacing_values)
+                    for every_replacing_value in replacing_values:
+                        try:
+                            arr[arr == every_replacing_value] = np.NaN
+                        except ValueError:
+                            pass
+                    data[cols[a_column_index][0]] = arr
+    return data
+
+
+#  ____________ 1. BASIC TIME ANALYZING AND SLICING _______________________________
+
 #  2.0. Count the strings
 def total_log_counter(device_type: str = 'nkvv',
                       data: pd.core = None):
@@ -130,7 +162,7 @@ def total_log_counter(device_type: str = 'nkvv',
     return data.shape[0]
 
 
-#  2.1. Analysis of time of measurements
+#  2.1.1. Analysis of time of measurements
 def values_time_analyzer(device_type: str = 'nkvv',
                          data: pd.core = None,
                          time_sequence_min: int = 1,
@@ -168,25 +200,16 @@ def values_time_analyzer(device_type: str = 'nkvv',
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y'),
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M'),
                                      err]
-    return error_dict
+    cols_t = ["Строка в БД", "Дата", "Время", "Дата след.", "Время след.", "Разница"]
+    return pd.DataFrame.from_dict(error_dict, orient='index', columns=cols_t)
 
 
-#  2.1.1. Analysis time of measurements to dataframe
-def values_time_analyzer_df(source_dict: dict = None,
-                            orient='index',
-                            cols_t: dict = None):
-    if source_dict is None:
-        source_dict = values_time_analyzer()
-    if cols_t is None:
-        cols_t = ["Строка в БД", "Дата", "Время", "Дата след.", "Время след.", "Разница"]
-    return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols_t)
-
-
-#  2.1.2. Slice time of measurements for big differences
+#  2.2.1. Slice time of measurements for big gaps
 def values_time_slicer(device_type: str = 'nkvv',
                        data: pd.core = None,
                        minutes_slice_mode: int = 1439,
                        min_values_required: int = 300,
+                       time_analyzer = None,
                        time_column: str = None,
                        full_param: bool = False):
     device_type = device_type.lower()
@@ -195,11 +218,12 @@ def values_time_slicer(device_type: str = 'nkvv',
     if time_column is None:
         time_column = columns.time_column(device_type=device_type, data=data)
     data_result = {}
-    time_analyzer_df = values_time_analyzer_df(source_dict=values_time_analyzer(device_type=device_type, data=data))
+    if time_analyzer is None:
+        time_analyzer = values_time_analyzer(device_type=device_type, data=data)
     indexes_for_slicing = [-1]
-    for i in range(time_analyzer_df.shape[0]):
-        if time_analyzer_df.iloc[i, len(time_analyzer_df.columns)-1] > datetime.timedelta(minutes=minutes_slice_mode):
-            indexes_for_slicing.append(time_analyzer_df.iloc[i, 0])
+    for i in range(time_analyzer.shape[0]):
+        if time_analyzer.iloc[i, len(time_analyzer.columns) - 1] > datetime.timedelta(minutes=minutes_slice_mode):
+            indexes_for_slicing.append(time_analyzer.iloc[i, 0])
     indexes_for_slicing.append(int(data.shape[0]))
     data_slices_list = []
     for k in range(len(indexes_for_slicing)-1):
@@ -230,58 +254,6 @@ def values_time_slicer(device_type: str = 'nkvv',
     else:
         data_result = data_slices
     return data_result
-
-
-#  2.1.2.1. Choose one of the slices of time of measurements
-def values_time_slicer_choose(sliced_dict=None, device_type: str = 'kiv'):
-    if sliced_dict is None:
-        sliced_dict = values_time_slicer(device_type=device_type)
-    error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
-    l = len(sliced_dict)
-    w = sadzax.Rus.cases(l, 'срез', 'среза', 'срезов')
-    print(f"По заданным параметрам найдено {l} {w} данных")
-    k = [i for i in sliced_dict.keys()]
-    for i in sliced_dict:
-        print(f"Срез данных № {k.index(i)+1}. " + sliced_dict[i][4])
-    while True:
-        try:
-            choice = int(input('Введите срез для анализа: '))
-            if choice <= 0 or choice > len(k):
-                print(error)
-                continue
-            print(f"Вы выбрали срез данных № {choice}. " + sliced_dict[k[choice - 1]][4])
-            return sliced_dict[k[choice - 1]][0]
-        except:
-            print(error)
-            continue
-
-
-#  2.2. Exclude (Ia(r) = -300, Tg = -10) to NaN  ______ ADD EXCLUSIONS LISTS!
-def pass_the_nan(device_type: str = 'nkvv',
-                 data: pd.core = None,
-                 cols: dict = None,
-                 default_dict_for_replacement: dict = None):
-    device_type = device_type.lower()
-    if data is None:
-        data = get_data(device_type=device_type)
-    if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type)
-    if default_dict_for_replacement is None:
-        default_dict_for_replacement = devices.links(device_type)[6]
-    for i in range(len(default_dict_for_replacement)):
-        seeking_param = [x for x in default_dict_for_replacement.keys()][i]
-        replacing_values = [x for x in default_dict_for_replacement.values()][i]
-        for a_column_index in range(len(cols)):
-            for a_param_index in range(len(cols[0])):
-                if cols[a_column_index][a_param_index] == seeking_param:
-                    arr = data[cols[a_column_index][0]]
-                    arr = np.array(arr)
-                    if isinstance(replacing_values, list) is False:
-                        replacing_values = list(replacing_values)
-                    for every_replacing_value in replacing_values:
-                        arr[arr == every_replacing_value] = np.NaN
-                    data[cols[a_column_index][0]] = arr
-    return data
 
 
 #  2.3. Counting the nan_strings:

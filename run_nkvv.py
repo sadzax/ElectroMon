@@ -88,12 +88,11 @@ print(f'Общее число записей в журнале измерени�
 
 info_print('Анализ периодичности и неразрывности измерений')
 log_time = analyzer.values_time_analyzer(data=database)
-log_time_df = analyzer.values_time_analyzer_df(source_dict=log_time, orient='index')
-if len(log_time) == 0:
+if log_time.shape[0] == 0:
     print(f'Периоды измерений НКВВ не нарушены')
 else:
-    print(f'Выявлено {len(log_time)} нарушений периодов измерений НКВВ')
-    print(answering('Хотите вывести подробные данные?', yes=log_time_df, no=''))
+    print(f'Выявлено {log_time.shape[0]} нарушений периодов измерений НКВВ')
+    print(answering('Хотите вывести подробные данные?', yes=log_time, no=''))
 
 info_print('Анализ периодов массовой некорректности измерений')
 log_nans = analyzer.total_nan_counter(data=database, cols=cols)
