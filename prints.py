@@ -1,41 +1,12 @@
 import pandas as pd
 import analyzer
-import columns
 import devices
 import plots
 import sadzax
 
 
-def clearing_script():
-    import sys
-    import warnings
-    warnings.simplefilter(action='ignore', category=FutureWarning)
-    sys.stdin.reconfigure(encoding='utf-8')
-    try:
-        sys.stdout.reconfigure(encoding='utf-8')
-    except AttributeError:
-        pass
-
-
-clearing_script()
-
-
 def info(the_string):
     print(f'\n\n          {the_string}...\r')
-
-
-def answering(question, yes='', no='', answer_list=None):
-    answer = input(f'  {question}  ')
-    if answer_list is None:
-        answer_list = {'yes': ['yes', 'ye', 'yeah', 'ok', 'y', 'да', 'ага', 'ок', 'хорошо', 'давай', 'го', 'д', 'lf',
-                               'da', 'нуы'],
-                       'no': ['no', 'nope', 'nah', 'n', 'нет', 'не', 'не надо', 'н', 'не-а', 'yt', 'ytn', 'тщ']}
-    for answer_example in answer_list['yes']:
-        if answer == answer_example:
-            return yes
-    for answer_example in answer_list['no']:
-        if answer == answer_example:
-            return no
 
 
 def file_picking(device_type='kiv'):
@@ -69,15 +40,45 @@ def total_log_counter(device_type, data):
     print(f'Общее число записей в журнале измерений составило {log_total}')
 
 
-def values_time_analyzer_df(device_type, data):
+def values_time_analyzer(device_type, data, log: pd.core = None):
     info('Анализ периодичности и неразрывности измерений')
-    log_time = analyzer.values_time_analyzer(data=data, device_type=device_type)
-    log_time_df = analyzer.values_time_analyzer_df(source_dict=log_time, orient='index')
-    if len(log_time) == 0:
+    if log is None:
+        log = analyzer.values_time_analyzer(device_type=device_type, data=data)
+    if log.shape[0] == 0:
         print(f'Периоды измерений не нарушены')
     else:
-        print(f'Выявлено {len(log_time)} нарушений периодов измерений')
-        print(answering('Хотите вывести подробные данные?', yes=log_time_df, no=''))
+        print(f'Выявлено {log.shape[0]} нарушений периодов измерений')
+        print(sadzax.question('Хотите вывести подробные данные?', yes=log, no=''))
+        return log
+
+
+def values_time_slicer(device_type, data, log: dict = None):
+    info('Выбор неразрывного периода для анализа')
+    if log is None:
+        log = analyzer.values_time_slicer(device_type=device_type, data=data)
+    error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
+    l = len(log)
+    w1 = sadzax.Rus.cases(l, 'найден', 'найдены', 'найдены')
+    w2 = sadzax.Rus.cases(l, 'срез', 'среза', 'срезов')
+    print(f"По заданным параметрам {w1} {l} {w2} данных")
+    k = [i for i in log.keys()]
+    for i in log:
+        print(f"Срез данных № {k.index(i)+1}. " + log[i][4])
+    if len(log) == 1:
+        print(f"Срез данных принят к анализу")
+        return log[0][0]
+    else:
+        while True:
+            try:
+                choice = int(input('Введите срез для анализа: '))
+                if choice <= 0 or choice > len(k):
+                    print(error)
+                    continue
+                print(f"Вы выбрали срез данных № {choice}. " + log[k[choice - 1]][4])
+                return log[k[choice - 1]][0]
+            except:
+                print(error)
+                continue
 
 
 def total_nan_counter_df(device_type, data, cols):
@@ -92,7 +93,7 @@ def total_nan_counter_df(device_type, data, cols):
         print(f"\n {w1} {len(log_nans)} {w2} с некорректными данными")
         print(f"Замеры с некорректными данными составили {round((len(log_nans) / data.shape[0]) * 100, 1)}%"
               f" от общего числа произведённых замеров")
-        print(answering('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no=''))
+        print(sadzax.question('Хотите вывести примеры некорректных данных?', yes=log_nans_df, no=''))
 
 
 def average_printer(ex, data, cols, abs_parameter=True):
@@ -145,7 +146,7 @@ def warning_printer(filter_list_append,
                 f'уровней {every_df.axes[1].values[1]} для срабатывания {warn_str} сигнализации. '
                 f'\n Процент срабатывания {round((every_df.shape[0] / data.shape[0]) * 100, 3)}% (от общего'
                 f' количества замеров')
-            print(answering('Вывести список?', every_df))
+            print(sadzax.question('Вывести список?', every_df))
 
 
 def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, cols=None, title=None):

@@ -7,8 +7,6 @@ import glob
 class Device:
     def __init__(self, name):
         """
-        Инициализация устройства, поля:
-        1. Краткое имя
         """
         self.name = name
         self.full_name = name
@@ -28,6 +26,10 @@ class Device:
 
     @property
     def file_list(self):
+        """
+        Sets the list of files based on 'file_name_starts' and/or 'file_name_ends' properties
+        :returns: list of files as filepath form root directory
+        """
         error = f'У устройства "{self.full_name}" в папке {self.file_folder} нет подходящих файлов.' \
                 f' Загрузите их, пожалуйста'
         all_files = ['/'.join([i for i in filepath.parts]) for filepath
