@@ -29,7 +29,7 @@ del cols_list
 print('Обработка файла завершена')
 
 data_slices = analyzer.values_time_slicer(device_type=device_type, data=data)
-data = analyzer.values_time_slicer_choose(sliced_dict=data_slices)
+data = prints.values_time_slicer(device_type=device_type, data=data, log=data_slices)
 
 
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ______________________________

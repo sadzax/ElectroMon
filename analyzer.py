@@ -121,7 +121,7 @@ def stack_data(device_type: str = 'mon',
     return data
 
 
-#  1.2. Exclude false measures
+#  1.1. Exclude false measures
 def pass_the_nan(device_type: str = 'nkvv',
                  data: pd.core = None,
                  cols: dict = None,
@@ -162,7 +162,7 @@ def total_log_counter(device_type: str = 'nkvv',
     return data.shape[0]
 
 
-#  2.1.1. Analysis of time of measurements
+#  2.1. Analysis of time of measurements
 def values_time_analyzer(device_type: str = 'nkvv',
                          data: pd.core = None,
                          time_sequence_min: int = 1,
@@ -205,11 +205,11 @@ def values_time_analyzer(device_type: str = 'nkvv',
 
 
 #  2.2.1. Slice time of measurements for big gaps
-def values_time_slicer(device_type: str = 'nkvv',
+def values_time_slicer(device_type: str = 'kiv',
                        data: pd.core = None,
+                       time_analyzer: pd.core = None,
                        minutes_slice_mode: int = 1439,
                        min_values_required: int = 300,
-                       time_analyzer = None,
                        time_column: str = None,
                        full_param: bool = False):
     device_type = device_type.lower()

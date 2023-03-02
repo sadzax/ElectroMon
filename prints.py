@@ -49,7 +49,6 @@ def values_time_analyzer(device_type, data, log: pd.core = None):
     else:
         print(f'Выявлено {log.shape[0]} нарушений периодов измерений')
         print(sadzax.question('Хотите вывести подробные данные?', yes=log, no=''))
-        return log
 
 
 def values_time_slicer(device_type, data, log: dict = None):
@@ -67,7 +66,12 @@ def values_time_slicer(device_type, data, log: dict = None):
     if len(log) == 1:
         print(f"Срез данных принят к анализу")
         return log[0][0]
-    else:
+    elif len(log) > 1:
+        try:
+            inputs = sadzax.Enter.mapped_ints('Введите срезы для анализа: ')
+        except ValueError:
+            choice = k
+
         while True:
             try:
                 choice = int(input('Введите срез для анализа: '))

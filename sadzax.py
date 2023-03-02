@@ -1,7 +1,37 @@
 import math
+from typing import List
 
 
 class Enter(object):
+    @staticmethod
+    def mapped_ints(self):
+        replace = [',', '.', ';']
+        txt = str(input(self))
+        while txt.find('-') > 0:
+            i = txt.find('-')
+            head = txt[:i]
+            head_space = head[::-1].find(' ')  # doesn't work if you set a space before dash
+            if head_space < 0:
+                head_space = 0
+            head_index = len(head) - head_space
+            start = txt[head_index-1:i]
+            tail = txt[i + 1:]
+            tail_space = tail.find(' ')
+            if tail_space < 0:
+                tail_space = 0
+            tail_index = i + 1 + tail_space
+            end = txt[i + 1: tail_index+1]
+            try:
+                the_range = list(range(int(start), int(end)+1))
+                if int(end) < int(start):
+                    the_range = ' '
+            except:
+                the_range = ' '
+            txt = txt[:head_index-1] + ' ' + ' '.join(str(x) for x in the_range) + ' ' + txt[tail_index+1:] + ' '
+        for char in replace:
+            txt = txt.replace(char, ' ')
+        return list(map(int, txt.split()))
+
     def int(input_descripton, arg_error, arg_min, arg_max, arg_isnt):
         while True:
             try:
