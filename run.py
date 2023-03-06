@@ -23,8 +23,8 @@ data = devices.Pkl.load(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
-# devices.Pkl.save(device_type=device_type, data=data)
 # data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
+# devices.Pkl.save(device_type=device_type, data=data)
 
 
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
@@ -33,10 +33,7 @@ prints.total_log_counter(dev, data)
 time_analyzer = analyzer.values_time_analyzer(dev, data)
 prints.values_time_analyzer(dev, data, time_analyzer)
 
-
 values_time_slicer = analyzer.values_time_slicer(dev, data, time_analyzer)
-prints.values_time_slicer(dev, data, values_time_slicer)
+data = prints.values_time_slicer(dev, data, values_time_slicer)
 
-values_time_slicer_choose = analyzer.values_time_slicer_choose(device_type, values_time_slicer)
-
-data = values_time_slicer_choose
+total_nan_counter = prints.total_nan_counter(dev, data, cols)

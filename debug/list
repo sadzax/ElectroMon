@@ -1,0 +1,5 @@
+data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)
+D:\Cloud2022\sadzax\_NKVV\analyzer.py:148: FutureWarning: elementwise comparison failed;
+returning scalar instead, but in the future will perform elementwise comparison
+  arr[arr == every_replacing_value] = np.NaN
+

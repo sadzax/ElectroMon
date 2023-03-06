@@ -260,7 +260,7 @@ def values_time_slicer(device_type: str = 'kiv',
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
                       cols: dict = None,
-                      false_data_percentage: float = 30.0):
+                      false_data_percentage: float = 33.0):
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -272,7 +272,20 @@ def total_nan_counter(device_type='nkvv',
     for i in range(len(cols)):
         if cols[i][0] == time_column:
             time_index = i
+
     for a_row in range(data.shape[0]):
+        data['total_nan_counter'] = data.isna().sum(axis=1) / data.shape[1]
+        data = data[[time_index, 'total_nan_counter']]
+
+        nana2 = data[nana > false_data_percentage/100]
+        nans_dict = pd.to_datetime(str(nana2.iloc[:, time_index]))
+
+        nans_dict[a_row] = [pd.to_datetime(str(nana2.iloc[a_row, time_index])).strftime('%d.%m.%y'),
+                            pd.to_datetime(str(nana2.iloc[a_row, time_index])).strftime('%H.%M'),
+                            round(nana * 100, 0)]  # correct percentage
+
+
+
         nan_counter = 0
         for a_column in range(len(cols)):
             if pd.isna(data.iloc[a_row, a_column]) is True:
@@ -281,18 +294,8 @@ def total_nan_counter(device_type='nkvv',
             nans_dict[a_row] = [pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%d.%m.%y'),
                                 pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%H.%M'),
                                 round((nan_counter/len(cols))*100, 0)]  # correct percentage
-    return nans_dict
-
-
-#  2.3.1.  Counting the nan_strings to dataframe:
-def total_nan_counter_df(source_dict: dict = None,
-                         cols: list = None,
-                         orient: str = 'index'):
-    if source_dict is None:
-        source_dict = total_nan_counter()
-    if cols is None:
-        cols = ['Дата', 'Время', '% некорректных данных (из общего числа считываемых) в момент замера']
-    return pd.DataFrame.from_dict(source_dict, orient=orient, columns=cols)
+    cols_out = ['Дата', 'Время', 'Доля некорректных данных в момент замера']
+    return pd.DataFrame.from_dict(nans_dict, orient='index', columns=cols_out)
 
 
 #  3.1. Filtering
