@@ -274,8 +274,9 @@ def total_nan_counter(device_type='nkvv',
             time_index = i
 
     for a_row in range(data.shape[0]):
-        data['total_nan_counter'] = data.isna().sum(axis=1) / data.shape[1]
-        data = data[[time_index, 'total_nan_counter']]
+        data['total_nan_counter'] = round((data.isna().sum(axis=1) / data.shape[1]) * 100, 0)
+        df = data[[data.columns[time_index],'total_nan_counter']]
+
 
         nana2 = data[nana > false_data_percentage/100]
         nans_dict = pd.to_datetime(str(nana2.iloc[:, time_index]))
