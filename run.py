@@ -11,7 +11,7 @@ import plots
 import prints
 import sadzax
 sadzax.Out.reconfigure_encoding()
-# sadzax.Out.clear_future_warning()
+sadzax.Out.clear_future_warning()
 
 
 #  ______________________________________ OBTAINING DATA _________________________________________
