@@ -98,7 +98,7 @@ def total_nan_counter(device_type, data, cols, false_data_percentage: float = 33
         print(f"\n Периоды некорректных измерений не выявлены")
     else:
         print(f"\n {w1} {log_nans.shape[0]} {w2} с некорректными данными (там, где"
-              f" за один замер зафиксировано более {false_data_percentage}% некорректных данных")
+              f" за один замер зафиксировано более {false_data_percentage}% некорректных данных)")
         print(f"Замеры с некорректными данными составили {round((log_nans.shape[0] / data.shape[0]) * 100, 1)}%"
               f" от общего числа произведённых замеров")
         print(sadzax.question('Хотите вывести примеры некорректных данных?', yes=log_nans, no=''))
