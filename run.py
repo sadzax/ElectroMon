@@ -36,4 +36,4 @@ prints.values_time_analyzer(dev, data, time_analyzer)
 values_time_slicer = analyzer.values_time_slicer(dev, data, time_analyzer)
 data = prints.values_time_slicer(dev, data, values_time_slicer)
 
-total_nan_counter = prints.total_nan_counter(dev, data, cols)
+total_nan_counter = prints.total_nan_counter(dev, data, cols, 33.0)

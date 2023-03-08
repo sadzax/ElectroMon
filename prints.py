@@ -87,16 +87,18 @@ def values_time_slicer(device_type, data, log: dict = None):
             del iterated_data
 
 
-def total_nan_counter(device_type, data, cols, log: pd.core = None):
+def total_nan_counter(device_type, data, cols, false_data_percentage: float = 33.0, log: pd.core = None):
     info('Анализ периодов массовой некорректности измерений')
     if log is None:
-        log_nans = analyzer.total_nan_counter(device_type=device_type, data=data, cols=cols)
+        log_nans = analyzer.total_nan_counter(device_type=device_type, data=data, cols=cols,
+                                              false_data_percentage=false_data_percentage)
     w1 = sadzax.Rus.cases(log_nans.shape[0], "Выявлен", "Выявлено", "Выявлено")
     w2 = sadzax.Rus.cases(log_nans.shape[0], "замер", "замера", "замеров")
     if log_nans.shape[0] == 0:
         print(f"\n Периоды некорректных измерений не выявлены")
     else:
-        print(f"\n {w1} {log_nans.shape[0]} {w2} с некорректными данными")
+        print(f"\n {w1} {log_nans.shape[0]} {w2} с некорректными данными (там, где"
+              f" за один замер зафиксировано более {false_data_percentage}% некорректных данных")
         print(f"Замеры с некорректными данными составили {round((log_nans.shape[0] / data.shape[0]) * 100, 1)}%"
               f" от общего числа произведённых замеров")
         print(sadzax.question('Хотите вывести примеры некорректных данных?', yes=log_nans, no=''))

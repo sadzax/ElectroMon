@@ -268,38 +268,27 @@ def total_nan_counter(device_type='nkvv',
         cols = columns.columns_analyzer(device_type=device_type)
     nans_dict = {}
     time_column = columns.time_column(device_type=device_type, data=data)
-
-
-
-    data['total_nan_counter'] = round((data.isna().sum(axis=1) / data.shape[1]) * 100, 0)
-    df = data[[time_column, 'total_nan_counter']]
-    df['alarm'] = df['total_nan_counter'] > false_data_percentage
-
-    df.loc[:, 'alarm'] = False
-
-
-    nana2 = data[nana > false_data_percentage/100]
-    nans_dict = pd.to_datetime(str(nana2.iloc[:, time_index]))
-
-    nans_dict[a_row] = [pd.to_datetime(str(nana2.iloc[a_row, time_index])).strftime('%d.%m.%y'),
-                        pd.to_datetime(str(nana2.iloc[a_row, time_index])).strftime('%H.%M'),
-                        round(nana * 100, 0)]  # correct percentage
-
-    time_index = 0
-    for i in range(len(cols)):
-        if cols[i][0] == time_column:
-            time_index = i
-    for a_row in range(data.shape[0]):
-        nan_counter = 0
-        for a_column in range(len(cols)):
-            if pd.isna(data.iloc[a_row, a_column]) is True:
-                nan_counter += 1
-        if nan_counter > (len(cols)*(false_data_percentage/100)):
-            nans_dict[a_row] = [pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%d.%m.%y'),
-                                pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%H.%M'),
-                                round((nan_counter/len(cols))*100, 0)]  # correct percentage
-    cols_out = ['Дата', 'Время', 'Доля некорректных данных в момент замера']
-    return pd.DataFrame.from_dict(nans_dict, orient='index', columns=cols_out)
+    data['% сбоя данных в момент замера'] = round((data.isna().sum(axis=1) / data.shape[1]) * 100, 0)
+    df = data[[time_column, '% сбоя данных в момент замера']]
+    df.insert(1, 'alarm', df['% сбоя данных в момент замера'] > false_data_percentage, True)
+    for k, v in {'Дата': '%d.%m.%y', 'Время': '%H.%M'}.items():
+        df.insert(df.shape[1], k, pd.to_datetime(df['Дата и время']).apply(lambda x: x.strftime(v)), True)
+    return df[df['alarm'] == True].iloc[:, 2:5]
+    # time_index = 0
+    # for i in range(len(cols)):
+    #     if cols[i][0] == time_column:
+    #         time_index = i
+    # for a_row in range(data.shape[0]):
+    #     nan_counter = 0
+    #     for a_column in range(len(cols)):
+    #         if pd.isna(data.iloc[a_row, a_column]) is True:
+    #             nan_counter += 1
+    #     if nan_counter > (len(cols)*(false_data_percentage/100)):
+    #         nans_dict[a_row] = [pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%d.%m.%y'),
+    #                             pd.to_datetime(str(data.iloc[a_row, time_index])).strftime('%H.%M'),
+    #                             round((nan_counter/len(cols))*100, 0)]  # correct percentage
+    # cols_out = ['Дата', 'Время', '% сбоя данных в момент замера']
+    # return pd.DataFrame.from_dict(nans_dict, orient='index', columns=cols_out)
 
 
 #  3.1. Filtering
