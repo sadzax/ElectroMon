@@ -82,11 +82,11 @@ nkvv.file_sep = ';'
 nkvv.file_default_encoding = 'WINDOWS-1251'
 nkvv.file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
 nkvv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
-                                            'tg': -10.0,
-                                            '∆tg': -10.0,
-                                            'c_delta': -10.0,
-                                            'c_deviation': 0.0,
-                                            'voltage_difference': 0.0}
+                                            'tg': [-10.0],
+                                            '∆tg': [-10.0],
+                                            'c_delta': [-10.0],
+                                            'c_deviation': [0.0],
+                                            'voltage_difference': [0.0]}
 nkvv.data_types = {'кВ': 'voltage',
                    'мА': 'power',
                    ',%': 'percentage',
@@ -116,9 +116,9 @@ kiv.file_name_starts = {'measure': 'MeasJ', 'event': 'WorkJ'}
 kiv.file_parse_dates = ['Дата/Время']  # Starts with
 kiv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                            'tg': [-10.0, 0.0],
-                                           '∆tg': [-10.0, 0.0],
-                                           'c_delta': [-10.0, 0.0],  # проверить edits!!!
-                                           'c_deviation': [0.0, 0.0],
+                                           '∆tg': [-10.0],
+                                           'c_delta': [-10.0],
+                                           'c_deviation': [0.0],
                                            'voltage_difference': [0.0]}
 kiv.data_types = {'°С': 'temperature',
                   'Дата': 'datetime',
@@ -180,6 +180,9 @@ mon.data_search_name = {'dtan_': ['∆tg', 'tangent_delta'],
                         'Tair': ['tair', 'temperature_of_air'],
                         'Tdev': ['tdev', 'temperature_of_device'],
                         'Tcpu': ['tcpu', 'temperature_of_cpu']}
+
+# Devices
+objs = [nkvv, kiv, mon]
 
 
 # Avoid error of func inside class and/or before obj.init.

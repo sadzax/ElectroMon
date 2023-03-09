@@ -13,9 +13,8 @@ import sadzax
 sadzax.Out.reconfigure_encoding()
 sadzax.Out.clear_future_warning()
 
-
 #  ______________________________________ OBTAINING DATA _________________________________________
-device_type = 'mon'
+device_type = prints.device_picking()
 dev = device_type
 # prints.file_picking(dev)
 # data = devices.Pkl.load(dev)
@@ -26,18 +25,16 @@ del cols_list
 data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
 # devices.Pkl.save(device_type=device_type, data=data)
 
-
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
 prints.total_log_counter(dev, data)
 
-time_analyzer = analyzer.values_time_analyzer(dev, data)
-prints.values_time_analyzer(dev, data, time_analyzer)
+values_time_analyzer = analyzer.values_time_analyzer(dev, data, time_sequence_min=1, inaccuracy_sec=3)
+prints.values_time_analyzer(dev, data, log=values_time_analyzer)
 
-values_time_slicer = analyzer.values_time_slicer(dev, data, time_analyzer)
-data = prints.values_time_slicer(dev, data, values_time_slicer)
+values_time_slicer = analyzer.values_time_slicer(dev, data, values_time_analyzer, min_values_required=150)
+data = prints.values_time_slicer(dev, data, log=values_time_slicer)
 
-total_nan_counter = prints.total_nan_counter(dev, data, cols, 33.0)
-
+total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=30.0)
+prints.total_nan_counter(dev, data, false_data_percentage=30.0, log=total_nan_counter)
 
 #  ______________________________________ DATA ENG. _____________________________________________
-

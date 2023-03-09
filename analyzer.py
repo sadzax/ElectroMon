@@ -88,6 +88,7 @@ def stack_data(device_type: str = 'mon',
     """
     For a custom file usage you need to set all additional params
     """
+    device_type = device_type.lower()
     files_list = devices.links(device_type)[5]
     if len(files_list) == 1:
         print(f"Доступен всего 1 файл для анализа")
@@ -259,14 +260,10 @@ def values_time_slicer(device_type: str = 'kiv',
 #  2.3. Counting the nan_strings:
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
-                      cols: dict = None,
                       false_data_percentage: float = 33.0):
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
-    if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type)
-    nans_dict = {}
     time_column = columns.time_column(device_type=device_type, data=data)
     data['% сбоя данных в момент замера'] = round((data.isna().sum(axis=1) / data.shape[1]) * 100, 0)
     df = data[[time_column, '% сбоя данных в момент замера']]

@@ -9,6 +9,25 @@ def info(the_string):
     print(f'\n\n          {the_string}...\r')
 
 
+def device_picking():
+    error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
+    print('Доступны следующие устройство для анализа: \n')
+    for obj in devices.objs:
+        print(f"{devices.objs.index(obj) + 1}. {obj.full_name} ({obj.name})")
+    while True:
+        try:
+            choice = int(input('\nВыберите № устройства: '))
+            if choice <= 0 or choice > len(devices.objs):
+                print(error)
+                continue
+            print(f'Выбрано устройство: \n"{devices.objs[choice - 1].full_name}"\n'
+                  f'Системный код устройства - "{devices.objs[choice - 1].name}"')
+            return devices.objs[choice - 1].name
+        except:
+            print(error)
+            continue
+
+
 def file_picking(device_type='kiv'):
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
     files_list = devices.links(device_type)[5]
@@ -68,8 +87,7 @@ def values_time_slicer(device_type, data, log: dict = None):
         return log[0][0]
     elif len(log) > 1:
         try:
-            inputs = sadzax.Enter.mapped_ints('Введите срезы для анализа (либо введите любой текст,'
-                                              ' чтобы взять в анализ их все: ')
+            inputs = sadzax.Enter.mapped_ints('Введите срезы для анализа: ')
             inputs = [x for x in inputs if x in k]
         except ValueError:
             inputs = k
@@ -87,21 +105,21 @@ def values_time_slicer(device_type, data, log: dict = None):
             del iterated_data
 
 
-def total_nan_counter(device_type, data, cols, false_data_percentage: float = 33.0, log: pd.core = None):
+def total_nan_counter(device_type, data, false_data_percentage: float = 33.0, log: pd.core = None):
     info('Анализ периодов массовой некорректности измерений')
     if log is None:
-        log_nans = analyzer.total_nan_counter(device_type=device_type, data=data, cols=cols,
-                                              false_data_percentage=false_data_percentage)
-    w1 = sadzax.Rus.cases(log_nans.shape[0], "Выявлен", "Выявлено", "Выявлено")
-    w2 = sadzax.Rus.cases(log_nans.shape[0], "замер", "замера", "замеров")
-    if log_nans.shape[0] == 0:
+        log = analyzer.total_nan_counter(device_type=device_type, data=data,
+                                         false_data_percentage=false_data_percentage)
+    w1 = sadzax.Rus.cases(log.shape[0], "Выявлен", "Выявлено", "Выявлено")
+    w2 = sadzax.Rus.cases(log.shape[0], "замер", "замера", "замеров")
+    if log.shape[0] == 0:
         print(f"\n Периоды некорректных измерений не выявлены")
     else:
-        print(f"\n {w1} {log_nans.shape[0]} {w2} с некорректными данными (там, где"
+        print(f"\n {w1} {log.shape[0]} {w2} с некорректными данными (там, где"
               f" за один замер зафиксировано более {false_data_percentage}% некорректных данных)")
-        print(f"Замеры с некорректными данными составили {round((log_nans.shape[0] / data.shape[0]) * 100, 1)}%"
+        print(f"Замеры с некорректными данными составили {round((log.shape[0] / data.shape[0]) * 100, 1)}%"
               f" от общего числа произведённых замеров")
-        print(sadzax.question('Хотите вывести примеры некорректных данных?', yes=log_nans, no=''))
+        print(sadzax.question('Хотите вывести примеры некорректных данных?', yes=log, no=''))
 
 
 def average_printer(ex, data, cols, abs_parameter=True):
