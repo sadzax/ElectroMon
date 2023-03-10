@@ -118,7 +118,7 @@ def stack_data(device_type: str = 'mon',
                 data = pd.concat([data, iterated_data])
     the_time_column = columns.time_column(device_type)
     data = data.sort_values(by=the_time_column)
-    print('Соединение файлов завершено')
+    print('Консолидация данных завершена')
     return data
 
 
@@ -126,7 +126,8 @@ def stack_data(device_type: str = 'mon',
 def pass_the_nan(device_type: str = 'nkvv',
                  data: pd.core = None,
                  cols: dict = None,
-                 default_dict_for_replacement: dict = None):
+                 default_dict_for_replacement: dict = None,
+                 default_dict_for_dtypes: dict = None):
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -150,6 +151,33 @@ def pass_the_nan(device_type: str = 'nkvv',
                         except ValueError:
                             pass
                     data[cols[a_column_index][0]] = arr
+    return data
+
+
+def set_dtypes(device_type: str = 'mon',
+               data: pd.core = None,
+               cols: dict = None,
+               default_dict_for_dtypes: dict = None):
+    device_type = device_type.lower()
+    if data is None:
+        data = get_data(device_type=device_type)
+    if cols is None:
+        cols = columns.columns_analyzer(device_type=device_type)
+    if default_dict_for_dtypes is None:
+        default_dict_for_dtypes = devices.links(device_type)[8]
+    if default_dict_for_dtypes is None:
+        pass
+    else:
+        for i in range(len(default_dict_for_dtypes)):
+            seeking_param = [x for x in default_dict_for_dtypes.keys()][i]
+            for a_column_index in range(len(cols)):
+                for a_param_index in range(len(cols[0])):
+                    if cols[a_column_index][a_param_index] == seeking_param:
+                        try:
+                            data[cols[a_column_index][0]] = data[cols[a_column_index][0]]\
+                                .astype(default_dict_for_dtypes[seeking_param])
+                        except ValueError | TypeError:
+                            pass
     return data
 
 

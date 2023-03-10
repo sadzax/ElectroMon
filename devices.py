@@ -21,6 +21,7 @@ class Device:
         self.file_parse_dates_basis = None
         self.file_parse_dates = None
         self.default_dict_for_replacement_to_nan = None
+        self.default_dict_for_dtypes = None
         self.data_types = None
         self.data_search_name = None
 
@@ -65,9 +66,15 @@ class Device:
 
     def links(self):  # Можно добавлять значения
         return [
-            self.name, self.file, self.file_sep, self.file_default_encoding,
-            self.file_parse_dates, self.file_list,
-            self.default_dict_for_replacement_to_nan, self.file_parse_dates_basis
+            self.name,
+            self.file,
+            self.file_sep,
+            self.file_default_encoding,
+            self.file_parse_dates,
+            self.file_list,
+            self.default_dict_for_replacement_to_nan,
+            self.file_parse_dates_basis,
+            self.default_dict_for_dtypes
         ]
 
 
@@ -180,6 +187,17 @@ mon.data_search_name = {'dtan_': ['∆tg', 'tangent_delta'],
                         'Tair': ['tair', 'temperature_of_air'],
                         'Tdev': ['tdev', 'temperature_of_device'],
                         'Tcpu': ['tcpu', 'temperature_of_cpu']}
+mon.default_dict_for_dtypes = {'∆tg': float,
+                               '∆C': float,
+                               'tg': float,
+                               'C': float,
+                               'U': float,
+                               'Ia': float,
+                               'Ir': float,
+                               'freq': float,
+                               'tair': float,
+                               'tdev': float,
+                               'tcpu': float}
 
 # Devices
 objs = [nkvv, kiv, mon]
