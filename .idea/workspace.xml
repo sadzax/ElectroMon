@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Minor bugs, typos">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Run">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
@@ -221,13 +221,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00078" summary="kiv plots and prints">
-      <created>1674998914332</created>
-      <option name="number" value="00078" />
-      <option name="presentableId" value="LOCAL-00078" />
-      <option name="project" value="LOCAL" />
-      <updated>1674998914332</updated>
     </task>
     <task id="LOCAL-00079" summary="kiv plots and prints">
       <created>1675085830411</created>
@@ -565,7 +558,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678496537701</updated>
     </task>
-    <option name="localTasksCounter" value="127" />
+    <task id="LOCAL-00127" summary="Run">
+      <created>1678577811721</created>
+      <option name="number" value="00127" />
+      <option name="presentableId" value="LOCAL-00127" />
+      <option name="project" value="LOCAL" />
+      <updated>1678577811721</updated>
+    </task>
+    <option name="localTasksCounter" value="128" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -580,7 +580,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="added list handler for passing the nans in main DF" />
     <MESSAGE value="printouts" />
     <MESSAGE value="kiv start" />
     <MESSAGE value="kiv columns debugging" />
@@ -605,6 +604,7 @@
     <MESSAGE value="total nan counter easing" />
     <MESSAGE value="Prints" />
     <MESSAGE value="Minor bugs, typos" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor bugs, typos" />
+    <MESSAGE value="Run" />
+    <option name="LAST_COMMIT_MESSAGE" value="Run" />
   </component>
 </project>
