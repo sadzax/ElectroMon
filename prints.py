@@ -11,7 +11,7 @@ def info(the_string):
 
 def device_picking():
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
-    print('Доступны следующие устройство для анализа: \n')
+    print('\nДоступны следующие устройства для анализа: \n')
     for obj in devices.objs:
         print(f"{devices.objs.index(obj) + 1}. {obj.full_name} ({obj.name})")
     while True:
@@ -20,7 +20,7 @@ def device_picking():
             if choice <= 0 or choice > len(devices.objs):
                 print(error)
                 continue
-            print(f'Выбрано устройство: \n"{devices.objs[choice - 1].full_name}"\n'
+            print(f'\nВыбрано устройство: \n"{devices.objs[choice - 1].full_name}"\n'
                   f'Системный код устройства - "{devices.objs[choice - 1].name}"')
             return devices.objs[choice - 1].name
         except:
@@ -75,34 +75,38 @@ def values_time_slicer(device_type, data, log: dict = None):
     if log is None:
         log = analyzer.values_time_slicer(device_type=device_type, data=data)
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
-    l = len(log)
-    w1 = sadzax.Rus.cases(l, 'найден', 'найдены', 'найдены')
-    w2 = sadzax.Rus.cases(l, 'срез', 'среза', 'срезов')
-    print(f"По заданным параметрам {w1} {l} {w2} данных")
+    w1 = sadzax.Rus.cases(len(log), 'найден', 'найдены', 'найдены')
+    w2 = sadzax.Rus.cases(len(log), 'срез', 'среза', 'срезов')
+    print(f"По заданным параметрам {w1} {len(log)} {w2} данных")
     k = [i for i in log.keys()]
     for i in log:
         print(f"Срез данных № {k.index(i)+1}. " + log[i][4])
-    if l == 1:
+    if len(log) < 1:
+        print(f"Ошибка источника периодов")
+        return data
+    elif len(log) == 1:
         print(f"Срез данных принят к анализу")
         return log[0][0]
     elif len(log) > 1:
         try:
-            inputs = sadzax.Enter.mapped_ints('Введите срезы для анализа: ')
-            inputs = [x for x in inputs if x in k]
-        except ValueError:
-            inputs = k
-        if len(inputs) < 1:
-            inputs = k
-        print(f"Выбранные срезы данных: \n")
-        data = pd.DataFrame.empty
-        for choice in inputs:
-            print(f"№ {choice}. " + log[k[choice - 1]][4] + "\n")
-            iterated_data = log[k[choice - 1]][0]
-            if data is pd.DataFrame.empty:
-                data = iterated_data
+            inputs = sadzax.Enter.mapped_ints('Введите срезы для анализа'
+                                              ' (либо введите любой текст для анализа всех срезов): ')
+            outputs = [x for x in k if k.index(x) in inputs]
+        except:
+            outputs = k
+        if len(outputs) < 1:
+            outputs = k
+        print(f"\nВыбранные срезы данных:")
+        df = pd.DataFrame.empty
+        for choice in outputs:
+            print(f"№ {k.index(choice)+1}. " + log[choice][4])
+            iterated_data = log[choice][0]
+            if df is pd.DataFrame.empty:
+                df = iterated_data
             else:
-                data = pd.concat([data, iterated_data])
+                df = pd.concat([df, iterated_data])
             del iterated_data
+        return df
 
 
 def total_nan_counter(device_type, data, false_data_percentage: float = 33.0, log: pd.core = None):

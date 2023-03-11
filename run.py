@@ -18,8 +18,8 @@ device_type = prints.device_picking()
 # device_type = 'mon'
 dev = device_type
 # prints.file_picking(dev)
-# data = devices.Pkl.load(dev)
-data = analyzer.stack_data(dev)
+data = devices.Pkl.load(dev)
+# data = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
@@ -42,7 +42,7 @@ prints.total_nan_counter(dev, data, false_data_percentage=30.0, log=total_nan_co
 #  ______________________________________ DATA ENG. _____________________________________________
 
 hv1 = 'Графики изменения значений напряжений в фазах А, В и С стороны ВН-220кВ'
-prints.print_flat_graph(input_y=['U_HV'], device_type=dev, data=data, cols=cols, title=hv1)
+prints.print_flat_graph(input_y=['U_HV', 'U_MV'], device_type=dev, data=data, cols=cols, title=hv1)
 
 hv2 = 'Графики изменения активной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН-220кВ'
 prints.print_flat_graph(input_y=['Ia_HV'], device_type=dev, data=data, cols=cols, title=hv2)

@@ -6,8 +6,19 @@ class Enter(object):
     @staticmethod
     def mapped_ints(self):
         replace = [',', '.', ';']
+        enter = str(input(self))
+        for char in replace:
+            enter = enter.replace(char, ' ')
+        ls = list(map(int, enter.split()))
+        ls = [x-1 for x in ls]
+        return ls
+
+    @staticmethod
+    def mapped_ints_UPDATE(self):  ## NEED TO DEBUG AND ADD DASHES
+        replace = [',', '.', ';']
+        symbs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
         txt = str(input(self))
-        while txt.find('-') > 0:
+        while txt.find('-') >= 0:
             i = txt.find('-')
             head = txt[:i]
             head_space = head[::-1].find(' ')  # doesn't work if you set a space before dash

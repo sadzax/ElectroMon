@@ -114,6 +114,17 @@ nkvv.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
                          'Tair': ['tair', 'temperature_of_air'],
                          'Tdev': ['tdev', 'temperature_of_device'],
                          'Tcpu': ['tcpu', 'temperature_of_cpu']}
+nkvv.default_dict_for_dtypes = {'∆tg': float,
+                               '∆C': float,
+                               'tg': float,
+                               'C': float,
+                               'U': float,
+                               'Ia': float,
+                               'Ir': float,
+                               'freq': float,
+                               'tair': float,
+                               'tdev': float,
+                               'tcpu': float}
 
 kiv = Device('kiv')
 kiv.full_name = 'Устройство контроля изоляции вводов'

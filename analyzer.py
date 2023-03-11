@@ -126,8 +126,7 @@ def stack_data(device_type: str = 'mon',
 def pass_the_nan(device_type: str = 'nkvv',
                  data: pd.core = None,
                  cols: dict = None,
-                 default_dict_for_replacement: dict = None,
-                 default_dict_for_dtypes: dict = None):
+                 default_dict_for_replacement: dict = None):
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -293,8 +292,9 @@ def total_nan_counter(device_type='nkvv',
     if data is None:
         data = get_data(device_type=device_type)
     time_column = columns.time_column(device_type=device_type, data=data)
-    data['% сбоя данных в момент замера'] = round((data.isna().sum(axis=1) / data.shape[1]) * 100, 0)
-    df = data[[time_column, '% сбоя данных в момент замера']]
+    data2 = data.copy()
+    data2['% сбоя данных в момент замера'] = round((data2.isna().sum(axis=1) / data2.shape[1]) * 100, 0)
+    df = data2[[time_column, '% сбоя данных в момент замера']]
     df.insert(1, 'alarm', df['% сбоя данных в момент замера'] > false_data_percentage, True)
     for k, v in {'Дата': '%d.%m.%y', 'Время': '%H.%M'}.items():
         df.insert(df.shape[1], k, pd.to_datetime(df['Дата и время']).apply(lambda x: x.strftime(v)), True)

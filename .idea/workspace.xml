@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="total nan counter easing">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Prints">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/devices.py" beforeDir="false" afterPath="$PROJECT_DIR$/devices.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prints.py" beforeDir="false" afterPath="$PROJECT_DIR$/prints.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sadzax.py" beforeDir="false" afterPath="$PROJECT_DIR$/sadzax.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,13 +222,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00076" summary="kiv plots and prints">
-      <created>1674636806989</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1674636806989</updated>
     </task>
     <task id="LOCAL-00077" summary="kiv plots and prints">
       <created>1674996391211</created>
@@ -564,7 +559,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678391702915</updated>
     </task>
-    <option name="localTasksCounter" value="125" />
+    <task id="LOCAL-00125" summary="Prints">
+      <created>1678463783189</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1678463783189</updated>
+    </task>
+    <option name="localTasksCounter" value="126" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -579,7 +581,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.14" />
     <MESSAGE value="1.14.1" />
     <MESSAGE value="added list handler for passing the nans in main DF" />
     <MESSAGE value="printouts" />
@@ -604,6 +605,7 @@
     <MESSAGE value="Documentation file updated" />
     <MESSAGE value="values_time_slicer_choose debug" />
     <MESSAGE value="total nan counter easing" />
-    <option name="LAST_COMMIT_MESSAGE" value="total nan counter easing" />
+    <MESSAGE value="Prints" />
+    <option name="LAST_COMMIT_MESSAGE" value="Prints" />
   </component>
 </project>
