@@ -176,3 +176,16 @@ def time_column(device_type='nkvv',
         print(f'Ошибка поиска колонки с временем замера, проверьте свойства устройства и атрибут'
               f' "self.file_parse_dates" в модуле устройств "devices.py"')
     return the_time_column
+
+
+def columns_df(device_type='mon', cols: dict = None):
+    if cols is None:
+        cols = columns_analyzer(device_type=device_type)
+    return pd.DataFrame.from_dict(cols,  orient='index', columns=[
+        'Наименование',
+        'Тип по ед. измерения',
+        'Датчик',
+        'Напряжение',
+        'Код краткий',
+        'Код полный',
+        'Код + напряжение'])
