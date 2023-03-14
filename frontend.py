@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import datetime
+import sys
+import io
 import os
 import analyzer
 import columns
@@ -33,6 +35,7 @@ style_title.fontName = 'Verdana'
 style_title.fontSize = 10
 style_title.alignment = 1
 
+
 class PDF:
     def builder(self, filename='output.pdf'):
         if isinstance(self, list) is True:
@@ -59,3 +62,7 @@ class PDF:
                                    ('GRID', (0, 0), (-1, -1), 1, colors.grey)]))
         title = Paragraph(str(title), style=style_title)
         return [title, table]
+
+    def text(self):
+        txt = Paragraph(str(self), style=style_body)
+        return [txt]
