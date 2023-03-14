@@ -140,7 +140,7 @@ class Trimmer(object):
 
 
 class Rus(object):
-    def cases(dgt, one, two, five):
+    def cases(dgt: float, one, two, five):
         x = math.trunc(abs(float(dgt)))
         if 5 <= x <= 20:
             return five

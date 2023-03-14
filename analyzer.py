@@ -1,4 +1,5 @@
 import datetime
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -175,7 +176,7 @@ def set_dtypes(device_type: str = 'mon',
                         try:
                             data[cols[a_column_index][0]] = data[cols[a_column_index][0]]\
                                 .astype(default_dict_for_dtypes[seeking_param])
-                        except ValueError | TypeError:
+                        except Union[ValueError, TypeError]:
                             pass
     return data
 
