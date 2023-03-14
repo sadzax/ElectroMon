@@ -28,32 +28,34 @@ data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 data.info()
 cols_df = columns.columns_df(dev, cols)
 
-
-
-
-
-
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas
 from matplotlib.backends.backend_pdf import PdfPages
+
 
 doc = SimpleDocTemplate("output.pdf", pagesize=A4)
 
 # Adding Pandas DataFrame Table to PDF File
-table = Table(cols_df)
+
+pdfmetrics.registerFont(TTFont('Verdana', 'misc/Verdana.ttf'))
+table = Table([list(cols_df.columns)] + cols_df.values.tolist(),
+              colWidths=[70, 40, 40, 65, 60, 120, 130])
 table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
                            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
                            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                           ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                           ('FONTSIZE', (0, 0), (-1, 0), 14),
+                           ('FONTNAME', (0, 0), (-1, 0), 'Verdana'),
+                           ('FONTSIZE', (0, 0), (-1, 0), 10),
                            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
                            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
                            ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
                            ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
-                           ('FONTNAME', (0, 1), (-1, -1), 'Helvetica-Bold'),
-                           ('FONTSIZE', (0, 1), (-1, -1), 12),
+                           ('FONTNAME', (0, 1), (-1, -1), 'Verdana'),
+                           ('FONTSIZE', (0, 1), (-1, -1), 10),
                            ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
                            ('BACKGROUND', (0, 0), (-1, 0), colors.lightblue),
                            ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
