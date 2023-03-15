@@ -66,15 +66,16 @@ class Device:
 
     def links(self):  # Можно добавлять значения
         return [
-            self.name,
-            self.file,
-            self.file_sep,
-            self.file_default_encoding,
-            self.file_parse_dates,
-            self.file_list,
-            self.default_dict_for_replacement_to_nan,
-            self.file_parse_dates_basis,
-            self.default_dict_for_dtypes
+            self.name,  # 0
+            self.file,  # 1
+            self.file_sep,  # 2
+            self.file_default_encoding,  # 3
+            self.file_parse_dates,  # 4
+            self.file_list,  # 5
+            self.default_dict_for_replacement_to_nan,  # 6
+            self.file_parse_dates_basis,  # 7
+            self.default_dict_for_dtypes,  # 8
+            self.full_name  # 9
         ]
 
 
@@ -115,16 +116,16 @@ nkvv.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
                          'Tdev': ['tdev', 'temperature_of_device'],
                          'Tcpu': ['tcpu', 'temperature_of_cpu']}
 nkvv.default_dict_for_dtypes = {'∆tg': float,
-                               '∆C': float,
-                               'tg': float,
-                               'C': float,
-                               'U': float,
-                               'Ia': float,
-                               'Ir': float,
-                               'freq': float,
-                               'tair': float,
-                               'tdev': float,
-                               'tcpu': float}
+                                '∆C': float,
+                                'tg': float,
+                                'C': float,
+                                'U': float,
+                                'Ia': float,
+                                'Ir': float,
+                                'freq': float,
+                                'tair': float,
+                                'tdev': float,
+                                'tcpu': float}
 
 kiv = Device('kiv')
 kiv.full_name = 'Устройство контроля изоляции вводов'

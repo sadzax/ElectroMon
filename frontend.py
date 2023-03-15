@@ -50,16 +50,6 @@ def capture_func(func, *args, **kwargs):
     return output
 
 
-def capture_prev():
-    original_stdout = sys.stdout
-    buffer = io.StringIO()
-    sys.stdout = buffer
-    print('aaa')
-    output = buffer.getvalue()
-    sys.stdout = original_stdout
-    return output
-
-
 def capture_on():
     buffer = io.StringIO()
     sys.stdout = buffer
@@ -69,33 +59,8 @@ def capture_on():
 def capture_off(buffer, n=1):
     stdout_messages = buffer.getvalue().split('\n')
     sys.stdout = sys.__stdout__
+    print('\n'.join(stdout_messages[-n-1:]))
     return '\n'.join(stdout_messages[-n-1:])
-
-
-def get_previous_stdout(n):
-    # Redirect stdout to a buffer
-    buffer = io.StringIO()
-    sys.stdout = buffer
-
-    # Call print statements
-    print("This is the first message")
-    print("This is the second message")
-    print("This is the third message")
-    print("This is the fourth message")
-    print("This is the fifth message")
-
-    # Get the stdout messages and split by newline
-    stdout_messages = buffer.getvalue().split('\n')
-
-    # Restore stdout
-    sys.stdout = sys.__stdout__
-
-    # Return the last n messages
-    return '\n'.join(stdout_messages[-n-1:])
-
-# Call the function to get the last 3 stdout messages
-print(get_previous_stdout(1))
-
 
 
 class PDF:
@@ -103,6 +68,15 @@ class PDF:
         if isinstance(self, list) is True:
             doc = SimpleDocTemplate(filename, pagesize=A4)
             doc.build(self)
+
+    def add_to_build_list(self, build_list: list = None):
+        if build_list is None:
+            build_list = []
+        if isinstance(self, list) is True:
+            for x in self:
+                build_list.append(x)
+        else:
+            build_list.append([self])
 
     def table_from_df(self, title='', style_body=style_body, style_title=style_title):
         table_data = []
@@ -123,8 +97,10 @@ class PDF:
                                    ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
                                    ('GRID', (0, 0), (-1, -1), 1, colors.grey)]))
         title = Paragraph(str(title), style=style_title)
-        return [title, table]
+        the_end = Paragraph(str(' \n \n'), style=style_title)
+        return [title, table, the_end]
 
     def text(self, style=style_body):
         txt = Paragraph(str(self), style=style)
-        return [txt]
+        the_end = Paragraph(str(' \n \n'), style=style_title)
+        return [txt, the_end]
