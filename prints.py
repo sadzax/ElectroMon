@@ -12,20 +12,6 @@ def info(the_string):
     print(f'\n\n          {the_string}...\r')
 
 
-def output():
-    new_stdout = io.StringIO()
-    sys.stdout = new_stdout
-    the_output = new_stdout.getvalue()
-    return the_output
-
-
-def output_off():
-    old_stdout = sys.stdout
-    new_stdout = io.StringIO()
-    sys.stdout = new_stdout
-    sys.stdout = old_stdout
-
-
 def device_picking():
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
     print('\nДоступны следующие устройства для анализа: \n')

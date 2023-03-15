@@ -24,22 +24,19 @@ del cols_list
 
 data.info()
 cols_df = columns.columns_df(dev, cols)
+# ___
 
+a = frontend.capture_func(prints.total_log_counter, dev, data)
+
+buffer = frontend.capture_on()
+prints.total_log_counter(dev, data)
+captured = frontend.capture_off(buffer, 2)
+print(captured)
+build_list_total_log_counter = frontend.PDF.text(captured, frontend.style_title2)
+
+
+# ____________
 build_list_cols = frontend.PDF.table_from_df(cols_df, title='Список данных файла с раскладкой для анализа')
 
-prints.total_log_counter(dev, data)
-a = prints.output()
-
-
-old_stdout = sys.stdout
-new_stdout = io.StringIO()
-sys.stdout = new_stdout
-
-prints.total_log_counter(dev, data)
-output = new_stdout.getvalue()
-print(output)
-
-sys.stdout = old_stdout
-
-build_list_total = build_list_cols
+build_list_total = build_list_total_log_counter + build_list_cols
 frontend.PDF.builder(build_list_total, 'output.pdf')

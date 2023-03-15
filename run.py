@@ -7,6 +7,7 @@ import os
 import analyzer
 import columns
 import devices
+import frontend
 import plots
 import prints
 import sadzax
@@ -18,8 +19,8 @@ device_type = prints.device_picking()
 # device_type = 'mon'
 dev = device_type
 # prints.file_picking(dev)
-# data = devices.Pkl.load(dev)
-data = analyzer.stack_data(dev)
+data = devices.Pkl.load(dev)
+# data = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list

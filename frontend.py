@@ -34,6 +34,68 @@ style_title.wordWrap = 'CJK'
 style_title.fontName = 'Verdana'
 style_title.fontSize = 10
 style_title.alignment = 1
+style_title2 = styles["Heading2"]
+style_title2.wordWrap = 'CJK'
+style_title2.fontName = 'Verdana'
+style_title2.fontSize = 12
+style_title2.alignment = 0
+
+
+def capture_func(func, *args, **kwargs):
+    output_buffer = io.StringIO()
+    sys.stdout = output_buffer
+    func(*args, **kwargs)
+    output = output_buffer.getvalue()
+    sys.stdout = sys.__stdout__
+    return output
+
+
+def capture_prev():
+    original_stdout = sys.stdout
+    buffer = io.StringIO()
+    sys.stdout = buffer
+    print('aaa')
+    output = buffer.getvalue()
+    sys.stdout = original_stdout
+    return output
+
+
+def capture_on():
+    buffer = io.StringIO()
+    sys.stdout = buffer
+    return buffer
+
+
+def capture_off(buffer, n=1):
+    stdout_messages = buffer.getvalue().split('\n')
+    sys.stdout = sys.__stdout__
+    return '\n'.join(stdout_messages[-n-1:])
+
+
+def get_previous_stdout(n):
+    # Redirect stdout to a buffer
+    buffer = io.StringIO()
+    sys.stdout = buffer
+
+    # Call print statements
+    print("This is the first message")
+    print("This is the second message")
+    print("This is the third message")
+    print("This is the fourth message")
+    print("This is the fifth message")
+
+    # Get the stdout messages and split by newline
+    stdout_messages = buffer.getvalue().split('\n')
+
+    # Restore stdout
+    sys.stdout = sys.__stdout__
+
+    # Return the last n messages
+    return '\n'.join(stdout_messages[-n-1:])
+
+# Call the function to get the last 3 stdout messages
+print(get_previous_stdout(1))
+
 
 
 class PDF:
@@ -63,6 +125,6 @@ class PDF:
         title = Paragraph(str(title), style=style_title)
         return [title, table]
 
-    def text(self):
-        txt = Paragraph(str(self), style=style_body)
+    def text(self, style=style_body):
+        txt = Paragraph(str(self), style=style)
         return [txt]
