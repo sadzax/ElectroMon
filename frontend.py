@@ -41,7 +41,27 @@ style_title2.fontSize = 12
 style_title2.alignment = 0
 
 
+def capture_on():
+    buffer = io.StringIO()
+    sys.stdout = buffer
+    return buffer
+
+
+def capture_off(buffer):
+    stdout_messages = buffer.getvalue()
+    sys.stdout = sys.__stdout__
+    print(stdout_messages)
+    return stdout_messages
+
+
 def capture_func(func, *args, **kwargs):
+    buffer = capture_on()
+    func(*args, **kwargs)
+    capture = capture_off(buffer)
+    return capture
+
+
+def arch_capture_func(func, *args, **kwargs):
     output_buffer = io.StringIO()
     sys.stdout = output_buffer
     func(*args, **kwargs)
@@ -50,13 +70,7 @@ def capture_func(func, *args, **kwargs):
     return output
 
 
-def capture_on():
-    buffer = io.StringIO()
-    sys.stdout = buffer
-    return buffer
-
-
-def capture_off(buffer, n=1):
+def arch_capture_off(buffer, n=1):
     stdout_messages = buffer.getvalue().split('\n')
     sys.stdout = sys.__stdout__
     print('\n'.join(stdout_messages[-n-1:]))
