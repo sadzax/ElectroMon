@@ -317,8 +317,13 @@ def total_nan_counter(device_type='nkvv',
     # return pd.DataFrame.from_dict(nans_dict, orient='index', columns=cols_out)
 
 
-def total_nan_counter_ease(df: pd.core):
-    pass
+def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_sec: int = 3):
+    df = total_nan_counter.copy()
+    df.insert(5, 'delta_sec', df.iloc[:, 0].diff().astype('timedelta64[s]'))
+    df.insert(6, 'delta_check', df['delta_sec'] > time_sequence_min*60 + inaccuracy_sec)
+    df.iloc[0, 6] = True
+    df.insert(7, 'delta_check_breaker', df.iloc[:, 6].diff())
+    df.iloc[0, 7] = True
 
 
 #  3.1. Filtering
