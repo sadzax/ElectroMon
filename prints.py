@@ -59,7 +59,7 @@ def file_picking(device_type='kiv'):
 def total_log_counter(device_type, data):
     info('Подсчёт общего количества записей')
     log_total = analyzer.total_log_counter(device_type=device_type, data=data)
-    print(f'\nОбщее число записей в журнале измерений составило {log_total}')
+    print(f'Общее число записей в журнале измерений составило {log_total}')
 
 
 def values_time_analyzer(device_type, data, log: pd.core = None):

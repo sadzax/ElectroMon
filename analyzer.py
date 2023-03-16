@@ -299,7 +299,7 @@ def total_nan_counter(device_type='nkvv',
     df.insert(1, 'alarm', df['% сбоя данных в момент замера'] > false_data_percentage, True)
     for k, v in {'Дата': '%d.%m.%y', 'Время': '%H.%M'}.items():
         df.insert(df.shape[1], k, pd.to_datetime(df['Дата и время']).apply(lambda x: x.strftime(v)), True)
-    return df[df['alarm'] == True].iloc[:, 2:5]
+    return df[df['alarm'] == True].iloc[:, 0:5]
     # time_index = 0
     # for i in range(len(cols)):
     #     if cols[i][0] == time_column:
@@ -315,6 +315,10 @@ def total_nan_counter(device_type='nkvv',
     #                             round((nan_counter/len(cols))*100, 0)]  # correct percentage
     # cols_out = ['Дата', 'Время', '% сбоя данных в момент замера']
     # return pd.DataFrame.from_dict(nans_dict, orient='index', columns=cols_out)
+
+
+def total_nan_counter_ease(df: pd.core):
+    pass
 
 
 #  3.1. Filtering
