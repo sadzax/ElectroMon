@@ -289,17 +289,26 @@ def values_time_slicer(device_type: str = 'kiv',
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
                       false_data_percentage: float = 33.0):
+    #  Set the device & unmutable data
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
+    #  Take time column for analyzing of mass-nan-periods
     time_column = columns.time_column(device_type=device_type, data=data)
+    #  Prevent SettingWithCopy
     data2 = data.copy()
+    #  Sum of all nan-data of a row out of all columns divided by the shape of the row returns it's 'nan-percentage'
     data2['% сбоя данных в момент замера'] = round((data2.isna().sum(axis=1) / data2.shape[1]) * 100, 0)
+    #  Dataframe view cleaned from all other data
     df = data2[[time_column, '% сбоя данных в момент замера']]
+    #  Create a column that checks if row contains more than max allowed nans (which we set in 'false_data_percentage')
     df.insert(1, 'alarm', df['% сбоя данных в момент замера'] > false_data_percentage, True)
+    #  Forms additional columns with a readable date and time formats
     for k, v in {'Дата': '%d.%m.%y', 'Время': '%H.%M'}.items():
-        df.insert(df.shape[1], k, pd.to_datetime(df['Дата и время']).apply(lambda x: x.strftime(v)), True)
+        df.insert(df.shape[1], k, pd.to_datetime(df[df.columns[0]]).apply(lambda x: x.strftime(v)), True)
+    #  Returns a view of the cleaned dataframe with only alarms
     return df[df['alarm'] == True].iloc[:, 0:5]
+    #  Archive (too heavy)
     # time_index = 0
     # for i in range(len(cols)):
     #     if cols[i][0] == time_column:
@@ -318,12 +327,43 @@ def total_nan_counter(device_type='nkvv',
 
 
 def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_sec: int = 3):
-    df = total_nan_counter.copy()
+    """
+    This function eases 'total_nan_counter'  function result and returns the periods of false measurements
+    Useful for passing to printing to PDF-file because false measurements are mostly stack into a continuous period
+    Must take a Pandas dataframe out of 'total_nan_counter' function result as a first argument
+    Returns dataframe with 3 columns (Start of the period - End of the period - Quantity of false measurements)
+    """
+    #  Take a total_nan_counter func result as a base
+    if df is None:
+        df = total_nan_counter.copy()
+    #  Insert a subtraction result column and a column that
     df.insert(5, 'delta_sec', df.iloc[:, 0].diff().astype('timedelta64[s]'))
-    df.insert(6, 'delta_check', df['delta_sec'] > time_sequence_min*60 + inaccuracy_sec)
-    df.iloc[0, 6] = True
-    df.insert(7, 'delta_check_breaker', df.iloc[:, 6].diff())
-    df.iloc[0, 7] = True
+    df.insert(6, 'delta_check', df['delta_sec'] < time_sequence_min*60 + inaccuracy_sec)
+    #  Sets 'delta_check' of first row to False as a default start period of false measurements
+    df.iloc[0, 6] = False
+    #  Filters 'delta_check' with 'False' value as a borders of periods of false measurements
+    df_with_only_breakers_ie_start = df[df['delta_check'] == False].iloc[:]
+    #  Create a dict for further appending with borders
+    ease_dict = {}
+    #  Makes a list of indexes of left borders of periods for finding following indexes as right borders
+    list_of_breakers_ie_start = [i for i in df_with_only_breakers_ie_start.alarm.index]
+    for i in range(len(list_of_breakers_ie_start)):
+        left_border = list_of_breakers_ie_start[i]
+        if (i+1) == len(list_of_breakers_ie_start):
+            right_border = (df.shape[0] - 1)
+        else:
+            right_border = list_of_breakers_ie_start[i+1] - 1
+        ease_dict[list_of_breakers_ie_start[i]] = [
+            list_of_breakers_ie_start[i],
+            df[df.columns[3]][df[df.columns[3]].index[left_border]],
+            df[df.columns[4]][df[df.columns[4]].index[left_border]],
+            df[df.columns[3]][df[df.columns[3]].index[right_border]],
+            df[df.columns[4]][df[df.columns[4]].index[right_border]],
+            right_border - left_border + 1
+        ]
+    cols_t = ["Строка в БД", "Дата начала замеров", "Время начала",
+              "Дата окончания замеров", "Время окончания", "Количество некорректных замеров"]
+    return pd.DataFrame.from_dict(ease_dict, orient='index', columns=cols_t)
 
 
 #  3.1. Filtering
