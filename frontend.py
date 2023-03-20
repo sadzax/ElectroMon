@@ -16,11 +16,12 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from matplotlib.backends.backend_pdf import PdfPages
+from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 pdfmetrics.registerFont(TTFont('Verdana', 'misc/Verdana.ttf'))
 styles = getSampleStyleSheet()
@@ -54,6 +55,16 @@ def capture_off(buffer):
     return stdout_messages
 
 
+def capture_on_pic():
+    return io.BytesIO()
+
+
+def capture_off_pic(buffer, aw=3, ah=3):
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    return [Image(buffer)]
+
+
 def capture_func(func, *args, **kwargs):
     buffer = capture_on()
     func(*args, **kwargs)
@@ -61,20 +72,20 @@ def capture_func(func, *args, **kwargs):
     return capture
 
 
-def arch_capture_func(func, *args, **kwargs):
-    output_buffer = io.StringIO()
-    sys.stdout = output_buffer
-    func(*args, **kwargs)
-    output = output_buffer.getvalue()
-    sys.stdout = sys.__stdout__
-    return output
-
-
-def arch_capture_off(buffer, n=1):
-    stdout_messages = buffer.getvalue().split('\n')
-    sys.stdout = sys.__stdout__
-    print('\n'.join(stdout_messages[-n-1:]))
-    return '\n'.join(stdout_messages[-n-1:])
+# def arch_capture_func(func, *args, **kwargs):
+#     output_buffer = io.StringIO()
+#     sys.stdout = output_buffer
+#     func(*args, **kwargs)
+#     output = output_buffer.getvalue()
+#     sys.stdout = sys.__stdout__
+#     return output
+#
+#
+# def arch_capture_off(buffer, n=1):
+#     stdout_messages = buffer.getvalue().split('\n')
+#     sys.stdout = sys.__stdout__
+#     print('\n'.join(stdout_messages[-n-1:]))
+#     return '\n'.join(stdout_messages[-n-1:])
 
 
 class PDF:
@@ -117,5 +128,8 @@ class PDF:
 
     def text(self, style=style_body):
         txt = Paragraph(str(self).replace('\n', '<br />\n'), style=style)
-        the_end = Paragraph(str(' \n \n'), style=style_title)
+        the_end = Paragraph(str(' \n \n'), style=style_body)
         return [txt, the_end]
+
+    def plot(self):
+        return [self]
