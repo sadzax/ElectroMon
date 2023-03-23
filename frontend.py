@@ -2,13 +2,12 @@ import matplotlib.pyplot as plt
 import sys
 import io
 
-
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib import utils
 from reportlab.lib.units import mm
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image, PageTemplate, Frame
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
@@ -42,6 +41,41 @@ style_title3.wordWrap = 'CJK'
 style_title3.fontName = 'Verdana'
 style_title3.fontSize = 14
 style_title3.alignment = 1
+
+PAGE_WIDTH, PAGE_HEIGHT = A4
+
+
+class MyDocTemplate(SimpleDocTemplate):
+    def __init__(self, filename, **kw):
+        super().__init__(filename, pagesize=(PAGE_WIDTH, PAGE_HEIGHT), **kw)
+        margin_left = 25 * mm
+        margin_right = 25 * mm
+        margin_top = 25 * mm
+        margin_bottom = 20 * mm
+        self.addPageTemplates([
+            PageTemplate(
+                id='OneCol',
+                frames=[
+                    Frame(
+                        margin_left,
+                        margin_bottom,
+                        PAGE_WIDTH - margin_left - margin_right,
+                        PAGE_HEIGHT - margin_bottom - margin_top,
+                        id='Normal'
+                    )
+                ],
+                onPage=self.add_page_number,
+            ),
+        ])
+
+    def add_page_number(self, canvas, doc):
+        page_num = canvas.getPageNumber()
+        PAGE_NUM_POS_X = PAGE_WIDTH - 40 * mm
+        PAGE_NUM_POS_Y = 15 * mm
+        canvas.saveState()
+        canvas.setFont('Verdana', 8)
+        canvas.drawString(PAGE_NUM_POS_X, PAGE_NUM_POS_Y, f'Стр. {page_num}')
+        canvas.restoreState()
 
 
 def capture_on():
@@ -98,8 +132,13 @@ def capture_off_pic(buffer, width=160, height=160, hAlign='CENTER'):
 class PDF:
     def builder(self, filename='output.pdf'):
         if isinstance(self, list) is True:
-            doc = SimpleDocTemplate(filename, pagesize=A4)
-            doc.build(self)
+            doc = MyDocTemplate(filename)
+            doc.build(self, onFirstPage=doc.add_page_number, onLaterPages=doc.add_page_number)
+
+    # def builder(self, filename='output.pdf'):
+    #     if isinstance(self, list) is True:
+    #         doc = SimpleDocTemplate(filename, pagesize=A4)
+    #         doc.build(self)
 
     def add_to_build_list(self, build_list: list = None):
         if build_list is None:
