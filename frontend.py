@@ -1,20 +1,12 @@
 import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-import datetime
 import sys
 import io
-import os
-import analyzer
-import columns
-import devices
-import plots
-import prints
-import sadzax
+
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from reportlab.lib.units import inch
+from reportlab.lib import utils
+from reportlab.lib.units import mm
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image
 from reportlab.pdfbase import pdfmetrics
@@ -30,6 +22,11 @@ style_body.wordWrap = 'CJK'
 style_body.fontName = 'Verdana'
 style_body.fontSize = 8
 style_body.alignment = 1
+style_regular = styles["BodyText"]
+style_regular.wordWrap = 'CJK'
+style_regular.fontName = 'Verdana'
+style_regular.fontSize = 8
+style_regular.alignment = 0
 style_title = styles["Heading1"]
 style_title.wordWrap = 'CJK'
 style_title.fontName = 'Verdana'
@@ -40,6 +37,11 @@ style_title2.wordWrap = 'CJK'
 style_title2.fontName = 'Verdana'
 style_title2.fontSize = 12
 style_title2.alignment = 0
+style_title3 = styles["Heading2"]
+style_title3.wordWrap = 'CJK'
+style_title3.fontName = 'Verdana'
+style_title3.fontSize = 14
+style_title3.alignment = 1
 
 
 def capture_on():
@@ -59,17 +61,22 @@ def capture_on_pic():
     return io.BytesIO()
 
 
-def capture_off_pic(buffer, aw=3, ah=3):
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    return [Image(buffer)]
-
-
 def capture_func(func, *args, **kwargs):
     buffer = capture_on()
     func(*args, **kwargs)
     capture = capture_off(buffer)
     return capture
+
+
+def capture_off_pic(buffer, width=160, height=160, hAlign='CENTER'):
+    if height is None:
+        img = utils.ImageReader(buffer)
+        iw, ih = buffer.getSize()
+        aspect = ih / float(iw)
+        height = (width * aspect)
+    a = plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    return [Image(buffer, width=width*mm, height=height*mm, hAlign=hAlign)]
 
 
 # def arch_capture_func(func, *args, **kwargs):
@@ -105,26 +112,30 @@ class PDF:
 
     def table_from_df(self, title='', style_body=style_body, style_title=style_title,
                       colWidths: list = [80, 40, 40, 65, 60, 120, 130]):
-        table_data = []
-        for row in [list(self.columns)] + self.values.tolist():
-            new_row = []
-            for item in row:
-                p = Paragraph(str(item), style=style_body)
-                new_row.append(p)
-            table_data.append(new_row)
-        table = Table(table_data, colWidths=colWidths)
-        table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
-                                   ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
-                                   ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                                   ('BOTTOMPADDING', (0, 0), (-1, 0), 6),
-                                   ('BACKGROUND', (0, 1), (-1, -1), colors.white),
-                                   ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
-                                   ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
-                                   ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
-                                   ('GRID', (0, 0), (-1, -1), 1, colors.grey)]))
         title = Paragraph(str(title), style=style_title)
         the_end = Paragraph(str(' \n \n'), style=style_title)
-        return [title, table, the_end]
+        if self is None:
+            message = Paragraph(f' \n Ошибок не выявлено', style=style_body)
+            return [title, message, the_end]
+        else:
+            table_data = []
+            for row in [list(self.columns)] + self.values.tolist():
+                new_row = []
+                for item in row:
+                    p = Paragraph(str(item), style=style_body)
+                    new_row.append(p)
+                table_data.append(new_row)
+            table = Table(table_data, colWidths=colWidths)
+            table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
+                                       ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+                                       ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                       ('BOTTOMPADDING', (0, 0), (-1, 0), 6),
+                                       ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                                       ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                                       ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
+                                       ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
+                                       ('GRID', (0, 0), (-1, -1), 1, colors.grey)]))
+            return [title, table, the_end]
 
     def text(self, style=style_body):
         txt = Paragraph(str(self).replace('\n', '<br />\n'), style=style)

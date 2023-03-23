@@ -9,7 +9,7 @@ import frontend
 
 
 def info(the_string):
-    print(f'\n\n          {the_string}...\r')
+    print(f'\n          {the_string}\r')
 
 
 def device_picking():
@@ -130,7 +130,7 @@ def total_nan_counter(device_type, data, false_data_percentage: float = 33.0, lo
 
 
 def average_printer(ex, data, cols, abs_parameter=True):
-    print(f'Среднее значение по {ex}: \r')
+    print(f'Средние значения по {ex}: \r')
     df_average = analyzer.data_average_finder(filter_list=[ex], data=data, cols=cols, abs_parameter=abs_parameter)
     if abs_parameter is True:
         str_adder = 'по модулю '
@@ -138,8 +138,6 @@ def average_printer(ex, data, cols, abs_parameter=True):
         str_adder = ''
     for every_value in df_average:
         print(f'Среднее {str_adder}по {every_value} составило {df_average[every_value]}')
-    print(f'Распределение значений {ex} (гистограмма): \r')
-    plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
 
 
 def warning_printer(filter_list_append,

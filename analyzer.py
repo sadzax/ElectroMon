@@ -229,8 +229,11 @@ def values_time_analyzer(device_type: str = 'nkvv',
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y'),
                                      pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M'),
                                      err]
-    cols_t = ["Строка в БД", "Дата", "Время", "Дата след.", "Время след.", "Разница"]
-    return pd.DataFrame.from_dict(error_dict, orient='index', columns=cols_t)
+    if len(error_dict) > 0:
+        cols_t = ["Строка в БД", "Дата", "Время", "Дата след.", "Время след.", "Разница"]
+        return pd.DataFrame.from_dict(error_dict, orient='index', columns=cols_t)
+    else:
+        return None
 
 
 #  2.2.1. Slice time of measurements for big gaps
@@ -285,7 +288,7 @@ def values_time_slicer(device_type: str = 'kiv',
     return data_result
 
 
-#  2.3. Counting the nan_strings:
+#  2.3.1. Counting the nan_strings:
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
                       false_data_percentage: float = 33.0):
@@ -326,6 +329,7 @@ def total_nan_counter(device_type='nkvv',
     # return pd.DataFrame.from_dict(nans_dict, orient='index', columns=cols_out)
 
 
+# 2.3.2. Stacking selected false measures in continious periods
 def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_sec: int = 3):
     """
     This function eases 'total_nan_counter'  function result and returns the periods of false measurements
@@ -336,34 +340,42 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
     #  Take a total_nan_counter func result as a base
     if df is None:
         df = total_nan_counter.copy()
-    #  Insert a subtraction result column and a column that
-    df.insert(5, 'delta_sec', df.iloc[:, 0].diff().astype('timedelta64[s]'))
-    df.insert(6, 'delta_check', df['delta_sec'] < time_sequence_min*60 + inaccuracy_sec)
-    #  Sets 'delta_check' of first row to False as a default start period of false measurements
-    df.iloc[0, 6] = False
-    #  Filters 'delta_check' with 'False' value as a borders of periods of false measurements
-    df_with_only_breakers_ie_start = df[df['delta_check'] == False].iloc[:]
-    #  Create a dict for further appending with borders
-    ease_dict = {}
-    #  Makes a list of indexes of left borders of periods for finding following indexes as right borders
-    list_of_breakers_ie_start = [i for i in df_with_only_breakers_ie_start.alarm.index]
-    for i in range(len(list_of_breakers_ie_start)):
-        left_border = list_of_breakers_ie_start[i]
-        if (i+1) == len(list_of_breakers_ie_start):
-            right_border = (df.shape[0] - 1)
-        else:
-            right_border = list_of_breakers_ie_start[i+1] - 1
-        ease_dict[list_of_breakers_ie_start[i]] = [
-            list_of_breakers_ie_start[i],
-            df[df.columns[3]][df[df.columns[3]].index[left_border]],
-            df[df.columns[4]][df[df.columns[4]].index[left_border]],
-            df[df.columns[3]][df[df.columns[3]].index[right_border]],
-            df[df.columns[4]][df[df.columns[4]].index[right_border]],
-            right_border - left_border + 1
-        ]
-    cols_t = ["Строка в БД", "Дата начала замеров", "Время начала",
-              "Дата окончания замеров", "Время окончания", "Количество некорректных замеров"]
-    return pd.DataFrame.from_dict(ease_dict, orient='index', columns=cols_t)
+    if df.shape[0] == 0:
+        pass
+    else:
+        #  Insert a subtraction result column and a column that
+        df.insert(5, 'delta_sec', df.iloc[:, 0].diff().astype('timedelta64[s]'))
+        df.insert(6, 'delta_check', df['delta_sec'] < time_sequence_min*60 + inaccuracy_sec)
+        #  Sets 'delta_check' of first row to False as a default start period of false measurements
+        df.iloc[0, 6] = False
+        #  Filters 'delta_check' with 'False' value as a borders of periods of false measurements
+        df_with_only_breakers_ie_start = df[df['delta_check'] == False].iloc[:]
+        #  Create a dict for further appending with borders
+        ease_dict = {}
+        #  Makes a list of indexes of left borders of periods for finding following indexes as right borders
+        list_of_breakers_ie_start = [i for i in df_with_only_breakers_ie_start.alarm.index]
+        #  Sets the right borders of periods depending on the left border dataframe-index
+        for i in range(len(list_of_breakers_ie_start)):
+            left_border = list_of_breakers_ie_start[i]
+            #  Exclusion for a last left border in a list
+            if (i+1) == len(list_of_breakers_ie_start):
+                right_border = (df.shape[0] - 1)
+            else:
+                #  Main branch for all other left borders
+                right_border = list_of_breakers_ie_start[i+1] - 1
+            #  Forms a dictionary
+            ease_dict[list_of_breakers_ie_start[i]] = [
+                list_of_breakers_ie_start[i],
+                df[df.columns[3]][df[df.columns[3]].index[left_border]],
+                df[df.columns[4]][df[df.columns[4]].index[left_border]],
+                df[df.columns[3]][df[df.columns[3]].index[right_border]],
+                df[df.columns[4]][df[df.columns[4]].index[right_border]],
+                right_border - left_border + 1
+            ]
+        cols_t = ["Строка в БД", "Дата начала замеров", "Время начала",
+                  "Дата окончания замеров", "Время окончания", "Количество некорректных замеров"]
+        #  Creates a dataframe out of the dictionary
+        return pd.DataFrame.from_dict(ease_dict, orient='index', columns=cols_t)
 
 
 #  3.1. Filtering

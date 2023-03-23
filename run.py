@@ -1,9 +1,11 @@
 #  ______________________________________ SETTING THE ENVIRONMENT ________________________________
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
 import datetime
+import io
 import os
+import sys
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import analyzer
 import columns
 import devices
@@ -14,7 +16,10 @@ import sadzax
 sadzax.Out.reconfigure_encoding()
 sadzax.Out.clear_future_warning()
 
+
 #  ______________________________________ OBTAINING DATA _________________________________________
+prints.info('Установление параметров для анализа')
+
 device_type = prints.device_picking()
 # device_type = 'mon'
 dev = device_type
@@ -28,37 +33,55 @@ data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # u
 data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 # devices.Pkl.save(device_type=device_type, data=data)
 
+
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
+prints.info('Анализ неразрывности замеров и их корректности')
+
+#  Returning total counter of measures
 prints.total_log_counter(dev, data)
 
+#  Analyzing time measures for sequence errors
 values_time_analyzer = analyzer.values_time_analyzer(dev, data, time_sequence_min=1, inaccuracy_sec=3)
 prints.values_time_analyzer(dev, data, log=values_time_analyzer)
 
-values_time_slicer = analyzer.values_time_slicer(dev, data, values_time_analyzer, min_values_required=150)
+#  Choosing the slice of time periods (the delimiter for defining a new time slice is 1440 minutes / 1 day)
+values_time_slicer = analyzer.values_time_slicer(dev, data, values_time_analyzer,
+                                                 minutes_slice_mode=1440, min_values_required=150)
 data = prints.values_time_slicer(dev, data, log=values_time_slicer)
 
+#  Analyzing data for false measurements
 total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=30.0)
 prints.total_nan_counter(dev, data, false_data_percentage=30.0, log=total_nan_counter)
 
-#  ______________________________________ CORRELATIONS _____________________________________________
 
+#  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
+prints.info('Анализ трендов и средних показателей')
+
+#  Defining the most usual 'ex'amples (deviation delta and tangent delta) for further correlation analyze
 ex1 = '∆C'
 ex2 = '∆tg'
-prints.info('Анализ трендов')
 
-print(f'Анализ корреляции данных {ex1} от температуры воздуха (при корреляции изменения на графике синхронны)')
+print(f'Анализ корреляций (чем более явная корреляция, тем больше отклонение графа от оси шагов:'
+      f' вверх для прямой корреляции, вниз - для обратной)')
+
+#  Correlation of ∆C and temperature with a plot
 plots.correlation_plot(filter_list1=[ex1], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
                        title=f"Анализ корреляции данных {ex1} от температуры воздуха")
 
-print(f'Анализ корреляции данных {ex2} от температуры воздуха (при корреляции изменения на графике синхронны)')
+#  Correlation of ∆tg and temperature with a plot
 plots.correlation_plot(filter_list1=[ex2], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
                        title=f"Анализ корреляции данных {ex2} от температуры воздуха")
 
+#  Average values of ∆C and their distribution
 prints.average_printer(ex=ex1, data=data, cols=cols, abs_parameter=True)
+plots.histogram([ex1], data=data, cols=cols, title=f'Распределение значений {ex1}')
+
+#  Average values of ∆tg  and their distribution
 prints.average_printer(ex=ex2, data=data, cols=cols, abs_parameter=True)
+plots.histogram([ex2], data=data, cols=cols, title=f'Распределение значений {ex2}')
 
-#  ______________________________________ DATA ENG. HV __________________________________________
 
+#  ______________________________________ DATA ENG. HV ___________________________________________
 hv1 = 'Графики изменения значений напряжений в фазах А, В и С стороны ВН'
 prints.print_flat_graph(input_y=['U_HV'], device_type=dev, data=data, cols=cols, title=hv1)
 
@@ -82,8 +105,8 @@ hv7 = 'Графики изменения значений ∆C/C1 (измене�
       ' фаз А, В и С стороны ВН'
 prints.print_flat_graph(input_y=['∆C_HV'], device_type=dev, data=data, cols=cols, title=hv7)
 
-#  ______________________________________ DATA ENG. MV __________________________________________
 
+#  ______________________________________ DATA ENG. MV ___________________________________________
 mv1 = 'Графики изменения значений напряжений в фазах А, В и С стороны СН'
 prints.print_flat_graph(input_y=['U_MV'], device_type=dev, data=data, cols=cols, title=mv1)
 
