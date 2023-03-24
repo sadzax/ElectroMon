@@ -220,13 +220,6 @@
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
     </task>
-    <task id="LOCAL-00098" summary="Monitoring-db added - stacking">
-      <created>1676458819935</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1676458819935</updated>
-    </task>
     <task id="LOCAL-00099" summary="Monitoring-db added - stacking data &amp; resolving problems">
       <created>1676459881564</created>
       <option name="number" value="00099" />
@@ -563,7 +556,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679660643704</updated>
     </task>
-    <option name="localTasksCounter" value="147" />
+    <task id="LOCAL-00147" summary="PDF uploads - v.1.0.">
+      <created>1679660694315</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1679660694315</updated>
+    </task>
+    <option name="localTasksCounter" value="148" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
