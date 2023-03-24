@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="PDF uploads">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="PDF uploads - added Page numbering">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/output.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/temp.py" beforeDir="false" afterPath="$PROJECT_DIR$/temp.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,13 +224,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00096" summary="Monitoring-db added">
-      <created>1676376942521</created>
-      <option name="number" value="00096" />
-      <option name="presentableId" value="LOCAL-00096" />
-      <option name="project" value="LOCAL" />
-      <updated>1676376942521</updated>
     </task>
     <task id="LOCAL-00097" summary="Monitoring-db added - stacking">
       <created>1676380766192</created>
@@ -567,7 +561,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679553171989</updated>
     </task>
-    <option name="localTasksCounter" value="145" />
+    <task id="LOCAL-00145" summary="PDF uploads - added Page numbering">
+      <created>1679587671153</created>
+      <option name="number" value="00145" />
+      <option name="presentableId" value="LOCAL-00145" />
+      <option name="project" value="LOCAL" />
+      <updated>1679587671154</updated>
+    </task>
+    <option name="localTasksCounter" value="146" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -582,7 +583,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="kiv start" />
     <MESSAGE value="kiv columns debugging" />
     <MESSAGE value="kiv columns done" />
     <MESSAGE value="kiv first plotting" />
@@ -607,6 +607,7 @@
     <MESSAGE value="Minor bugs, typos" />
     <MESSAGE value="Run" />
     <MESSAGE value="PDF uploads" />
-    <option name="LAST_COMMIT_MESSAGE" value="PDF uploads" />
+    <MESSAGE value="PDF uploads - added Page numbering" />
+    <option name="LAST_COMMIT_MESSAGE" value="PDF uploads - added Page numbering" />
   </component>
 </project>

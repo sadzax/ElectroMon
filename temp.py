@@ -19,11 +19,10 @@ sadzax.Out.clear_future_warning()
 
 #  ______________________________________ OBTAINING DATA _________________________________________
 device_type = prints.device_picking()
-# device_type = 'mon'
 dev = device_type
 # prints.file_picking(dev)
-data = devices.Pkl.load(dev)
-# data = analyzer.stack_data(dev)
+# data = devices.Pkl.load(dev)
+data = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
@@ -40,7 +39,10 @@ build_list = []
 build_temp = frontend.PDF.text(f'Отчёт по устройству', frontend.style_title)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 capture = devices.links(device_type)[9]
-build_temp = frontend.PDF.text(capture, frontend.style_title3)
+build_temp = frontend.PDF.text(capture, frontend.style_title2)
+frontend.PDF.add_to_build_list(build_temp, build_list)
+
+build_temp = frontend.PDF.text(f'Анализ неразрывности замеров и их корректности', frontend.style_title2)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
 #  Listing the columns and adding table of it as an object for reportlab/PDF
@@ -53,7 +55,7 @@ frontend.PDF.add_to_build_list(build_temp, build_list)
 
 #  Returning total counter of measures and adding it as an object for reportlab/PDF
 capture = frontend.capture_func(prints.total_log_counter, dev, data)
-build_temp = frontend.PDF.text(capture, frontend.style_title2)
+build_temp = frontend.PDF.text(capture, frontend.style_title)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
 #  Analyzing time measures for sequence errors and adding the table of it as an object for reportlab/PDF
@@ -85,72 +87,123 @@ ex1 = '∆C'
 ex2 = '∆tg'
 
 #  Adding the heading of the module as an object for reportlab/PD
-capture = frontend.capture_func(prints.info, f'Анализ трендов и средних показателей')
+capture = f'Анализ трендов и средних показателей'
 build_temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(build_temp, build_list)
-capture = f'Анализ корреляций (чем более явная корреляция, тем больше отклонение графа от оси шагов:' \
-          f' вверх для прямой корреляции, вниз - для обратной)'
+
+#  Adding the heading of the submodule as an object for reportlab/PD
+capture = f'Анализ распределения значений'
 build_temp = frontend.PDF.text(capture, frontend.style_title)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
-#  Correlation of ∆C and temperature with a plot added as an object for reportlab/PD
-buffer = frontend.capture_on_pic()
-plots.correlation_plot(filter_list1=[ex1], filter_list2=['tair'],
-                       device_type=device_type, data=data, cols=cols,
-                       title=f"Анализ корреляции данных {ex1} от температуры воздуха")
-build_temp = frontend.capture_off_pic(buffer, width=140, height=100, hAlign='RIGHT')
-frontend.PDF.add_to_build_list(build_temp, build_list)
+#  Average values operative function
+def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=build_list, width=80, height=65,
+                             hAlign='CENTER', abs_parameter=True):
+    capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
+    build_temp = frontend.PDF.text(capture, frontend.style_regular)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
+    buffer = frontend.capture_on_pic()
+    plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
+    build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
 
-#  Correlation of ∆tg and temperature with a plot added as an object for reportlab/PD
-buffer = frontend.capture_on_pic()
-plots.correlation_plot(filter_list1=['U'], filter_list2=['tair'],
-                       device_type=device_type, data=data, cols=cols,
-                       title=f"Анализ корреляции данных {'U'} от температуры воздуха")
-build_temp = frontend.capture_off_pic(buffer, width=140, height=100, hAlign='RIGHT')
-frontend.PDF.add_to_build_list(build_temp, build_list)
+#  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
+capturer_for_PDF_average(ex1)
+capturer_for_PDF_average(ex2)
+capturer_for_PDF_average('Ia', abs_parameter=False)
+capturer_for_PDF_average('Ir', abs_parameter=False)
+capturer_for_PDF_average('U', abs_parameter=False)
 
-#  Correlation of ∆tg and temperature with a plot added as an object for reportlab/PD
-buffer = frontend.capture_on_pic()
-plots.correlation_plot(filter_list1=['Ia'], filter_list2=['tair'],
-                       device_type=device_type, data=data, cols=cols,
-                       title=f"Анализ корреляции данных {'Ia'} от температуры воздуха")
-build_temp = frontend.capture_off_pic(buffer, width=140, height=100, hAlign='RIGHT')
-frontend.PDF.add_to_build_list(build_temp, build_list)
+#  Step 3 lines after submodule
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
-#  Correlation of ∆tg and temperature with a plot added as an object for reportlab/PD
-buffer = frontend.capture_on_pic()
-plots.correlation_plot(filter_list1=['Ir'], filter_list2=['tair'],
-                       device_type=device_type, data=data, cols=cols,
-                       title=f"Анализ корреляции данных {'Ir'} от температуры воздуха")
-build_temp = frontend.capture_off_pic(buffer, width=140, height=100, hAlign='RIGHT')
+#  Adding the heading of the submodule as an object for reportlab/PD
+capture = f'Анализ корреляций'
+build_temp = frontend.PDF.text(capture, frontend.style_title)
 frontend.PDF.add_to_build_list(build_temp, build_list)
-
-#  Correlation of ∆tg and temperature with a plot added as an object for reportlab/PD
-buffer = frontend.capture_on_pic()
-plots.correlation_plot(filter_list1=[ex2], filter_list2=['tair'],
-                       device_type=device_type, data=data, cols=cols,
-                       title=f"Анализ корреляции данных {ex2} от температуры воздуха")
-build_temp = frontend.capture_off_pic(buffer, width=140, height=100, hAlign='RIGHT')
-frontend.PDF.add_to_build_list(build_temp, build_list)
-
-#  Average values of ∆C and their distribution added as an object for reportlab/PD
-capture = frontend.capture_func(prints.average_printer, ex=ex1, data=data, cols=cols, abs_parameter=True)
+capture = f'(чем более явная корреляция, тем больше отклонение графа от оси шагов:' \
+          f' вверх для прямой корреляции, вниз - для обратной)'
 build_temp = frontend.PDF.text(capture, frontend.style_regular)
 frontend.PDF.add_to_build_list(build_temp, build_list)
-buffer = frontend.capture_on_pic()
-plots.histogram([ex1], data=data, cols=cols, title=f'Распределение значений {ex1}')
-build_temp = frontend.capture_off_pic(buffer, width=80, height=70, hAlign='CENTER')
+
+#  Correlation with and air operative function
+def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=build_list, width=140, height=100,
+                                     hAlign='RIGHT'):
+    buffer = frontend.capture_on_pic()
+    plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'],
+                           device_type=device_type, data=data, cols=cols,
+                           title=f"Анализ корреляции данных {ex1} от температуры воздуха")
+    build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
+
+#  Correlation of [∆C, ∆tg, Ia, Ir, U] and temperature with a plot added as an object for reportlab/PD
+capturer_for_PDF_air_correlation(ex1)
+capturer_for_PDF_air_correlation(ex2)
+capturer_for_PDF_air_correlation('Ia')
+capturer_for_PDF_air_correlation('Ir')
+capturer_for_PDF_air_correlation('U')
+
+#  Step 3 lines after submodule
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+
+#  ______________________________________ WARNINGS _______________________________________________
+#  Adding the heading of the module as an object for reportlab/PD
+capture = f'Анализ срабатываний предупредительной и аварийной сигнализации'
+build_temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
-#  Average values of ∆tg and their distribution added as an object for reportlab/PD
-capture = frontend.capture_func(prints.average_printer, ex=ex2, data=data, cols=cols, abs_parameter=True)
-build_temp = frontend.PDF.text(capture, frontend.style_regular)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f'В обработке', frontend.style_regular), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+
+#  ______________________________________ DATA ENG. ______________________________________________
+def capturer_for_PDF_main_graph(ex, title='', device_type=device_type, data=data, cols=cols,
+                                build_list=build_list, width=205, height=95, hAlign='CENTER'):
+    buffer = frontend.capture_on_pic()
+    prints.print_flat_graph(input_y=[ex], device_type=device_type, data=data, cols=cols, title=title)
+    build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
+
+main_graph_params = {
+    'U': 'График изменения значений напряжений',
+    'Ia': 'График изменения активной составляющей токов утечек',
+    'Ir': 'График изменения реактивной составляющей токов утечек',
+    'tg': 'График изменения значений tgδ',
+    'C': 'График изменения значений емкостей С1',
+    '∆tg': 'График изменения значений ∆tgδ (изменение tgδ относительно начальных значений)',
+    '∆C': 'График изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
+}
+
+#  Adding the heading of the HV-submodule as an object for reportlab/PD
+capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С со стороны высокого напряжения'
+build_temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(build_temp, build_list)
-buffer = frontend.capture_on_pic()
-plots.histogram([ex2], data=data, cols=cols, title=f'Распределение значений {ex2}')
-build_temp = frontend.capture_off_pic(buffer, width=80, height=70, hAlign='CENTER')
+for k in main_graph_params:
+    key = k + '_HV'
+    title = main_graph_params[k] + ' со стороны ВН'
+    capturer_for_PDF_main_graph(key, title)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+
+#  Adding the heading of the MV-submodule as an object for reportlab/PD
+capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С со стороны среднего напряжения'
+build_temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(build_temp, build_list)
+for k in main_graph_params:
+    key = k + '_MV'
+    title = main_graph_params[k] + ' со стороны СН'
+    capturer_for_PDF_main_graph(key, title)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
 
-# ____________
+#  ______________________________________ OUTPUT IN PDF __________________________________________
 frontend.PDF.builder(build_list, 'output.pdf')

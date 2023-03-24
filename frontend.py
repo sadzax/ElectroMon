@@ -31,16 +31,12 @@ style_title.wordWrap = 'CJK'
 style_title.fontName = 'Verdana'
 style_title.fontSize = 10
 style_title.alignment = 1
+style_title.spaceAfter = 3
 style_title2 = styles["Heading2"]
 style_title2.wordWrap = 'CJK'
 style_title2.fontName = 'Verdana'
-style_title2.fontSize = 12
-style_title2.alignment = 0
-style_title3 = styles["Heading2"]
-style_title3.wordWrap = 'CJK'
-style_title3.fontName = 'Verdana'
-style_title3.fontSize = 14
-style_title3.alignment = 1
+style_title2.fontSize = 14
+style_title2.alignment = 1
 
 PAGE_WIDTH, PAGE_HEIGHT = A4
 
