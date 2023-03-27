@@ -343,7 +343,7 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
     if df.shape[0] == 0:
         pass
     else:
-        #  Insert a subtraction result column and a column that
+        #  Insert a subtraction result column and a column that checks for delta set by *args
         df.insert(5, 'delta_sec', df.iloc[:, 0].diff().astype('timedelta64[s]'))
         df.insert(6, 'delta_check', df['delta_sec'] < time_sequence_min*60 + inaccuracy_sec)
         #  Sets 'delta_check' of first row to False as a default start period of false measurements
@@ -356,22 +356,26 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
         list_of_breakers_ie_start = [i for i in df_with_only_breakers_ie_start.alarm.index]
         #  Sets the right borders of periods depending on the left border dataframe-index
         for i in range(len(list_of_breakers_ie_start)):
-            left_border = list_of_breakers_ie_start[i]
-            #  Exclusion for a last left border in a list
-            if (i+1) == len(list_of_breakers_ie_start):
-                right_border = (df.shape[0] - 1)
+            #  Exclusion for a first left border in a list
+            if i == 0:
+                left_border = 0
             else:
-                #  Main branch for all other left borders
-                right_border = list_of_breakers_ie_start[i+1] - 1
-            #  Forms a dictionary
-            ease_dict[list_of_breakers_ie_start[i]] = [
-                list_of_breakers_ie_start[i],
-                df[df.columns[3]][df[df.columns[3]].index[left_border]],
-                df[df.columns[4]][df[df.columns[4]].index[left_border]],
-                df[df.columns[3]][df[df.columns[3]].index[right_border]],
-                df[df.columns[4]][df[df.columns[4]].index[right_border]],
-                right_border - left_border + 1
-            ]
+                left_border = list_of_breakers_ie_start[i] - 1
+                #  Exclusion for a last right border in a list
+                if (i+1) == len(list_of_breakers_ie_start):
+                    right_border = (df.shape[0] - 1)
+                else:
+                    #  Main branch for all other left borders
+                    right_border = list_of_breakers_ie_start[i+1] - 2
+                #  Forms a dictionary
+                ease_dict[list_of_breakers_ie_start[i]] = [
+                    list_of_breakers_ie_start[i],
+                    df[df.columns[3]][df[df.columns[3]].index[left_border]],
+                    df[df.columns[4]][df[df.columns[4]].index[left_border]],
+                    df[df.columns[3]][df[df.columns[3]].index[right_border]],
+                    df[df.columns[4]][df[df.columns[4]].index[right_border]],
+                    right_border - left_border + 1
+                ]
         cols_t = ["Строка в БД", "Дата начала замеров", "Время начала",
                   "Дата окончания замеров", "Время окончания", "Количество некорректных замеров"]
         #  Creates a dataframe out of the dictionary
