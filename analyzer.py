@@ -355,6 +355,7 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
         #  Makes a list of indexes of left borders of periods for finding following indexes as right borders
         list_of_breakers_ie_start = [i for i in df_with_only_breakers_ie_start.alarm.index]
         #  Sets the right borders of periods depending on the left border dataframe-index
+        #  FIX!!!!
         for i in range(len(list_of_breakers_ie_start)):
             #  Exclusion for a first left border in a list
             if i == 0:
