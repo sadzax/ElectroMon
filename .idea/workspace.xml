@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="PDF uploads - v.1.0.">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Minor bug fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/output.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output2.py" beforeDir="false" afterPath="$PROJECT_DIR$/output2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sadzax.py" beforeDir="false" afterPath="$PROJECT_DIR$/sadzax.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,20 +225,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00100" summary="Monitoring-db added - making columns">
-      <created>1676469340870</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1676469340870</updated>
-    </task>
-    <task id="LOCAL-00101" summary="Monitoring-db added - making columns">
-      <created>1676474617136</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1676474617136</updated>
     </task>
     <task id="LOCAL-00102" summary="Added exclusion of empty file choose field">
       <created>1676611011891</created>
@@ -567,7 +555,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679661877174</updated>
     </task>
-    <option name="localTasksCounter" value="149" />
+    <task id="LOCAL-00149" summary="Minor bug fixes">
+      <created>1679925698353</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1679925698354</updated>
+    </task>
+    <task id="LOCAL-00150" summary="Minor bug fixes">
+      <created>1679925722292</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1679925722292</updated>
+    </task>
+    <option name="localTasksCounter" value="151" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -582,8 +584,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="kiv columns done" />
-    <MESSAGE value="kiv first plotting" />
     <MESSAGE value="kiv analyzers" />
     <MESSAGE value="kiv analyzers and get_data updated" />
     <MESSAGE value="functions refactored w/devices class" />
@@ -607,6 +607,8 @@
     <MESSAGE value="PDF uploads" />
     <MESSAGE value="PDF uploads - added Page numbering" />
     <MESSAGE value="PDF uploads - v.1.0." />
-    <option name="LAST_COMMIT_MESSAGE" value="PDF uploads - v.1.0." />
+    <MESSAGE value="Minor bug fixues" />
+    <MESSAGE value="Minor bug fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minor bug fixes" />
   </component>
 </project>

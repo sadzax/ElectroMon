@@ -583,3 +583,4 @@ def warning_finder(filter_list: list = None,
                 df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
             func_result.append(df_temp_result)
     return func_result
+

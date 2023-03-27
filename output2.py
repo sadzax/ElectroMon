@@ -207,3 +207,4 @@ frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), b
 
 #  ______________________________________ OUTPUT IN PDF __________________________________________
 frontend.PDF.builder(build_list, 'output.pdf')
+
