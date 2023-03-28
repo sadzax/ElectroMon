@@ -206,5 +206,7 @@ frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), b
 
 
 #  ______________________________________ OUTPUT IN PDF __________________________________________
-frontend.PDF.builder(build_list, 'output.pdf')
-
+name_file_by_user = sadzax.Enter.str('Введите имя файла для сохранения: ',
+                                     arg_must_be=sadzax.Enter.allowed_symbs_default, arg_max_capacity=24,
+                                     arg_error='Некорректное имя для файла')
+frontend.PDF.builder(build_list, filename=name_file_by_user + '.pdf')

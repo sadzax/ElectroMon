@@ -52,6 +52,8 @@ data = prints.values_time_slicer(dev, data, log=values_time_slicer)
 #  Analyzing data for false measurements
 total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=30.0)
 prints.total_nan_counter(dev, data, false_data_percentage=30.0, log=total_nan_counter)
+total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
+print(total_nan_counter_ease)
 
 
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
@@ -81,52 +83,24 @@ prints.average_printer(ex=ex2, data=data, cols=cols, abs_parameter=True)
 plots.histogram([ex2], data=data, cols=cols, title=f'Распределение значений {ex2}')
 
 
-#  ______________________________________ DATA ENG. HV ___________________________________________
-hv1 = 'Графики изменения значений напряжений в фазах А, В и С стороны ВН'
-prints.print_flat_graph(input_y=['U_HV'], device_type=dev, data=data, cols=cols, title=hv1)
+#  ______________________________________ DATA ENG. ______________________________________________
 
-hv2 = 'Графики изменения активной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН'
-prints.print_flat_graph(input_y=['Ia_HV'], device_type=dev, data=data, cols=cols, title=hv2)
+main_graph_params = {
+    'U': 'График изменения значений напряжений',
+    'Ia': 'График изменения активной составляющей токов утечек',
+    'Ir': 'График изменения реактивной составляющей токов утечек',
+    'tg': 'График изменения значений tgδ',
+    'C': 'График изменения значений емкостей С1',
+    '∆tg': 'График изменения значений ∆tgδ (изменение tgδ относительно начальных значений)',
+    '∆C': 'График изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
+}
 
-hv3 = 'Графики изменения реактивной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны ВН'
-prints.print_flat_graph(input_y=['Ir_HV'], device_type=dev, data=data, cols=cols, title=hv3)
+for k in main_graph_params:
+    key = k + '_HV'
+    title = main_graph_params[k] + ' со стороны ВН'
+    prints.print_flat_graph(input_y=[key], device_type=dev, data=data, cols=cols, title=title)
 
-hv4 = 'Графики изменения значений tgδ высоковольтных вводов фаз А, В и С стороны ВН'
-prints.print_flat_graph(input_y=['tg_HV'], device_type=dev, data=data, cols=cols, title=hv4)
-
-hv5 = 'Графики изменения значений емкостей С1 высоковольтных вводов фаз А, В и С стороны ВН'
-prints.print_flat_graph(input_y=['C_HV'], device_type=dev, data=data, cols=cols, title=hv5)
-
-hv6 = 'Графики изменения значений ∆tgδ (изменение tgδ относительно начальных значений) высоковольтных вводов' \
-      ' фаз А, В и С стороны ВН'
-prints.print_flat_graph(input_y=['∆tg_HV'], device_type=dev, data=data, cols=cols, title=hv6)
-
-hv7 = 'Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений) высоковольтных вводов' \
-      ' фаз А, В и С стороны ВН'
-prints.print_flat_graph(input_y=['∆C_HV'], device_type=dev, data=data, cols=cols, title=hv7)
-
-
-#  ______________________________________ DATA ENG. MV ___________________________________________
-mv1 = 'Графики изменения значений напряжений в фазах А, В и С стороны СН'
-prints.print_flat_graph(input_y=['U_MV'], device_type=dev, data=data, cols=cols, title=mv1)
-
-mv2 = 'Графики изменения активной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны СН'
-prints.print_flat_graph(input_y=['Ia_MV'], device_type=dev, data=data, cols=cols, title=mv2)
-
-mv3 = 'Графики изменения реактивной составляющей токов утечек высоковольтных вводов фаз А, В и С стороны СН'
-prints.print_flat_graph(input_y=['Ir_MV'], device_type=dev, data=data, cols=cols, title=mv3)
-
-mv4 = 'Графики изменения значений tgδ высоковольтных вводов фаз А, В и С стороны СН'
-prints.print_flat_graph(input_y=['tg_MV'], device_type=dev, data=data, cols=cols, title=mv4)
-
-mv5 = 'Графики изменения значений емкостей С1 высоковольтных вводов фаз А, В и С стороны СН'
-prints.print_flat_graph(input_y=['C_MV'], device_type=dev, data=data, cols=cols, title=mv5)
-
-mv6 = 'Графики изменения значений ∆tgδ (изменение tgδ относительно начальных значений) высоковольтных вводов' \
-      ' фаз А, В и С стороны СН'
-prints.print_flat_graph(input_y=['∆tg_MV'], device_type=dev, data=data, cols=cols, title=mv6)
-
-mv7 = 'Графики изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений) высоковольтных вводов' \
-      ' фаз А, В и С стороны СН'
-prints.print_flat_graph(input_y=['∆C_MV'], device_type=dev, data=data, cols=cols, title=mv7)
-
+for k in main_graph_params:
+    key = k + '_MV'
+    title = main_graph_params[k] + ' со стороны СН'
+    prints.print_flat_graph(input_y=[key], device_type=dev, data=data, cols=cols, title=title)

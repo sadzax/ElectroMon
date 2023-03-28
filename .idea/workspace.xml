@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Minor bug fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output2.py" beforeDir="false" afterPath="$PROJECT_DIR$/output2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output2.py" beforeDir="false" afterPath="$PROJECT_DIR$/output.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sadzax.py" beforeDir="false" afterPath="$PROJECT_DIR$/sadzax.py" afterDir="false" />
     </list>
@@ -225,13 +225,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00102" summary="Added exclusion of empty file choose field">
-      <created>1676611011891</created>
-      <option name="number" value="00102" />
-      <option name="presentableId" value="LOCAL-00102" />
-      <option name="project" value="LOCAL" />
-      <updated>1676611011891</updated>
     </task>
     <task id="LOCAL-00103" summary="Documentation file added">
       <created>1676611358055</created>
@@ -569,7 +562,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679925722292</updated>
     </task>
-    <option name="localTasksCounter" value="151" />
+    <task id="LOCAL-00151" summary="Minor bug fixes">
+      <created>1679949104309</created>
+      <option name="number" value="00151" />
+      <option name="presentableId" value="LOCAL-00151" />
+      <option name="project" value="LOCAL" />
+      <updated>1679949104309</updated>
+    </task>
+    <option name="localTasksCounter" value="152" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -610,5 +610,16 @@
     <MESSAGE value="Minor bug fixues" />
     <MESSAGE value="Minor bug fixes" />
     <option name="LAST_COMMIT_MESSAGE" value="Minor bug fixes" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/frontend.py</url>
+          <line>6</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

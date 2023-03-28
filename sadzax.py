@@ -3,6 +3,11 @@ from typing import List
 
 
 class Enter(object):
+    stack_eng = 'qwertyuiopasdfghjklzxcvbnm'
+    stack_rus = 'йцукенгшщзхъфывапролджэячсмитьбю'
+    stack_sym = '1234567890-_!~'
+    allowed_symbs_default = [x for x in stack_eng] + [x for x in stack_rus] + [x for x in stack_sym]
+
     @staticmethod
     def mapped_ints(self):
         replace = [',', '.', ';']
@@ -43,11 +48,12 @@ class Enter(object):
             txt = txt.replace(char, ' ')
         return list(map(int, txt.split()))
 
-    def int(input_descripton, arg_error, arg_min, arg_max, arg_isnt):
+    def int(input_descripton, arg_error=None, arg_min=None, arg_max=None, arg_isnt=None):
         while True:
             try:
                 i = int(input(input_descripton))
-                if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False or Enter.arg_isnt_f(i, arg_isnt) is False:
+                if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False \
+                        or Enter.arg_isnt_f(i, arg_isnt) is False:
                     print(arg_error)
                     continue
                 return i
@@ -55,11 +61,12 @@ class Enter(object):
                 print(arg_error)
                 continue
 
-    def float(input_descripton, arg_error, arg_min, arg_max, arg_isnt_in_list):
+    def float(input_descripton, arg_error=None, arg_min=None, arg_max=None, arg_isnt_in_list=None):
         while True:
             try:
                 i = float(input(input_descripton))
-                if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False or Enter.arg_isnt_in_list_f(i, arg_isnt_in_list) is False:
+                if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False \
+                        or Enter.arg_isnt_in_list_f(i, arg_isnt_in_list) is False:
                     print(arg_error)
                     continue
                 return i
@@ -67,17 +74,37 @@ class Enter(object):
                 print(arg_error)
                 continue
 
-    def str(input_descripton, arg_error, arg_min, arg_max, arg_isnt_in_list):
+    def str(input_descripton, arg_error=None, arg_min=None, arg_max=None, arg_isnt_in_list=None,
+            arg_must_be: list = None, arg_max_capacity: int = None):
         while True:
             try:
                 i = str(input(input_descripton))
-                if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False or Enter.arg_isnt_in_list_f(i, arg_isnt_in_list) is False:
+                if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False \
+                        or Enter.arg_isnt_in_list_f(i, arg_isnt_in_list) is False \
+                        or Enter.arg_must_be(i, arg_must_be) is False or len(i) > arg_max_capacity:
                     print(arg_error)
                     continue
                 return i
             except:
                 print(arg_error)
                 continue
+
+    def arg_must_be(i, arg):
+        if arg is not None:
+            if isinstance(arg, (list, tuple)):
+                for el in str(i).lower():
+                    if str(el) in arg:
+                        continue
+                    else:
+                        a = False
+                        break
+                else:
+                    a = True
+            elif i != arg:
+                return False
+        else:
+            return True
+
     def arg_min_f(i, arg):
         if arg is not None:
             if i < arg:
@@ -109,6 +136,7 @@ class Enter(object):
                 return False
         else:
             return True
+
 
 
 class Digits_operator(object):
