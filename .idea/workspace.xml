@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Minor bug fixes">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="total_nan_counter_ease updated with reset indexes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output2.py" beforeDir="false" afterPath="$PROJECT_DIR$/output.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sadzax.py" beforeDir="false" afterPath="$PROJECT_DIR$/sadzax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output.pdf" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,20 +222,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00103" summary="Documentation file added">
-      <created>1676611358055</created>
-      <option name="number" value="00103" />
-      <option name="presentableId" value="LOCAL-00103" />
-      <option name="project" value="LOCAL" />
-      <updated>1676611358055</updated>
-    </task>
-    <task id="LOCAL-00104" summary="Documentation file updated">
-      <created>1676613865997</created>
-      <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
-      <option name="project" value="LOCAL" />
-      <updated>1676613865997</updated>
     </task>
     <task id="LOCAL-00105" summary="Documentation file updated">
       <created>1676613871895</created>
@@ -569,7 +552,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679949104309</updated>
     </task>
-    <option name="localTasksCounter" value="152" />
+    <task id="LOCAL-00152" summary="Added output filename choose">
+      <created>1680001739042</created>
+      <option name="number" value="00152" />
+      <option name="presentableId" value="LOCAL-00152" />
+      <option name="project" value="LOCAL" />
+      <updated>1680001739042</updated>
+    </task>
+    <task id="LOCAL-00153" summary="total_nan_counter_ease updated with reset indexes">
+      <created>1680007246188</created>
+      <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
+      <option name="project" value="LOCAL" />
+      <updated>1680007246188</updated>
+    </task>
+    <option name="localTasksCounter" value="154" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -584,8 +581,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="kiv analyzers" />
-    <MESSAGE value="kiv analyzers and get_data updated" />
     <MESSAGE value="functions refactored w/devices class" />
     <MESSAGE value="kiv runner" />
     <MESSAGE value="kiv plots and prints" />
@@ -609,7 +604,9 @@
     <MESSAGE value="PDF uploads - v.1.0." />
     <MESSAGE value="Minor bug fixues" />
     <MESSAGE value="Minor bug fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor bug fixes" />
+    <MESSAGE value="Added output filename choose" />
+    <MESSAGE value="total_nan_counter_ease updated with reset indexes" />
+    <option name="LAST_COMMIT_MESSAGE" value="total_nan_counter_ease updated with reset indexes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
