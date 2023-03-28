@@ -340,6 +340,7 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
     #  Take a total_nan_counter func result as a base
     if df is None:
         df = total_nan_counter.copy()
+        df = df.reset_index(drop=True)
     if df.shape[0] == 0:
         pass
     else:
@@ -355,28 +356,28 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
         #  Makes a list of indexes of left borders of periods for finding following indexes as right borders
         list_of_breakers_ie_start = [i for i in df_with_only_breakers_ie_start.alarm.index]
         #  Sets the right borders of periods depending on the left border dataframe-index
-        #  FIX!!!!
         for i in range(len(list_of_breakers_ie_start)):
             #  Exclusion for a first left border in a list
             if i == 0:
                 left_border = 0
+                right_border = list_of_breakers_ie_start[i+1] - 1
             else:
-                left_border = list_of_breakers_ie_start[i] - 1
+                left_border = list_of_breakers_ie_start[i]
                 #  Exclusion for a last right border in a list
                 if (i+1) == len(list_of_breakers_ie_start):
                     right_border = (df.shape[0] - 1)
                 else:
                     #  Main branch for all other left borders
-                    right_border = list_of_breakers_ie_start[i+1] - 2
+                    right_border = list_of_breakers_ie_start[i+1] - 1
                 #  Forms a dictionary
-                ease_dict[list_of_breakers_ie_start[i]] = [
-                    list_of_breakers_ie_start[i],
-                    df[df.columns[3]][df[df.columns[3]].index[left_border]],
-                    df[df.columns[4]][df[df.columns[4]].index[left_border]],
-                    df[df.columns[3]][df[df.columns[3]].index[right_border]],
-                    df[df.columns[4]][df[df.columns[4]].index[right_border]],
-                    right_border - left_border + 1
-                ]
+            ease_dict[list_of_breakers_ie_start[i]] = [
+                list_of_breakers_ie_start[i],
+                df[df.columns[3]][df[df.columns[3]].index[left_border]],
+                df[df.columns[4]][df[df.columns[4]].index[left_border]],
+                df[df.columns[3]][df[df.columns[3]].index[right_border]],
+                df[df.columns[4]][df[df.columns[4]].index[right_border]],
+                right_border - left_border + 1
+            ]
         cols_t = ["Строка в БД", "Дата начала замеров", "Время начала",
                   "Дата окончания замеров", "Время окончания", "Количество некорректных замеров"]
         #  Creates a dataframe out of the dictionary
