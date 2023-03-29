@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="total_nan_counter_ease updated with reset indexes" />
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Documentation update">
+      <change beforePath="$PROJECT_DIR$/Readme.MD" beforeDir="false" afterPath="$PROJECT_DIR$/Readme.MD" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -219,13 +221,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00106" summary="Documentation file updated">
-      <created>1676634242541</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1676634242541</updated>
     </task>
     <task id="LOCAL-00107" summary="Documentation file updated">
       <created>1676634610873</created>
@@ -563,7 +558,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680013357966</updated>
     </task>
-    <option name="localTasksCounter" value="155" />
+    <task id="LOCAL-00155" summary="Documentation update">
+      <created>1680102698452</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1680102698452</updated>
+    </task>
+    <option name="localTasksCounter" value="156" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -578,7 +580,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="functions refactored w/devices class" />
     <MESSAGE value="kiv runner" />
     <MESSAGE value="kiv plots and prints" />
     <MESSAGE value="kiv done" />
@@ -603,7 +604,8 @@
     <MESSAGE value="Minor bug fixes" />
     <MESSAGE value="Added output filename choose" />
     <MESSAGE value="total_nan_counter_ease updated with reset indexes" />
-    <option name="LAST_COMMIT_MESSAGE" value="total_nan_counter_ease updated with reset indexes" />
+    <MESSAGE value="Documentation update" />
+    <option name="LAST_COMMIT_MESSAGE" value="Documentation update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
