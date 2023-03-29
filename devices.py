@@ -7,6 +7,8 @@ import glob
 class Device:
     def __init__(self, name):
         """
+        Devices mostly store and return attributes for further processing
+        Module consist of methods setting properties and statuses of device, such as:
         """
         self.name = name
         self.full_name = name
@@ -59,12 +61,20 @@ class Device:
     def file(self):
         return self.file_list[self.file_list_choice]
 
-    def file_pick(self, num=0):  # Отдаёт значения в ./prints
+    def file_pick(self, num=0):  # Returns values to ./prints
+        """
+        Picks a file out of file list, should take a number/index of a file
+        """
         file = self.file_list[num]
         self.file_list_choice = num
         return file
 
     def links(self):  # Можно добавлять значения
+        """
+        Method contains main properties of a devices returned as a list
+        The method can be enlarged with new properties, but the order of the list must never be rearranged
+            because its indexes are used in analytical functions
+        """
         return [
             self.name,  # 0
             self.file,  # 1
@@ -211,6 +221,7 @@ mon.default_dict_for_dtypes = {'∆tg': float,
                                'tdev': float,
                                'tcpu': float}
 
+
 # Devices
 objs = [nkvv, kiv, mon]
 
@@ -226,6 +237,10 @@ def links(device_type):
 
 
 class Pkl:
+    """
+    Saved cache of data for a device can be stored in a
+    .pkl format in save/ directory for further fast upload.
+    """
     def save(device_type, data: object) -> object:
         path = './save/' + device_type + '/'
         isExist = os.path.exists(path)

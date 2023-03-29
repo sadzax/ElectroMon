@@ -19,8 +19,9 @@ def get_data(device_type: str = 'kiv',
              parse_dates: list = None,
              raw_param: bool = False):
     """
-    For a custom file usage you need to set all additional params
-    Need to switch to classes of devices
+
+    For a custom file usage you need to set all the additional params
+                plan/note: Need to switch the func. to classes of devices
     """
     data = pd.DataFrame.empty
     device_type = device_type.lower()

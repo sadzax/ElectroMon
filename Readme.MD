@@ -1,40 +1,65 @@
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Contents
+- [Description](#description)
+
+
+- [Implementation](#implementation)
+- - [Stack](#stack)
+
+
+- [Requirements and peculiarities](#requirements-and-peculiarities)
+
+
+- [App Structure](#app-structure)
+- - [Device initialisation](#device-initialisation)
+- - - [Measurers](#measurers)
+- - - [Attributes](#attributes)
+- - - [Sources](#sources)
+- - - [Links](#links)
+- - - [Quick save/load](#quick-save-load)
+
+
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
 
-ElectroMon is the app that monitors high-voltage parameters. 
+**ElectroMon** is the app that monitors high-voltage parameters. 
 It uses data uploaded from devices that make minute-by-minute measurements 
 in power plants, transformers and other electrical appliances.
 
 &nbsp;
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation
-## Tech-stack
+## Stack
 Backend is written in 
 **Python**,
-graphs and plots are provided by **Jupyter Notebook** 
+graphs and plots are provided by 
+**Jupyter Notebook** 
 
 &nbsp;
 
 ## Requirements and peculiarities
 Requires some Python additional classic libs, all of which can be downloaded via `pip install`:
 
-Check [requirements.txt](requirements.txt) in root directory
+Check 
+[requirements.txt](requirements.txt) 
+in root directory for a list of required libraries
 
 The actual devices are applied with usage of cyrillic characters. 
 Encoding and translation features should be considered.
 
-Data source located in `upload/`
 
 &nbsp;
 
 ## App Structure
 ### &nbsp;&nbsp; Device initialisation ([devices.py](devices.py))
-ElectroMon bases on actual physical devices-measurers, described in file 
-[devices.py](devices.py)
+
+#### Measurers
+ElectroMon bases on actual physical devices-measurers
 
 &nbsp;&nbsp; There is a list of them:
-- ``nkvv`` - Device for continuous monitoring and protection of high-voltage inputs<details><summary>cyrillic</summary>Устройство непрерывного контроля и защиты высоковольтных вводов</details>
-- ``kiv`` - Input isolation monitoring device <details><summary>cyrillic</summary>Устройство контроля изоляции вводов</details>
-- ``monitoring`` - Monitoring of devices for continuous monitoring and protection of high-voltage inputs <details><summary>cyrillic</summary>Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов</details>
+- ``nkvv`` - Device for continuous monitoring and protection of high-voltage inputs<details><summary>cyrillic</summary>**Устройство непрерывного контроля и защиты высоковольтных вводов**</details>
+- ``kiv`` - Input isolation monitoring device <details><summary>cyrillic</summary>**Устройство контроля изоляции вводов**</details>
+- ``monitoring`` - Monitoring of devices for continuous monitoring and protection of high-voltage inputs <details><summary>cyrillic</summary>**Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов**</details>
+
+#### Attributes 
 
 [Devices](devices.py) 
 mostly store and return attributes for further processing.
@@ -47,16 +72,16 @@ Module consist of methods setting properties and statuses of device, such as:
 - misc. info
 <details><summary>Example of device initialisation</summary>
 
-    nkvv.name = 'nkvv'
-    nkvv.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
-    nkvv.monitoring_params = {'input': 220000, 'output': 110000}
-    nkvv.log_types = {'measure': 'csv', 'event': 'csv'}
+    self.name = 'nkvv'
+    self.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
+    self.monitoring_params = {'input': 220000, 'output': 110000}
+    self.log_types = {'measure': 'csv', 'event': 'csv'}
     self.file_folder = 'upload/' + name + '/'
-    nkvv.file_name_starts = {'measure': 'DB_i'}
-    nkvv.file_sep = ';'
-    nkvv.file_default_encoding = 'WINDOWS-1251'
-    nkvv.file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
-    nkvv.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
+    self.file_name_starts = {'measure': 'DB_i'}
+    self.file_sep = ';'
+    self.file_default_encoding = 'WINDOWS-1251'
+    self.file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
+    self.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
                                                 'tg': -10.0,
                                                 '∆tg': -10.0,
                                                 'c_delta': -10.0,
@@ -64,9 +89,69 @@ Module consist of methods setting properties and statuses of device, such as:
                                                 'voltage_difference': 0.0}
 </details>
 
+#### Sources
+
+Data source located in `upload/` and should refer to the requirements 
+of the chosen device described in [devices.py](devices.py) file in class `Device`
+with init-properties such as `self.file_name_starts` or `file_name_ends` of device-objects
+In case of adding another file-type/patterns these properties should be updated.
+
+<details><summary>Example of upload files</summary>
+
+    'upload/kiv/MeasJ a284 #572665920 30-12-2022.xlsx' 
+    'upload/mon/22_06/21217004.I' 
+    'upload/mon/22_07/21217004.I' 
+    'upload/mon/22_08/21217004.I' 
+    'upload/mon/22_09/21217004.I' 
+    'upload/mon/22_10/21217004.I' 
+    'upload/mon/22_11/21217004.I' 
+    'upload/mon/22_12/21217004.I' 
+    'upload/mon/23_01/21217004.I' 
+    'upload/nkvv/DB_i.csv;  
+</details>
+
+#### Links
+
+`links()` method contains main properties of a devices returned as a list. 
+The method can be enlarged with new properties, but the order of the list 
+**must** never be rearranged because its indexes are used in analytical functions. 
+
+<details><summary>Current links-list and indexes of the properties</summary>
+
+            self.name,  # 0
+            self.file,  # 1
+            self.file_sep,  # 2
+            self.file_default_encoding,  # 3
+            self.file_parse_dates,  # 4
+            self.file_list,  # 5
+            self.default_dict_for_replacement_to_nan,  # 6
+            self.file_parse_dates_basis,  # 7
+            self.default_dict_for_dtypes,  # 8
+            self.full_name  # 9
+</details>
+
+#### Quick save/load
+
+Saved cache of data for a device can be stored in a `.pkl` format in `save/` directory 
+for further fast upload.
+
+Use class `Pkl` and `save()` or `load()` method in [devices](devices.py)
+<details><summary>Example of fast save & load </summary>
+You can save the processing data with  
+
+    data = devices.Pkl.save(device_type='kiv', data=data)
+
+And then upload it with
+
+    data = devices.Pkl.load(device_type='kiv')
+</details>
+
 ### &nbsp;&nbsp; Columns processing ([columns.py](columns.py)) 
-Based on [devices](devices) attributes
-[сolumns](columns.py)
+
+#### Main columns analyzer
+
+Based on [devices](devices.py) attributes
+`columns_analyzer()`
 processes data columns into Python dictionary with enumerated keys (can be used as indexes too) 
 and values as list of parameters:
 1. Original name of the column passed as string
@@ -77,7 +162,9 @@ and values as list of parameters:
 6. Full search name
 7. Concatenation of short search name and voltage parameter
 
-[Columns](columns.py) are set to cover column's parameters across as many viewpoints as possible
+[Columns](columns.py) are set to cover column's parameters across as many viewpoints as possible 
+in order to increase efficiency of analytical functions
+
 
 <details><summary>Example of columns dictionary</summary>
 
@@ -132,6 +219,13 @@ and values as list of parameters:
     48: ['Unnamed: 48', 'other', 'overall', 'no_voltage', 'no_name', 'no_name', 'no_name_no_voltage']
 </details>
 
+#### Defining the time column
+
+`time_column()` returns full name of a timestamp-column in dats based on `device` property 
+`self.file_parse_dates`. This property stores a list of columns which contain time-type data
+and the main time column (with the fixed time of the measurement) must be first in this list.
+
 ### &nbsp;&nbsp; Analyzers and processors ([analyzer.py](analyzer.py))
 
-*to 
+#### Data import
+Based on (described in [Sources](#Sources)) 

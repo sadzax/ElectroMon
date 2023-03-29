@@ -9,7 +9,6 @@ import sadzax
 # mask = [original, measurement, code_of_sensor, voltage_param,
 #         short_search_name, full_search_name, concat_of_short_search_name_and_voltage_param]
 
-
 #  Need to organize "file=devices.nkvv.work_file" etc... ->  to func.
 def columns_list_maker(device_type: str = 'nkvv',
                        data: pd.core = None,
@@ -17,7 +16,10 @@ def columns_list_maker(device_type: str = 'nkvv',
                        sep: str = None,
                        encoding: str = None):
     """
-    Need to take it to the class of Devices
+    Makes list of columns based on set properties
+    Must have a device_type set and a raw data input
+    Mostly works well with a default device properties described in devices.py
+    Recommended to return the dict in a variable 'cols_list' in a runner-file
     """
     if file is None:
         file, sep, encoding, parse_dates = devices.links(device_type)[1:5]
@@ -46,7 +48,19 @@ def columns_list_maker(device_type: str = 'nkvv',
 def columns_analyzer(device_type: str ='nkvv',
                      list_for_columns: list = None):
     """
-    Need to take it to the class of Devices
+    Must have a device_type set. Should take a list of columns as a base (recommend to use func. 'columns_list_maker')
+    Based on devices attributes processes data columns into a dictionary with enumerated keys.
+    and values as list of parameters (the mask):
+        original name,
+        measurement,
+        code_of_sensor,
+        voltage_param,
+        short_search_name,
+        full_search_name,
+        concat_of_short_search_name_and_voltage_param
+    The keys of the dictionary can be used as indexes
+    Uses in analytical functions for defining the processing columns
+    Recommended to return the dict in a variable 'cols' in a runner-file
     """
     if list_for_columns is None:
         list_for_columns = columns_list_maker(device_type=device_type)
@@ -141,7 +155,7 @@ def columns_analyzer(device_type: str ='nkvv',
             else:
                 result_dict[i].append('no_voltage')
             for a_key in devices.kiv.data_search_name:
-                # if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key and 'ф.' or 'Дата' in str(result_dict[i][0]):  #
+                # if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key and 'ф.' or 'Дата' in str(result_dict[i][0]):
                 if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key:
                     try:
                         source_dict[i][4] = devices.kiv.data_search_name[a_key][0]
@@ -160,6 +174,11 @@ def columns_analyzer(device_type: str ='nkvv',
 
 def time_column(device_type='nkvv',
                 data: pd.core = None):
+    """
+    Returns full name of a timestamp-column in data
+    Uses 'device' property 'self.file_parse_dates' (property stores a list of columns which contain time-type data)
+    The main time column (with the fixed time of the measurement) must be first in the list of 'self.file_parse_dates'
+    """
     the_time_column = None
     device_type = device_type.lower()
     if data is None:
@@ -179,6 +198,9 @@ def time_column(device_type='nkvv',
 
 
 def columns_df(device_type='mon', cols: dict = None):
+    """
+    Used for transformation of 'cols'-dict to pandas dataframe
+    """
     if cols is None:
         cols = columns_analyzer(device_type=device_type)
     return pd.DataFrame.from_dict(cols,  orient='index', columns=[
