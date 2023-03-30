@@ -19,9 +19,23 @@ def get_data(device_type: str = 'kiv',
              parse_dates: list = None,
              raw_param: bool = False):
     """
+                plan/note: Need to switch the func. to classes of devices ---
+    Returns data from work files. 
+    There should be at least one suitable uploaded file in the upload directory of the device.
+    The selected files are then concatenated to form a single dataframe. 
+    The data won't be sorted by the time of measurement.
 
-    For a custom file usage you need to set all the additional params
-                plan/note: Need to switch the func. to classes of devices
+    Parameters:
+    device_type (str): Type of device for which data is being analyzed.
+    file (str): Name of the file to be analyzed. If not specified, a suitable file is chosen from the device's upload 
+                directory.
+    sep (str): Delimiter to be used for parsing the file. If not specified, the default delimiter for the device is used.
+    encoding (str): Encoding to be used for reading the file. If not specified, the default encoding for the device is used.
+    parse_dates (list): List of column names to be parsed as dates. If not specified, no columns are parsed as dates.
+    raw_param (bool): Whether to return raw data without any pre-processing. Default is False.
+
+    Returns:
+    pd.DataFrame: A consolidated dataframe containing data from all the selected files.
     """
     data = pd.DataFrame.empty
     device_type = device_type.lower()
@@ -88,14 +102,33 @@ def stack_data(device_type: str = 'mon',
                parse_dates: list = None,
                raw_param: bool = False):
     """
-    For a custom file usage you need to set all additional params
+    Stacks data in case of using multiple files for creating an uninterrupted dataflow.
+
+    This function can be used instead of `get_data()` function. There should be at least one suitable
+    uploaded file in the upload directory of the device. If only one file is available,
+    that file is picked for analysis. If multiple files are available, the function prompts the user
+    to choose the files to be consolidated. The selected files are then
+    concatenated to form a single dataframe. The data is sorted by the time of measurement.
+
+    Parameters:
+    device_type (str): Type of device for which data is being analyzed.
+    file (str): Name of the file to be analyzed. If not specified, a suitable file is chosen from the device's upload 
+                directory.
+    sep (str): Delimiter to be used for parsing the file. If not specified, the default delimiter for the device is used.
+    encoding (str): Encoding to be used for reading the file. If not specified, the default encoding for the device is used.
+    parse_dates (list): List of column names to be parsed as dates. If not specified, no columns are parsed as dates.
+    raw_param (bool): Whether to return raw data without any pre-processing. Default is False.
+
+    Returns:
+    pd.DataFrame: A consolidated dataframe containing data from all the selected files.
     """
     device_type = device_type.lower()
     files_list = devices.links(device_type)[5]
+    #  Exclusion for a single work-file
     if len(files_list) == 1:
         print(f"Доступен всего 1 файл для анализа")
         devices.file_pick(device_type, 0)
-        data = get_data(device_type=device_type)
+        data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
     else:
         data = pd.DataFrame.empty
         w1 = sadzax.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
@@ -104,21 +137,26 @@ def stack_data(device_type: str = 'mon',
         for i in files_list:
             print(f"Файл № {files_list.index(i) + 1}. {i}")
         try:
+            #  Create a list of files for picking a specific file(s)
             inputs = list(map(int, input(f'Введите номера файлов через пробел, которые нужно соединить для общего'
                                          f' анализа (либо введите любой текст для соединения всех): ').split()))
             if len(inputs) == 0:
                 inputs = list(range(len(files_list)))  # all
+            #  Need to subtract 1 for bringing the 'choice'-ints to indexes
             indexes = [x-1 for x in inputs if x in list(range(len(files_list)))]
         except ValueError:
             indexes = list(range(len(files_list)))  # all files
         for i in indexes:
             devices.file_pick(device_type, i)
             if data is pd.DataFrame.empty:
+                #  Exclusion for a first iteration
                 data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
             else:
+                #  Store a new iterated data in a temp. variable
                 iterated_data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
                 data = pd.concat([data, iterated_data])
     the_time_column = columns.time_column(device_type)
+    #  Sort data by time of meausure
     data = data.sort_values(by=the_time_column)
     print('Консолидация данных завершена')
     return data
@@ -129,6 +167,25 @@ def pass_the_nan(device_type: str = 'nkvv',
                  data: pd.core = None,
                  cols: dict = None,
                  default_dict_for_replacement: dict = None):
+    """
+    Replaces specified values in a DataFrame with NaN values.
+
+    Parameters:
+    device_type (str): The type of device being analyzed.
+    data (pd.core): The DataFrame to be processed. If None, it will be obtained
+                    using get_data() with the specified device_type.
+    cols (dict): The dictionary of columns to be analyzed. If None, it will be
+                 obtained using columns.columns_analyzer() with the specified
+                 device_type.
+    default_dict_for_replacement (dict): The dictionary containing the values
+                                         to be replaced with NaN values. If None,
+                                         the default value will be obtained
+                                         using devices.links() with the specified
+                                         device_type.
+
+    Returns:
+    pd.core: The processed DataFrame with specified values replaced by NaN.
+    """
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -137,10 +194,12 @@ def pass_the_nan(device_type: str = 'nkvv',
     if default_dict_for_replacement is None:
         default_dict_for_replacement = devices.links(device_type)[6]
     for i in range(len(default_dict_for_replacement)):
+        #  Seeking_param is an any type string that could be found in cols-dict
         seeking_param = [x for x in default_dict_for_replacement.keys()][i]
         replacing_values = [x for x in default_dict_for_replacement.values()][i]
         for a_column_index in range(len(cols)):
             for a_param_index in range(len(cols[0])):
+                #  Conversion of the seeking_param to the original column name
                 if cols[a_column_index][a_param_index] == seeking_param:
                     arr = data[cols[a_column_index][0]]
                     arr = np.array(arr)
@@ -159,6 +218,24 @@ def set_dtypes(device_type: str = 'mon',
                data: pd.core = None,
                cols: dict = None,
                default_dict_for_dtypes: dict = None):
+    """
+    Sets the data types for specified columns in a DataFrame.
+
+    Parameters:
+    device_type (str): The type of device being analyzed.
+    data (pd.core): The DataFrame to be processed. If None, it will be obtained
+                    using get_data() with the specified device_type.
+    cols (dict): The dictionary of columns to be analyzed. If None, it will be
+                 obtained using columns.columns_analyzer() with the specified
+                 device_type.
+    default_dict_for_dtypes (dict): The dictionary containing the data types
+                                    for each column. If None, the default value
+                                    will be obtained using devices.links() with
+                                    the specified device_type.
+
+    Returns:
+    pd.core: The processed DataFrame with specified data types for columns.
+    """
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -170,9 +247,11 @@ def set_dtypes(device_type: str = 'mon',
         pass
     else:
         for i in range(len(default_dict_for_dtypes)):
+            #  Seeking_param is an any type string that could be found in cols-dict
             seeking_param = [x for x in default_dict_for_dtypes.keys()][i]
             for a_column_index in range(len(cols)):
                 for a_param_index in range(len(cols[0])):
+                    #  Conversion of the seeking_param to the original column name
                     if cols[a_column_index][a_param_index] == seeking_param:
                         try:
                             data[cols[a_column_index][0]] = data[cols[a_column_index][0]]\
@@ -187,6 +266,19 @@ def set_dtypes(device_type: str = 'mon',
 #  2.0. Count the strings
 def total_log_counter(device_type: str = 'nkvv',
                       data: pd.core = None):
+    """
+    The total_log_counter function takes a device type and a pandas DataFrame as input
+    and returns the total number of logs in the DataFrame. If no DataFrame is provided,
+    the function calls the get_data function to obtain one.
+
+    Parameters:
+    device_type (str): a string indicating the type of device from which the logs were obtained.
+    data (pd.core): a pandas DataFrame containing the logs. Default is None.
+
+    Returns:
+
+    An integer representing the total number of logs in the DataFrame.
+    """
     if data is None:
         data = get_data(device_type=device_type.lower())
     return data.shape[0]
@@ -201,6 +293,44 @@ def values_time_analyzer(device_type: str = 'nkvv',
                          gap_const_hour: int = 60,
                          time_column: str = None,
                          exact_gap: bool = True):
+    """
+    Analyzes the time gaps between consecutive rows in a given time column of a Pandas DataFrame and returns a DataFrame
+    with information about any gaps that exceed a specified duration or fall outside a certain range of durations.
+
+    Parameters:
+    -----------
+    device_type : str, default 'nkvv'
+        The type of device for which to retrieve the data.
+    data : pandas.core.frame.DataFrame, optional
+        The DataFrame containing the data to analyze. If None, the data will be retrieved using the `get_data()` function.
+    time_sequence_min : int, default 1
+        The minimum duration (in minutes) that a time sequence should last.
+    inaccuracy_sec : int, default 3
+        The maximum allowed deviation (in seconds) from the expected time sequence duration.
+    gap_const_day : int, default 1440
+        The minimum duration (in minutes) for which to report gaps in the DataFrame, if `exact_gap` is False.
+    gap_const_hour : int, default 60
+        The minimum duration (in minutes) for which to report gaps in the DataFrame, if `exact_gap` is False.
+    time_column : str, optional
+        The name of the time column to analyze. If None, the column will be determined automatically based on the device
+        type and the available columns in the DataFrame.
+    exact_gap : bool, default True
+        Whether to report gaps in the DataFrame with the exact duration or with a duration rounded to the nearest day,
+        hour, or minute, depending on their size.
+
+    Returns:
+    --------
+    pandas.core.frame.DataFrame or None
+        A DataFrame with information about any gaps that exceed a specified duration or fall outside a certain range
+        of durations, or None if no such gaps were found. The DataFrame contains the following columns:
+        - "Строка в БД" (Database row): the index of the row in the DataFrame where the gap starts.
+        - "Дата" (Date): the date of the row where the gap starts, in the format 'dd.mm.yy'.
+        - "Время" (Time): the time of the row where the gap starts, in the format 'hh.mm'.
+        - "Дата след." (Next date): the date of the row where the gap ends, in the format 'dd.mm.yy'.
+        - "Время след." (Next time): the time of the row where the gap ends, in the format 'hh.mm'.
+        - "Разница" (Duration): the duration of the gap, in minutes or days, depending on its size and the value of
+          `exact_gap`.
+    """
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -554,35 +684,42 @@ def warning_finder(filter_list: list = None,
     Need to put a 'time' in filter_list
     """
     device_type = device_type.lower()
+    if list_of_non_math is None:
+        list_of_non_math = devices.links(device_type)[4]
     if data is None:
         data = get_data(device_type=device_type)
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
     if filter_list is None:
         filter_list = ['time', '∆tgδ_MV']
-    if list_of_non_math is None:
-        list_of_non_math = devices.links(device_type)[4]
-    df = data_filter(filter_list=filter_list, cols=cols, data=data)
-    cols_list = list(df.columns)
-    date_index = 0
-    for i in range(df.shape[1]):
-        for k in list_of_non_math:
-            if cols_list[i].startswith(k) is True:
-                date_index = i
-    func_result = []
-    for i in range(df.shape[1]):
-        if i == date_index:
+    else:
+        if isinstance(filter_list, list) is False:
+            filter_list = [filter_list]
+        if 'time' in filter_list:
             pass
         else:
-            df_temp = data_filter(filter_list=[cols_list[date_index], cols_list[i]], data=df, cols=cols)
-            # arr = df_temp[cols_list[i]]
-            # arr = np.array(arr)
-            # arr[arr >= warning_amount]
+            filter_list.append('time')
+    #  Form main DataFrame for work: warning params + time column
+    df = data_filter(filter_list=filter_list, cols=cols, data=data)
+    cols_list = list(df.columns)
+    #  Default datetime column
+    datetime_index = 0
+    for i in range(df.shape[1]):
+        if cols_list[i].startswith(list_of_non_math[0]) is True:
+            datetime_index = i
+    func_result = {}
+    #  Iterating columns
+    for a_column_index in range(df.shape[1]):
+        if a_column_index == datetime_index:
+            pass
+        else:
+            #  Temporal dataframe for a warnings/accidents storage
+            df_t = data_filter(filter_list=[cols_list[datetime_index], cols_list[a_column_index]], data=df, cols=cols)
             if abs_parameter is True:
-                df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount) |
-                                             (df_temp[cols_list[i]] <= warning_amount * -1)]
+                df_temp_result = df_t.iloc[(df_t[cols_list[i]] >= warning_amount) |
+                                           (df_t[cols_list[i]] <= warning_amount * -1)]
             else:
-                df_temp_result = df_temp.loc[(df_temp[cols_list[i]] >= warning_amount)]
-            func_result.append(df_temp_result)
+                df_temp_result = df_t.iloc[(df_t[cols_list[i]] >= warning_amount)]
+            func_result[cols_list[a_column_index]] = df_temp_result
+            del df_t
     return func_result
-

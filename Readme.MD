@@ -15,10 +15,10 @@
 - - - [Attributes](#attributes)
 - - - [Sources](#sources)
 - - - [Links](#links)
-- - - [Quick save/load](#quick-saveload)
+- - - [Quick save/load](#quick-save-load)
 
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description <a name="description"></a>
 
 **ElectroMon** is the app that monitors high-voltage parameters. 
 It uses data uploaded from devices that make minute-by-minute measurements 
@@ -26,12 +26,12 @@ in power plants, transformers and other electrical appliances.
 
 &nbsp;
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation <a name="implementation"></a>
 ## Stack
 Backend is written in 
-**Python**,
-graphs and plots are provided by 
-**Jupyter Notebook** 
+**Python** using pandas and numpy.
+Graphs, plots and presentations are provided by 
+**Jupyter Notebook**  using matplotlib and reportlab.
 
 &nbsp;
 
@@ -44,7 +44,6 @@ in root directory for a list of required libraries
 
 The actual devices are applied with usage of cyrillic characters. 
 Encoding and translation features should be considered.
-
 
 &nbsp;
 
@@ -163,8 +162,7 @@ and values as list of parameters:
 7. Concatenation of short search name and voltage parameter
 
 [Columns](columns.py) are set to cover column's parameters across as many viewpoints as possible 
-in order to increase efficiency of analytical functions
-
+in order to increase efficiency of analytical functions.
 
 <details><summary>Example of columns dictionary</summary>
 
@@ -228,4 +226,53 @@ and the main time column (with the fixed time of the measurement) must be first 
 ### &nbsp;&nbsp; Analyzers and processors ([analyzer.py](analyzer.py))
 
 #### Data import
-Based on (described in [Sources](#Sources)) 
+The import is based on work-files (described in [Sources](#Sources)).
+In case of using a multiple files for creating an uninterrupted dataflow `stack_data()` function should be used.
+Stacking data from different files also automatically sorted by ascending timestamps of the measurement.
+Data import functions returns pandas DataFrame. It is recommended to set a `data` as a variable to store this result.
+
+#### Replace data
+There are some measurements that actually mean "NaN" but 
+due to the technical issues of the devices 
+are actually written as values in upload-files.
+`pass_the_nan()` 
+replaces specified values in a DataFrame with NaN values.
+
+<details><summary>Example of NaN-measures</summary>
+
+    {
+        'power': [-300.0, 0.0],
+        'tg': [-10.0],
+        '∆tg': [-10.0],
+        'c_delta': [-10.0],
+        'c_deviation': [0.0],
+        'voltage_difference': [0.0]
+    }
+</details>
+
+`set_dtypes` 
+sets the data types for specified columns in a DataFrame.
+
+The dictionaries are stored in [device](devices.py):
+- the values to be replaced with NaN values 
+is a dictionary
+`self.default_dict_for_replacement_to_nan` 
+property
+- the data types for each column 
+is a dictionary
+`self.default_dict_for_dtypes` 
+property
+
+It's recommended to pass variable `data` and return it as a `data` variable as well for these functions 
+
+#### Counter
+
+`total_log_counter()` is a simple function that takes a device type and a pandas DataFrame as input 
+and returns the total number of logs in the DataFrame. 
+If no DataFrame is provided, the function calls `get_data()` to obtain one.
+
+#### Timestamp analyzing
+
+`values_time_analyzer()` analyzes the time gaps between consecutive rows in a given time column of a 
+Pandas DataFrame and returns a DataFrame with information about any gaps that exceed a specified duration 
+or fall outside a certain range of durations.

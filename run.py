@@ -20,8 +20,8 @@ sadzax.Out.clear_future_warning()
 #  ______________________________________ OBTAINING DATA _________________________________________
 prints.info('Установление параметров для анализа')
 
-device_type = prints.device_picking()
-# device_type = 'mon'
+# device_type = prints.device_picking()
+device_type = 'mon'
 dev = device_type
 # prints.file_picking(dev)
 data = devices.Pkl.load(dev)
@@ -29,9 +29,54 @@ data = devices.Pkl.load(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
-data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
-data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
+# data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
+# data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 # devices.Pkl.save(device_type=device_type, data=data)
+
+
+ex2 = '∆tg'
+w1 = 1.0
+w2 = 1.5
+prints.warning_printer([ex2], dev, data, cols, w1, w2, 'accident')
+
+
+
+
+
+ex1 = '∆C'
+prints.info('Анализ сигнализации со стороны ВН')
+w1 = 3.0
+w2 = 5.0
+print(f'\nПревышение уровней {ex1} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r')
+status = sadzax.question('Вывести только срабатывания аварийной сигнализации?', yes='y', no='n')
+if status == 'y':
+    prints.warning_printer([ex1], w1, w2, 'accident')
+elif status == 'n':
+    prints.warning_printer([ex1], w1, w2, 'warning')
+    prints.warning_printer([ex1], w1, w2, 'accident')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________

@@ -144,16 +144,15 @@ def warning_printer(filter_list_append,
                     device_type: str = 'kiv',
                     data: pd.core = None,
                     cols: dict = None,
-                    warning_param1=1.0,
-                    warning_param2=1.5,
-                    warn_type='accident',
-                    abs_parameter=True):
+                    warning_param1: float = 1.0,
+                    warning_param2: float = 1.5,
+                    warn_type: str = 'accident',
+                    abs_parameter: bool = True):
     filter_list = ['time']
-    if isinstance(filter_list, list) is False:
+    if isinstance(filter_list_append, list) is False:
         filter_list_append = [filter_list_append]
     for x in filter_list_append:
         filter_list.append(x)
-    warning_param = 0.0
     if warn_type == 'warning':
         warning_param = warning_param1
         warn_str = 'предупредительной'
