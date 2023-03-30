@@ -222,13 +222,6 @@
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
     </task>
-    <task id="LOCAL-00110" summary="values_time_slicer_choose debug">
-      <created>1676714496841</created>
-      <option name="number" value="00110" />
-      <option name="presentableId" value="LOCAL-00110" />
-      <option name="project" value="LOCAL" />
-      <updated>1676714496841</updated>
-    </task>
     <task id="LOCAL-00111" summary="values_time_slicer_choose debug">
       <created>1677007834855</created>
       <option name="number" value="00111" />
@@ -565,7 +558,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680203742274</updated>
     </task>
-    <option name="localTasksCounter" value="159" />
+    <task id="LOCAL-00159" summary="Documentation update">
+      <created>1680203866933</created>
+      <option name="number" value="00159" />
+      <option name="presentableId" value="LOCAL-00159" />
+      <option name="project" value="LOCAL" />
+      <updated>1680203866933</updated>
+    </task>
+    <option name="localTasksCounter" value="160" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

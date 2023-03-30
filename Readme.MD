@@ -1,15 +1,14 @@
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Contents
-- [Description](#description)
+- [Description](#-description-)
 
 
-- [Implementation](#implementation)
-- - [Stack](#stack)
+- [Implementation](#-implementation-)
 
 
-- [Requirements and peculiarities](#requirements-and-peculiarities)
+- [Requirements and peculiarities](#-requirements-and-peculiarities)
 
 
-- [App Structure](#app-structure)
+- [App Structure]#-app-structure)
 - - [Device initialisation](#device-initialisation)
 - - - [Measurers](#measurers)
 - - - [Attributes](#attributes)
@@ -18,7 +17,7 @@
 - - - [Quick save/load](#quick-saveload)
 
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description <a name="description"></a>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
 
 **ElectroMon** is the app that monitors high-voltage parameters. 
 It uses data uploaded from devices that make minute-by-minute measurements 
@@ -26,7 +25,7 @@ in power plants, transformers and other electrical appliances.
 
 &nbsp;
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation <a name="implementation"></a>
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation
 Backend is written in 
 **Python** using pandas and numpy.
 Graphs, plots and presentations are provided by 
