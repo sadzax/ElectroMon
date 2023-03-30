@@ -1,15 +1,15 @@
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Contents
-- [Description](#-description-)
+- [Description](#-description)
 
 
-- [Implementation](#-implementation-)
+- [Implementation](#-implementation)
 
 
 - [Requirements and peculiarities](#-requirements-and-peculiarities)
 
 
-- [App Structure]#-app-structure)
-- - [Device initialisation](#device-initialisation)
+- [App Structure](#-app-structure)
+- - [Device initialisation](#-device-initialisation-devicespy)
 - - - [Measurers](#measurers)
 - - - [Attributes](#attributes)
 - - - [Sources](#sources)
