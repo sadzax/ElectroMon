@@ -1,8 +1,9 @@
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Contents
-- [Description](#-description-)
+- [Description](#description)
 
 
-- [Implementation](#-implementation-)
+- [Implementation](#implementation)
+- - [Stack](#stack)
 
 
 - [Requirements and peculiarities](#requirements-and-peculiarities)
@@ -26,6 +27,7 @@ in power plants, transformers and other electrical appliances.
 &nbsp;
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation <a name="implementation"></a>
+## Stack
 Backend is written in 
 **Python** using pandas and numpy.
 Graphs, plots and presentations are provided by 
@@ -33,7 +35,7 @@ Graphs, plots and presentations are provided by
 
 &nbsp;
 
-#  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Requirements and peculiarities
+## Requirements and peculiarities
 Requires some Python additional classic libs, all of which can be downloaded via `pip install`:
 
 Check 
@@ -45,10 +47,10 @@ Encoding and translation features should be considered.
 
 &nbsp;
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; App Structure
-## &nbsp;&nbsp; Device initialisation ([devices.py](devices.py))
+## App Structure
+### &nbsp;&nbsp; Device initialisation ([devices.py](devices.py))
 
-### Measurers
+#### Measurers
 ElectroMon bases on actual physical devices-measurers
 
 &nbsp;&nbsp; There is a list of them:
@@ -56,7 +58,7 @@ ElectroMon bases on actual physical devices-measurers
 - ``kiv`` - Input isolation monitoring device <details><summary>cyrillic</summary>**Устройство контроля изоляции вводов**</details>
 - ``monitoring`` - Monitoring of devices for continuous monitoring and protection of high-voltage inputs <details><summary>cyrillic</summary>**Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов**</details>
 
-### Attributes 
+#### Attributes 
 
 [Devices](devices.py) 
 mostly store and return attributes for further processing.
@@ -86,7 +88,7 @@ Module consist of methods setting properties and statuses of device, such as:
                                                 'voltage_difference': 0.0}
 </details>
 
-### Sources
+#### Sources
 
 Data source located in `upload/` and should refer to the requirements 
 of the chosen device described in [devices.py](devices.py) file in class `Device`
@@ -107,7 +109,7 @@ In case of adding another file-type/patterns these properties should be updated.
     'upload/nkvv/DB_i.csv;  
 </details>
 
-### Links
+#### Links
 
 `links()` method contains main properties of a devices returned as a list. 
 The method can be enlarged with new properties, but the order of the list 
@@ -127,7 +129,7 @@ The method can be enlarged with new properties, but the order of the list
             self.full_name  # 9
 </details>
 
-### Quick save/load
+#### Quick save/load
 
 Saved cache of data for a device can be stored in a `.pkl` format in `save/` directory 
 for further fast upload.
@@ -143,9 +145,9 @@ And then upload it with
     data = devices.Pkl.load(device_type='kiv')
 </details>
 
-## &nbsp;&nbsp; Columns processing ([columns.py](columns.py)) 
+### &nbsp;&nbsp; Columns processing ([columns.py](columns.py)) 
 
-### Main columns analyzer
+#### Main columns analyzer
 
 Based on [devices](devices.py) attributes
 `columns_analyzer()`
@@ -215,21 +217,21 @@ in order to increase efficiency of analytical functions.
     48: ['Unnamed: 48', 'other', 'overall', 'no_voltage', 'no_name', 'no_name', 'no_name_no_voltage']
 </details>
 
-### Defining the time column
+#### Defining the time column
 
 `time_column()` returns full name of a timestamp-column in dats based on `device` property 
 `self.file_parse_dates`. This property stores a list of columns which contain time-type data
 and the main time column (with the fixed time of the measurement) must be first in this list.
 
-## &nbsp;&nbsp; Analyzers and processors ([analyzer.py](analyzer.py))
+### &nbsp;&nbsp; Analyzers and processors ([analyzer.py](analyzer.py))
 
-### Data import
+#### Data import
 The import is based on work-files (described in [Sources](#Sources)).
 In case of using a multiple files for creating an uninterrupted dataflow `stack_data()` function should be used.
 Stacking data from different files also automatically sorted by ascending timestamps of the measurement.
 Data import functions returns pandas DataFrame. It is recommended to set a `data` as a variable to store this result.
 
-### Replace data
+#### Replace data
 There are some measurements that actually mean "NaN" but 
 due to the technical issues of the devices 
 are actually written as values in upload-files.
@@ -263,13 +265,13 @@ property
 
 It's recommended to pass variable `data` and return it as a `data` variable as well for these functions 
 
-### Counter
+#### Counter
 
 `total_log_counter()` is a simple function that takes a device type and a pandas DataFrame as input 
 and returns the total number of logs in the DataFrame. 
 If no DataFrame is provided, the function calls `get_data()` to obtain one.
 
-### Timestamp analyzing
+#### Timestamp analyzing
 
 `values_time_analyzer()` analyzes the time gaps between consecutive rows in a given time column of a 
 Pandas DataFrame and returns a DataFrame with information about any gaps that exceed a specified duration 
