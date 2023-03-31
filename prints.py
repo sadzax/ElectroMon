@@ -140,43 +140,47 @@ def average_printer(ex, data, cols, abs_parameter=True):
         print(f'Среднее {str_adder}по {every_value} составило {df_average[every_value]}')
 
 
-def warning_printer(filter_list_append,
-                    device_type: str = 'kiv',
+def warning_printer(device_type: str = 'mon',
+                    log: dict = None,
+                    warn_type: str = 'accident',
+                    filter_list=None,
                     data: pd.core = None,
                     cols: dict = None,
-                    warning_param1: float = 1.0,
-                    warning_param2: float = 1.5,
-                    warn_type: str = 'accident',
+                    warning_param_war: float = None,
+                    warning_param_acc: float = None,
                     abs_parameter: bool = True):
-    filter_list = ['time']
-    if isinstance(filter_list_append, list) is False:
-        filter_list_append = [filter_list_append]
-    for x in filter_list_append:
-        filter_list.append(x)
-    if warn_type == 'warning':
-        warning_param = warning_param1
+    if warn_type == 'warning' or warn_type == 'war':
+        warning_param = warning_param_war
         warn_str = 'предупредительной'
-    elif warn_type == 'accident':
-        warning_param = warning_param2
+        log_list_i = 0
+    elif warn_type == 'accident' or warn_type == 'acc':
+        warning_param = warning_param_acc
         warn_str = 'аварийной'
-    log_warn = analyzer.warning_finder(filter_list=filter_list,
-                                       device_type=device_type,
-                                       data=data,
-                                       cols=cols,
-                                       warning_amount=warning_param,
-                                       abs_parameter=abs_parameter)
-    for every_df in log_warn:
-        if every_df.empty is True:
-            print(f'Превышение уровней {every_df.axes[1].values[1]} '
-                  f'для срабатывания {warn_str} (±{warning_param}) сигнализации не выявлено')
+        log_list_i = 1
+    if log is None:
+        log = analyzer.warning_finder(filter_list=filter_list,
+                                      device_type=device_type,
+                                      data=data,
+                                      cols=cols,
+                                      warning_param_war=warning_param_war,
+                                      warning_param_acc=warning_param_acc,
+                                      abs_parameter=abs_parameter)
+    for key in log:
+        if key == 'datetime':
+            pass
         else:
-            num = every_df.shape[0]
-            print(
-                f'Выявлено {num} {sadzax.Rus.cases(num, "превышение", "превышения", "превышений")} (±{warning_param}):'
-                f'уровней {every_df.axes[1].values[1]} для срабатывания {warn_str} сигнализации. '
-                f'\n Процент срабатывания {round((every_df.shape[0] / data.shape[0]) * 100, 3)}% (от общего'
-                f' количества замеров')
-            print(sadzax.question('Вывести список?', every_df))
+            num = log[key][log_list_i].shape[0]
+            if num == 0:
+                print(f'Превышение уровней {key} для срабатывания {warn_str} (±{warning_param}%) '
+                      f'сигнализации не выявлено')
+            else:
+                print(
+                    f"Выявлено {num} {sadzax.Rus.cases(num, 'превышение', 'превышения', 'превышений')} (±{warning_param}):"
+                    f"значения {key} для срабатывания {warn_str} сигнализации. "
+                    f"\n Процент срабатывания {round((num / log['datetime'][log_list_i].shape[0]) * 100, 3)}%"
+                    f" (от общего числа замеров)"
+                )
+                print(sadzax.question('Вывести список? ', log[key][log_list_i]))
 
 
 def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, cols=None, title=None):

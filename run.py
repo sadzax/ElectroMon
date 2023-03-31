@@ -33,11 +33,12 @@ del cols_list
 # data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 # devices.Pkl.save(device_type=device_type, data=data)
 
-
-ex2 = '∆tg'
+ex2 = '∆tg_MV'
 w1 = 1.0
 w2 = 1.5
-prints.warning_printer([ex2], dev, data, cols, w1, w2, 'accident')
+
+warning_finder = analyzer.warning_finder(ex2, dev, data, cols, w1, w2)
+prints.warning_printer(dev, warning_finder, 'acc', warning_param_war=w1, warning_param_acc=w2)
 
 
 
@@ -50,10 +51,10 @@ w2 = 5.0
 print(f'\nПревышение уровней {ex1} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r')
 status = sadzax.question('Вывести только срабатывания аварийной сигнализации?', yes='y', no='n')
 if status == 'y':
-    prints.warning_printer([ex1], w1, w2, 'accident')
+    prints.warning_printer(dev, warning_finder, 'acc')
 elif status == 'n':
-    prints.warning_printer([ex1], w1, w2, 'warning')
-    prints.warning_printer([ex1], w1, w2, 'accident')
+    prints.warning_printer(dev, warning_finder, 'war')
+    prints.warning_printer(dev, warning_finder, 'acc')
 
 
 

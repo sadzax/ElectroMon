@@ -469,9 +469,7 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
     Returns dataframe with 3 columns (Start of the period - End of the period - Quantity of false measurements)
     """
     #  Take a total_nan_counter func result as a base
-    if df is None:
-        df = total_nan_counter.copy()
-        df = df.reset_index(drop=True)
+    df = df.reset_index(drop=True)
     if df.shape[0] == 0:
         pass
     else:
@@ -677,11 +675,13 @@ def warning_finder(filter_list: list = None,
                    device_type: str = 'nkvv',
                    data: pd.core = None,
                    cols: dict = None,
-                   warning_amount: float = 1.0,
+                   warning_param_war: float = 1.0,
+                   warning_param_acc: float = 1.5,
                    abs_parameter: bool = True,
                    list_of_non_math: list = None):
     """
-    Need to put a 'time' in filter_list
+    pass
+    'datetime'
     """
     device_type = device_type.lower()
     if list_of_non_math is None:
@@ -701,6 +701,7 @@ def warning_finder(filter_list: list = None,
             filter_list.append('time')
     #  Form main DataFrame for work: warning params + time column
     df = data_filter(filter_list=filter_list, cols=cols, data=data)
+    df = df.reset_index(drop=True)
     cols_list = list(df.columns)
     #  Default datetime column
     datetime_index = 0
@@ -711,15 +712,74 @@ def warning_finder(filter_list: list = None,
     #  Iterating columns
     for a_column_index in range(df.shape[1]):
         if a_column_index == datetime_index:
-            pass
+            func_result['datetime'] = []
+            df_temp_result = data_filter(filter_list=[cols_list[datetime_index]], data=df, cols=cols)
+            func_result['datetime'].append(df_temp_result)
+            func_result['datetime'].append(df_temp_result)
+            del df_temp_result
         else:
             #  Temporal dataframe for a warnings/accidents storage
             df_t = data_filter(filter_list=[cols_list[datetime_index], cols_list[a_column_index]], data=df, cols=cols)
-            if abs_parameter is True:
-                df_temp_result = df_t.iloc[(df_t[cols_list[i]] >= warning_amount) |
-                                           (df_t[cols_list[i]] <= warning_amount * -1)]
-            else:
-                df_temp_result = df_t.iloc[(df_t[cols_list[i]] >= warning_amount)]
-            func_result[cols_list[a_column_index]] = df_temp_result
+            func_result[cols_list[a_column_index]] = []
+            for warning_amount in [warning_param_war, warning_param_acc]:
+                if abs_parameter is True:
+                    df_temp_result = df_t.loc[(df_t[cols_list[a_column_index]] >= warning_amount) |
+                                              (df_t[cols_list[a_column_index]] <= warning_amount * -1)]
+                else:
+                    df_temp_result = df_t.loc[(df_t[cols_list[a_column_index]] >= warning_amount)]
+                func_result[cols_list[a_column_index]].append(df_temp_result)
+                del df_temp_result
             del df_t
     return func_result
+
+def warning_finder_ease(df: pd.core, device_type='mon',  time_sequence_min: int = 1, inaccuracy_sec: int = 3):
+    if df is None:
+        df = warning_finder[list(warning_finder.keys())[0]][1]
+    df = df.reset_index(drop=True)
+    for i in range(df.shape[1]):
+        if list(df.columns)[i].startswith(devices.links(device_type)[4][0]) is True:
+            datetime_index = i
+    if df.shape[0] == 0:
+        pass
+    else:
+        #  Insert a subtraction result column and a column that checks for delta set by *args
+        df.insert(2, 'delta_sec', df.iloc[:, datetime_index].diff().astype('timedelta64[s]'))
+        df.insert(3, 'delta_check', df['delta_sec'] < time_sequence_min * 60 + inaccuracy_sec)
+        #  Sets 'delta_check' of first row to False as a default start period of false measurements
+        df.iloc[0, 3] = False
+        #  Filters 'delta_check' with 'False' value as a borders of periods of false measurements
+        df_with_only_breakers_ie_start = df[df['delta_check'] == False].iloc[:]
+        #  Create a dict for further appending with borders
+        ease_dict = {}
+        #  Makes a list of indexes of left borders of periods for finding following indexes as right borders
+        list_of_breakers_ie_start = [i for i in df_with_only_breakers_ie_start.delta_check.index]
+        #  Sets the right borders of periods depending on the left border dataframe-index
+        for i in range(len(list_of_breakers_ie_start)):
+            #  Exclusion for a first left border in a list
+            if i == 0:
+                left_border = 0
+                right_border = list_of_breakers_ie_start[i + 1] - 1
+            else:
+                left_border = list_of_breakers_ie_start[i]
+                #  Exclusion for a last right border in a list
+                if (i + 1) == len(list_of_breakers_ie_start):
+                    right_border = (df.shape[0] - 1)
+                else:
+                    #  Main branch for all other left borders
+                    right_border = list_of_breakers_ie_start[i + 1] - 1
+                #  Forms a dictionary
+            ease_dict[list_of_breakers_ie_start[i]] = [
+                list_of_breakers_ie_start[i],
+                df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[left_border]],
+                df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[left_border]],
+                df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[right_border]],
+                df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[right_border]],
+                right_border - left_border + 1
+            ]
+        cols_t = ["Строка в БД", "Дата начала замеров", "Время начала",
+                  "Дата окончания замеров", "Время окончания", "Количество некорректных замеров"]
+        #  Creates a dataframe out of the dictionary
+        return pd.DataFrame.from_dict(ease_dict, orient='index', columns=cols_t)
+
+
+

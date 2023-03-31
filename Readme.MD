@@ -16,6 +16,17 @@
 - - - [Links](#links)
 - - - [Quick save/load](#quick-saveload)
 
+- - [Columns processing](#-columns-processing-columnspy)
+- - - [Main columns analyzer](#main-columns-analyzer)
+- - - [Defining the time column](#defining-the-time-column)
+
+- - [Analyzers and processors](#-analyzers-and-processors-analyzerpy)
+- - - [Data import](#data-import)
+- - - [Replace data](#replace-data)
+- - - [Counter](#counter)
+- - - [Timestamp analyzing](#timestamp-analyzing)
+
+&nbsp;
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
 
@@ -274,3 +285,4 @@ If no DataFrame is provided, the function calls `get_data()` to obtain one.
 `values_time_analyzer()` analyzes the time gaps between consecutive rows in a given time column of a 
 Pandas DataFrame and returns a DataFrame with information about any gaps that exceed a specified duration 
 or fall outside a certain range of durations.
+

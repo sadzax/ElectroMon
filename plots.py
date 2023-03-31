@@ -6,6 +6,7 @@ import columns
 import devices
 
 
+#  Simple graph
 def flat_graph(input_x: list = None,
                input_y: list = None,
                device_type='nkvv',
@@ -110,3 +111,8 @@ def correlation_plot(filter_list1=None,
         legend.append(keys_list[i])
         axs.plot([i for i in range(max_len)], y)
         plt.legend(legend)
+
+#  Warning plots
+    def dots_plot():
+        fig, axs = plt.subplots()
+        axs.grid(axis='both', color='gray', linestyle='--')
