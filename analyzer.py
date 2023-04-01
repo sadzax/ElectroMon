@@ -680,7 +680,7 @@ def warning_finder(filter_list: list = None,
                    abs_parameter: bool = True,
                    list_of_non_math: list = None):
     """
-    pass
+    passesult = df_t.loc[(df_t[cols_list[a_column_index]] >= warning_amount) |
     'datetime'
     """
     device_type = device_type.lower()
@@ -691,7 +691,7 @@ def warning_finder(filter_list: list = None,
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
     if filter_list is None:
-        filter_list = ['time', '∆tgδ_MV']
+        filter_list = ['time', '∆tg_HV']
     else:
         if isinstance(filter_list, list) is False:
             filter_list = [filter_list]
@@ -732,6 +732,7 @@ def warning_finder(filter_list: list = None,
             del df_t
     return func_result
 
+
 def warning_finder_ease(df: pd.core, device_type='mon',  time_sequence_min: int = 1, inaccuracy_sec: int = 3):
     if df is None:
         df = warning_finder[list(warning_finder.keys())[0]][1]
@@ -771,13 +772,10 @@ def warning_finder_ease(df: pd.core, device_type='mon',  time_sequence_min: int 
             ease_dict[list_of_breakers_ie_start[i]] = [
                 list_of_breakers_ie_start[i],
                 df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[left_border]],
-                df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[left_border]],
-                df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[right_border]],
                 df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[right_border]],
                 right_border - left_border + 1
             ]
-        cols_t = ["Строка в БД", "Дата начала замеров", "Время начала",
-                  "Дата окончания замеров", "Время окончания", "Количество некорректных замеров"]
+        cols_t = ["Строка в БД", "Начало замеров", "Окончание замеров", "Количество сигнальных замеров"]
         #  Creates a dataframe out of the dictionary
         return pd.DataFrame.from_dict(ease_dict, orient='index', columns=cols_t)
 
