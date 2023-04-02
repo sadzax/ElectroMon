@@ -135,7 +135,8 @@ The method can be enlarged with new properties, but the order of the list
             self.default_dict_for_replacement_to_nan,  # 6
             self.file_parse_dates_basis,  # 7
             self.default_dict_for_dtypes,  # 8
-            self.full_name  # 9
+            self.full_name,  # 9
+            self.warning_map  # 10
 </details>
 
 ### Quick save/load

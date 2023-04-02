@@ -33,51 +33,6 @@ del cols_list
 data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 # devices.Pkl.save(device_type=device_type, data=data)
 
-ex2 = '∆tg_MV'
-w1 = 1.0
-w2 = 1.5
-
-warning_finder = analyzer.warning_finder([ex2], dev, data, cols, w1, w2)
-prints.warning_printer(dev, warning_finder, 'acc', warning_param_war=w1, warning_param_acc=w2)
-a = warning_finder['dtan_A2'][1]
-warning_finder_ease = analyzer.warning_finder_ease(a)
-
-
-ex1 = '∆C'
-prints.info('Анализ сигнализации со стороны ВН')
-w1 = 3.0
-w2 = 5.0
-print(f'\nПревышение уровней {ex1} для срабатывания предупредительной (±{w1}) или аварийной (±{w2}) сигнализации: \r')
-status = sadzax.question('Вывести только срабатывания аварийной сигнализации?', yes='y', no='n')
-if status == 'y':
-    prints.warning_printer(dev, warning_finder, 'acc')
-elif status == 'n':
-    prints.warning_printer(dev, warning_finder, 'war')
-    prints.warning_printer(dev, warning_finder, 'acc')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
 prints.info('Анализ неразрывности замеров и их корректности')
@@ -99,6 +54,28 @@ total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=
 prints.total_nan_counter(dev, data, false_data_percentage=30.0, log=total_nan_counter)
 total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
 print(total_nan_counter_ease)
+
+
+#  ______________________________________ WARNINGS AND ACCIDENTS _________________________________
+
+for k in devices.links(device_type)[10]:
+    w0 = devices.links(device_type)[10][k][0]
+    w1 = devices.links(device_type)[10][k][1]
+    print(
+        f'\nПревышение уровней {k} для срабатывания предупредительной (±{w0}) или аварийной (±{w1}) сигнализации: \r')
+    #  Main operation
+    warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
+    status = sadzax.question(
+        'Вывести краткий вид? (Только срабатывания аварийной сигнализации без предупредительной сигнализации,'
+        ' если нет - будут выведены и предупредительные, и аварийные замеры) ', yes='y', no='n')
+    warnings_codes_temporal_list = ['acc']
+    if status == 'n':
+        warnings_codes_temporal_list.append('war')
+    for warn_code in warnings_codes_temporal_list:
+        prints.warning_printer(dev, warning_finder, warn_code, warning_param_war=w0, warning_param_acc=w1)
+        warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
+                                                           warning_param_war=w0, warning_param_acc=w1)
+        print(warning_finder_ease)
 
 
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________

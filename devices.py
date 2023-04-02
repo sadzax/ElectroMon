@@ -26,6 +26,7 @@ class Device:
         self.default_dict_for_dtypes = None
         self.data_types = None
         self.data_search_name = None
+        self.warning_map = {'∆tg': [1.0, 1.5], '∆C': [3.0, 5.0]}
 
     @property
     def file_list(self):
@@ -85,7 +86,8 @@ class Device:
             self.default_dict_for_replacement_to_nan,  # 6
             self.file_parse_dates_basis,  # 7
             self.default_dict_for_dtypes,  # 8
-            self.full_name  # 9
+            self.full_name,  # 9
+            self.warning_map  # 10
         ]
 
 
