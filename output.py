@@ -186,10 +186,6 @@ for k in devices.links(device_type)[10]:
                                                 colWidths=[140, 110, 110, 50])
         frontend.PDF.add_to_build_list(build_temp, build_list)
 
-#  Step 2 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-
 
 #  ______________________________________ DATA ENG. ______________________________________________
 def capturer_for_PDF_main_graph(ex, title='', device_type=device_type, data=data, cols=cols,

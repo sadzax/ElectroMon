@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Warnings and accidents added to runner">
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Warnings and accidents added to runner - added to PDF">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/output.py" beforeDir="false" afterPath="$PROJECT_DIR$/output.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prints.py" beforeDir="false" afterPath="$PROJECT_DIR$/prints.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,13 +222,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00116" summary="values_time_slicer_choose debug">
-      <created>1677620251102</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1677620251102</updated>
     </task>
     <task id="LOCAL-00117" summary="values_time_slicer_choose debug">
       <created>1677800302403</created>
@@ -569,7 +559,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680433267684</updated>
     </task>
-    <option name="localTasksCounter" value="165" />
+    <task id="LOCAL-00165" summary="Warnings and accidents added to runner - added to PDF">
+      <created>1680437502186</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1680437502186</updated>
+    </task>
+    <option name="localTasksCounter" value="166" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -584,7 +581,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="kiv plots and prints" />
     <MESSAGE value="kiv done" />
     <MESSAGE value="SettingwithCopyWarning solved" />
     <MESSAGE value="Devices classes" />
@@ -609,7 +605,8 @@
     <MESSAGE value="total_nan_counter_ease updated with reset indexes" />
     <MESSAGE value="Documentation update" />
     <MESSAGE value="Warnings and accidents added to runner" />
-    <option name="LAST_COMMIT_MESSAGE" value="Warnings and accidents added to runner" />
+    <MESSAGE value="Warnings and accidents added to runner - added to PDF" />
+    <option name="LAST_COMMIT_MESSAGE" value="Warnings and accidents added to runner - added to PDF" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
