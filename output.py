@@ -147,10 +147,10 @@ capturer_for_PDF_air_correlation('Ia')
 capturer_for_PDF_air_correlation('Ir')
 capturer_for_PDF_air_correlation('U')
 
-#  Step 3 lines after submodule
+#  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+
 
 #  ______________________________________ WARNINGS _______________________________________________
 #  Adding the heading of the module as an object for reportlab/PD
@@ -158,11 +158,38 @@ capture = f'Анализ срабатываний предупредительн
 build_temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
-frontend.PDF.add_to_build_list(frontend.PDF.text(f'В обработке', frontend.style_regular), build_list)
+for k in devices.links(device_type)[10]:
+    w0 = devices.links(device_type)[10][k][0]
+    w1 = devices.links(device_type)[10][k][1]
+    capture = f'\nПревышение уровней {k} для срабатывания ' \
+              f'предупредительной (±{w0}) или аварийной (±{w1}) сигнализации: \r'
+    build_temp = frontend.PDF.text(capture, frontend.style_title)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
+    #  Main operation
+    warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
+    status = sadzax.question(
+        f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
+        f" \n Eсли нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
+    warnings_codes_temporal_list = ['acc']
+    if status == 'n':
+        warnings_codes_temporal_list = ['war', 'acc']
+    for warn_code in warnings_codes_temporal_list:
+        capture = frontend.capture_func(prints.warning_printer, dev, warning_finder, warn_code,
+                                        warning_param_war=w0, warning_param_acc=w1)
+        build_temp = frontend.PDF.text(capture, frontend.style_regular)
+        frontend.PDF.add_to_build_list(build_temp, build_list)
+        warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
+                                                           warning_param_war=w0, warning_param_acc=w1)
+        capture = warning_finder_ease
+        build_temp = frontend.PDF.table_from_df(capture, title='Таблица периодов непрерывной сигнализации',
+                                                style_body=frontend.style_body, style_title=frontend.style_title,
+                                                colWidths=[140, 110, 110, 50])
+        frontend.PDF.add_to_build_list(build_temp, build_list)
+
+#  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+
 
 #  ______________________________________ DATA ENG. ______________________________________________
 def capturer_for_PDF_main_graph(ex, title='', device_type=device_type, data=data, cols=cols,

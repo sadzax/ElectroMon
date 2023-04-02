@@ -149,10 +149,10 @@ def warning_printer(device_type: str = 'mon',
                     warning_param_war: float = None,
                     warning_param_acc: float = None,
                     abs_parameter: bool = True):
+    log_list_i = 0
     if warn_type == 'warning' or warn_type == 'war':
         warning_param = warning_param_war
         warn_str = 'предупредительной'
-        log_list_i = 0
     elif warn_type == 'accident' or warn_type == 'acc':
         warning_param = warning_param_acc
         warn_str = 'аварийной'
@@ -172,15 +172,14 @@ def warning_printer(device_type: str = 'mon',
             num = log[key][log_list_i].shape[0]
             if num == 0:
                 print(f'Превышение уровней {key} для срабатывания {warn_str} (±{warning_param}%) '
-                      f'сигнализации не выявлено')
+                      f'сигнализации не выявлено\n')
             else:
                 print(
                     f"Выявлено {num} {sadzax.Rus.cases(num, 'превышение', 'превышения', 'превышений')} (±{warning_param}):"
                     f"значения {key} для срабатывания {warn_str} сигнализации. "
                     f"\n Процент срабатывания {round((num / log['datetime'][log_list_i].shape[0]) * 100, 3)}%"
-                    f" (от общего числа замеров)"
+                    f" (от общего числа замеров)\n"
                 )
-                print(sadzax.question('Вывести список? ', log[key][log_list_i]))
 
 
 def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, cols=None, title=None):

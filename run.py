@@ -56,28 +56,6 @@ total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
 print(total_nan_counter_ease)
 
 
-#  ______________________________________ WARNINGS AND ACCIDENTS _________________________________
-
-for k in devices.links(device_type)[10]:
-    w0 = devices.links(device_type)[10][k][0]
-    w1 = devices.links(device_type)[10][k][1]
-    print(
-        f'\nПревышение уровней {k} для срабатывания предупредительной (±{w0}) или аварийной (±{w1}) сигнализации: \r')
-    #  Main operation
-    warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
-    status = sadzax.question(
-        'Вывести краткий вид? (Только срабатывания аварийной сигнализации без предупредительной сигнализации,'
-        ' если нет - будут выведены и предупредительные, и аварийные замеры) ', yes='y', no='n')
-    warnings_codes_temporal_list = ['acc']
-    if status == 'n':
-        warnings_codes_temporal_list.append('war')
-    for warn_code in warnings_codes_temporal_list:
-        prints.warning_printer(dev, warning_finder, warn_code, warning_param_war=w0, warning_param_acc=w1)
-        warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
-                                                           warning_param_war=w0, warning_param_acc=w1)
-        print(warning_finder_ease)
-
-
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
 prints.info('Анализ трендов и средних показателей')
 
@@ -103,6 +81,29 @@ plots.histogram([ex1], data=data, cols=cols, title=f'Распределение 
 #  Average values of ∆tg  and their distribution
 prints.average_printer(ex=ex2, data=data, cols=cols, abs_parameter=True)
 plots.histogram([ex2], data=data, cols=cols, title=f'Распределение значений {ex2}')
+
+
+#  ______________________________________ WARNINGS AND ACCIDENTS _________________________________
+prints.info('Анализ срабатываний предупредительной и аварийной сигнализации')
+
+for k in devices.links(device_type)[10]:
+    w0 = devices.links(device_type)[10][k][0]
+    w1 = devices.links(device_type)[10][k][1]
+    print(
+        f'\nПревышение уровней {k} для срабатывания предупредительной (±{w0}) или аварийной (±{w1}) сигнализации: \r')
+    #  Main operation
+    warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
+    status = sadzax.question(
+        f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
+        f" \n Eсли нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
+    warnings_codes_temporal_list = ['acc']
+    if status == 'n':
+        warnings_codes_temporal_list = ['war', 'acc']
+    for warn_code in warnings_codes_temporal_list:
+        prints.warning_printer(dev, warning_finder, warn_code, warning_param_war=w0, warning_param_acc=w1)
+        warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
+                                                           warning_param_war=w0, warning_param_acc=w1)
+        print(warning_finder_ease)
 
 
 #  ______________________________________ DATA ENG. ______________________________________________
