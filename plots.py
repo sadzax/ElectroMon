@@ -154,3 +154,4 @@ def scatter(input_x: list = None,
         legend.append(y_name)
         axs.scatter(x, y, c=color, s=area)
         plt.legend(legend)
+
