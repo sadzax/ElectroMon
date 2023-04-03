@@ -18,16 +18,17 @@ sadzax.Out.clear_future_warning()
 
 
 #  ______________________________________ OBTAINING DATA _________________________________________
-device_type = prints.device_picking()
+# device_type = prints.device_picking()
+device_type = 'mon'
 dev = device_type
 # prints.file_picking(dev)
-# data = devices.Pkl.load(dev)
-data = analyzer.stack_data(dev)
+data = devices.Pkl.load(dev)
+# data = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
-data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
-data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
+# data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
+# data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 # devices.Pkl.save(device_type=device_type, data=data)
 
 
@@ -159,14 +160,17 @@ build_temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
 for k in devices.links(device_type)[10]:
+    #  Set the default warning values (1 / 1.5% for delta_tangent and 3 / 5% for delta_correlation)
     w0 = devices.links(device_type)[10][k][0]
     w1 = devices.links(device_type)[10][k][1]
+    #  Title
     capture = f'\nПревышение уровней {k} для срабатывания ' \
-              f'предупредительной (±{w0}) или аварийной (±{w1}) сигнализации: \r'
+              f'предупредительной (±{w0}) или аварийной (±{w1}) сигнализации \r'
     build_temp = frontend.PDF.text(capture, frontend.style_title)
     frontend.PDF.add_to_build_list(build_temp, build_list)
-    #  Main operation
+    #  Main operation - forming a dict with a DataFrames of warning issues
     warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
+    #  Setting the short/full output
     status = sadzax.question(
         f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
         f" \n Eсли нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
@@ -178,12 +182,19 @@ for k in devices.links(device_type)[10]:
                                         warning_param_war=w0, warning_param_acc=w1)
         build_temp = frontend.PDF.text(capture, frontend.style_regular)
         frontend.PDF.add_to_build_list(build_temp, build_list)
+        #  Setting minimal amout of values to be printed in a table
+        min_values_for_print = 5
+        #  Easing the main operated data to form a DataFrame
         warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
-                                                           warning_param_war=w0, warning_param_acc=w1)
+                                                           warning_param_war=w0, warning_param_acc=w1,
+                                                           min_values_for_print=min_values_for_print)
         capture = warning_finder_ease
-        build_temp = frontend.PDF.table_from_df(capture, title='Таблица периодов непрерывной сигнализации',
+        #  Form table from DataFrame
+        build_temp = frontend.PDF.table_from_df(capture, title=f'Таблица периодов непрерывной сигнализации'
+                                                               f' (минимум {min_values_for_print} сигнальных'
+                                                               f' замеров подряд)',
                                                 style_body=frontend.style_body, style_title=frontend.style_title,
-                                                colWidths=[140, 110, 110, 50])
+                                                colWidths=[180, 110, 110, 70])
         frontend.PDF.add_to_build_list(build_temp, build_list)
 
 

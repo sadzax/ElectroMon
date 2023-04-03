@@ -733,11 +733,32 @@ def warning_finder(filter_list: list = None,
     return func_result
 
 
+def warning_finder_merge(log: dict, device_type: str = 'mon', data: pd.core = None):
+    if data is None:
+        data = get_data(device_type=device_type)
+    datetime_name = columns.time_column(device_type=device_type, data=data)
+    #  Create main dataframe for merging
+    df = log['datetime'][0]
+    for key in log:
+        #  dict-Key 'datetime' is for uninterrupted whole-time measurer for plotting and should be passed here
+        if key == 'datetime':
+            pass
+        else:
+            if log[key][0].shape[0] == 0:
+                pass
+            else:
+                for i in [0, 1]:
+                    df_temp = log[key][i]
+                    df = pd.merge(df, df_temp, how='left', on=datetime_name)
+    return df
+
+
 def warning_finder_ease(log: dict,
                         device_type: str = 'mon',
                         warn_type: str = 'accident',
                         warning_param_war: float = None,
                         warning_param_acc: float = None,
+                        min_values_for_print: int = 5,
                         time_sequence_min: int = 1,
                         inaccuracy_sec: int = 3):
     #  warning_finder func. returns two dataframes for every key-measurer, ind.0 = warnings, ind.1 = accident
@@ -802,6 +823,14 @@ def warning_finder_ease(log: dict,
                             df[df.columns[datetime_index]][df[df.columns[datetime_index]].index[right_border]],
                             right_border - left_border + 1
                         ]
-    cols_t = ["Показатель", "Начало", "Окончание", "Количество сигнальных замеров"]
+    ease_dict_trimmed = {k: v for k, v in ease_dict.items() if v[3] >= min_values_for_print}
+    cols_t = ["Показатель", "Начало", "Окончание", "Количество непрерывных сигнальных замеров"]
     #  Creates a dataframe out of the dictionary
-    return pd.DataFrame.from_dict(ease_dict, orient='index', columns=cols_t)
+    if len(ease_dict_trimmed) > 0:
+        return pd.DataFrame.from_dict(ease_dict_trimmed, orient='index', columns=cols_t)
+    else:
+        return str(f'Периоды непрерывной сигнализации (минимум {min_values_for_print} подряд) не выявлены')
+
+
+
+

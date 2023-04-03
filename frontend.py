@@ -26,12 +26,11 @@ style_regular.wordWrap = 'CJK'
 style_regular.fontName = 'Verdana'
 style_regular.fontSize = 8
 style_regular.alignment = 0
-style_title = styles["Heading1"]
+style_title = styles["Heading2"]
 style_title.wordWrap = 'CJK'
 style_title.fontName = 'Verdana'
 style_title.fontSize = 10
 style_title.alignment = 1
-style_title.spaceAfter = 3
 style_title2 = styles["Heading2"]
 style_title2.wordWrap = 'CJK'
 style_title2.fontName = 'Verdana'
@@ -147,11 +146,15 @@ class PDF:
 
     def table_from_df(self, title='', style_body=style_body, style_title=style_title,
                       colWidths: list = [80, 40, 40, 65, 60, 120, 130]):
+
         title = Paragraph(str(title), style=style_title)
         the_end = Paragraph(str(' \n \n'), style=style_title)
         if self is None:
             message = Paragraph(f' \n Ошибок не выявлено', style=style_body)
             return [title, message, the_end]
+        elif type(self) is str:
+            message = Paragraph(self, style=style_regular)
+            return [message, the_end]
         else:
             table_data = []
             for row in [list(self.columns)] + self.values.tolist():
@@ -170,7 +173,7 @@ class PDF:
                                        ('ALIGN', (0, 1), (-1, -1), 'CENTER'),
                                        ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
                                        ('GRID', (0, 0), (-1, -1), 1, colors.grey)]))
-            return [title, table, the_end]
+        return [title, table, the_end]
 
     def text(self, style=style_body):
         txt = Paragraph(str(self).replace('\n', '<br />\n'), style=style)

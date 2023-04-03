@@ -171,12 +171,11 @@ def warning_printer(device_type: str = 'mon',
         else:
             num = log[key][log_list_i].shape[0]
             if num == 0:
-                print(f'Превышение уровней {key} для срабатывания {warn_str} (±{warning_param}%) '
-                      f'сигнализации не выявлено\n')
+                print(f"По {key}: срабатывания {warn_str} (±{warning_param}%) сигнализации не выявлены\n")
             else:
                 print(
-                    f"Выявлено {num} {sadzax.Rus.cases(num, 'превышение', 'превышения', 'превышений')} (±{warning_param}):"
-                    f"значения {key} для срабатывания {warn_str} сигнализации. "
+                    f"По {key}: выявлено {num} {sadzax.Rus.cases(num, 'срабатывание', 'срабатывания', 'срабатываний')} "
+                    f"{warn_str} (±{warning_param}%) сигнализации."
                     f"\n Процент срабатывания {round((num / log['datetime'][log_list_i].shape[0]) * 100, 3)}%"
                     f" (от общего числа замеров)\n"
                 )
@@ -185,3 +184,8 @@ def warning_printer(device_type: str = 'mon',
 def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, cols=None, title=None):
     info(title)
     plots.flat_graph(input_x=input_x, input_y=input_y, device_type=device_type, data=data, cols=cols, title=title)
+
+
+def print_scatter(input_x=None, input_y=None, device_type='mon', data=None, cols=None, title=None):
+    info(title)
+    plots.scatter(input_x=input_x, input_y=input_y, device_type=device_type, data=data, cols=cols, title=title)

@@ -104,6 +104,10 @@ for k in devices.links(device_type)[10]:
         warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
                                                            warning_param_war=w0, warning_param_acc=w1)
         print(warning_finder_ease)
+    #  For scattering
+    warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data)
+    plots.scatter(df=warning_finder_merge, cols=cols, device_type=dev)  # !!!!!!!!!!
+
 
 
 #  ______________________________________ DATA ENG. ______________________________________________
