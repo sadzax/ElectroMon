@@ -20,16 +20,16 @@ sadzax.Out.clear_future_warning()
 #  ______________________________________ OBTAINING DATA _________________________________________
 prints.info('Установление параметров для анализа')
 
-# device_type = prints.device_picking()
-device_type = 'mon'
+device_type = prints.device_picking()
+# device_type = 'mon'
 dev = device_type
 # prints.file_picking(dev)
-data = devices.Pkl.load(dev)
-# data = analyzer.stack_data(dev)
+# data = devices.Pkl.load(dev)
+data = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
-# data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
+data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
 data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 # devices.Pkl.save(device_type=device_type, data=data)
 
@@ -96,18 +96,17 @@ for k in devices.links(device_type)[10]:
     status = sadzax.question(
         f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
         f" \n Eсли нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
-    warnings_codes_temporal_list = ['acc']
+    warnings_codes_temporal_list = {'acc': 'аварийной'}
     if status == 'n':
-        warnings_codes_temporal_list = ['war', 'acc']
-    for warn_code in warnings_codes_temporal_list:
+        warnings_codes_temporal_list = {'war': 'предупредительной', 'acc': 'аварийной'}
+    for warn_code, warn_code_str in warnings_codes_temporal_list.items():
         prints.warning_printer(dev, warning_finder, warn_code, warning_param_war=w0, warning_param_acc=w1)
         warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
                                                            warning_param_war=w0, warning_param_acc=w1)
         print(warning_finder_ease)
-    #  For scattering
-    warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data)
-    plots.scatter(df=warning_finder_merge, cols=cols, device_type=dev)  # !!!!!!!!!!
-
+        #  Scattering
+        warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data, warn_code, w0, w1)
+        plots.scatter(df=warning_finder_merge, device_type=dev, title=f'График {warn_code_str} сигнализации')
 
 
 #  ______________________________________ DATA ENG. ______________________________________________

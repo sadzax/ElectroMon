@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-
 import analyzer
 import columns
-import devices
 
 
 #  Simple graph
@@ -36,7 +34,7 @@ def flat_graph(input_x: list = None,
         y = df_y[y_name].tolist()
         legend.append(y_name)
         axs.plot(x, y)
-        plt.legend(legend)
+    plt.legend(legend)
 
 
 #  Histogram for raw data and distribution data
@@ -110,7 +108,7 @@ def correlation_plot(filter_list1=None,
         y = cr[keys_list[i]]
         legend.append(keys_list[i])
         axs.plot([i for i in range(max_len)], y)
-        plt.legend(legend)
+    plt.legend(legend)
 
 
 #  Warning plots
@@ -118,19 +116,19 @@ def scatter(input_x: list = None,
             input_y: list = None,
             device_type='mon',
             df: pd.core = None,
-            cols: dict = None,
+            cols_inside: dict = None,
             title: str = '',
             size_x: int = 14,
             size_y: int = 6,
             color=None,
             area=None):
     """
-    Mostly designed to get dataframes from analyzer.warning_finder_ease function
+    Mostly designed to get dataframes from analyzer.warning_finder_merge function
     """
     if df is None:
         df = analyzer.get_data(device_type=device_type)
-    if cols is None:
-        cols = columns.columns_analyzer(device_type=device_type)
+    if cols_inside is None:
+        cols_inside = columns.columns_analyzer(device_type=device_type, list_for_columns=list(df.columns))
     if input_x is None:
         input_x = [columns.time_column(device_type=device_type, data=df)]
     if input_y is None:
@@ -143,15 +141,17 @@ def scatter(input_x: list = None,
     fig, axs = plt.subplots(figsize=(size_x, size_y))
     axs.grid(axis='both', color='gray', linestyle='--')
     plt.title(title)
-    df_x = analyzer.data_filter(input_x, cols=cols, data=df)
+    df_x = analyzer.data_filter(input_x, cols=cols_inside, data=df)
     plt.xlabel(str(df_x.columns[0]))
-    df_y = analyzer.data_filter(input_y, cols=cols, data=df)
-    plt.ylabel(', '.join(input_y))
+    df_y = analyzer.data_filter(input_y, cols=cols_inside, data=df)
+    plt.ylabel('Значения по (' + ', '.join(input_y) + ')')
     legend = []
     for y_name in [col for col in df_y.columns]:
         x = df_x[df_x.columns[0]].tolist()
         y = df_y[y_name].tolist()
-        legend.append(y_name)
-        axs.scatter(x, y, c=color, s=area)
-        plt.legend(legend)
-
+        if y_name.find('отриц.') != -1 or y_name.find('полож.') != -1:
+            axs.scatter(x, y, c='k', marker='.', s=2)
+        else:
+            axs.scatter(x, y, c=color, s=area)
+            legend.append(y_name)
+    plt.legend(legend)

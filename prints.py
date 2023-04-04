@@ -1,17 +1,15 @@
 import pandas as pd
-import io
-import sys
 import analyzer
 import devices
 import plots
 import sadzax
-import frontend
 
 
 def info(the_string):
     print(f'\n          {the_string}\r')
 
 
+# noinspection PyBroadException
 def device_picking():
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
     print('\nДоступны следующие устройства для анализа: \n')
@@ -31,6 +29,7 @@ def device_picking():
             continue
 
 
+# noinspection PyBroadException
 def file_picking(device_type='kiv'):
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
     files_list = devices.links(device_type)[5]
@@ -73,11 +72,12 @@ def values_time_analyzer(device_type, data, log: pd.core = None):
         print(sadzax.question('Хотите вывести подробные данные?', yes=log, no=''))
 
 
+# noinspection PyBroadException
 def values_time_slicer(device_type, data, log: dict = None):
     info('Выбор неразрывного периода для анализа')
     if log is None:
         log = analyzer.values_time_slicer(device_type=device_type, data=data)
-    error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
+    # error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
     w1 = sadzax.Rus.cases(len(log), 'найден', 'найдены', 'найдены')
     w2 = sadzax.Rus.cases(len(log), 'срез', 'среза', 'срезов')
     print(f"По заданным параметрам {w1} {len(log)} {w2} данных")
@@ -150,6 +150,8 @@ def warning_printer(device_type: str = 'mon',
                     warning_param_acc: float = None,
                     abs_parameter: bool = True):
     log_list_i = 0
+    warning_param = warning_param_war
+    warn_str = 'предупредительной'
     if warn_type == 'warning' or warn_type == 'war':
         warning_param = warning_param_war
         warn_str = 'предупредительной'
@@ -188,4 +190,4 @@ def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, c
 
 def print_scatter(input_x=None, input_y=None, device_type='mon', data=None, cols=None, title=None):
     info(title)
-    plots.scatter(input_x=input_x, input_y=input_y, device_type=device_type, data=data, cols=cols, title=title)
+    plots.scatter(input_x=input_x, input_y=input_y, device_type=device_type, df=data, cols_inside=cols, title=title)

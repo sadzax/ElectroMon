@@ -733,12 +733,28 @@ def warning_finder(filter_list: list = None,
     return func_result
 
 
-def warning_finder_merge(log: dict, device_type: str = 'mon', data: pd.core = None):
+def warning_finder_merge(log: dict,
+                         device_type: str = 'mon',
+                         data: pd.core = None,
+                         warn_type: str = 'acc',
+                         warning_param_war: float = 1.0,
+                         warning_param_acc: float = 1.5):
     if data is None:
         data = get_data(device_type=device_type)
     datetime_name = columns.time_column(device_type=device_type, data=data)
     #  Create main dataframe for merging
     df = log['datetime'][0]
+    log_list_i = 0
+    warn_str = 'предупредительный'
+    warning_param = warning_param_war
+    if warn_type == 'warning' or warn_type == 'war':
+        log_list_i = 0
+        warn_str = 'предупредительный'
+        warning_param = warning_param_war
+    elif warn_type == 'accident' or warn_type == 'acc':
+        warning_param = warning_param_acc
+        warn_str = 'аварийный'
+        log_list_i = 1
     for key in log:
         #  dict-Key 'datetime' is for uninterrupted whole-time measurer for plotting and should be passed here
         if key == 'datetime':
@@ -747,25 +763,29 @@ def warning_finder_merge(log: dict, device_type: str = 'mon', data: pd.core = No
             if log[key][0].shape[0] == 0:
                 pass
             else:
-                for i in [0, 1]:
-                    df_temp = log[key][i]
-                    df = pd.merge(df, df_temp, how='left', on=datetime_name)
+                df_temp = log[key][log_list_i]
+                df = pd.merge(df, df_temp, how='left', on=datetime_name)
+    df.insert(df.shape[1], str(warn_str + ' отриц.'), warning_param)
+    df.insert(df.shape[1], str(warn_str + ' полож.'), warning_param * -1)
     return df
 
 
 def warning_finder_ease(log: dict,
                         device_type: str = 'mon',
                         warn_type: str = 'accident',
-                        warning_param_war: float = None,
-                        warning_param_acc: float = None,
+                        warning_param_war: float = 1.0,
+                        warning_param_acc: float = 1.5,
                         min_values_for_print: int = 5,
                         time_sequence_min: int = 1,
                         inaccuracy_sec: int = 3):
     #  warning_finder func. returns two dataframes for every key-measurer, ind.0 = warnings, ind.1 = accident
     log_list_i = 0
+    warn_str = 'предупредительная'
+    warning_param = warning_param_war
     if warn_type == 'warning' or warn_type == 'war':
-        warning_param = warning_param_war
+        log_list_i = 0
         warn_str = 'предупредительная'
+        warning_param = warning_param_war
     elif warn_type == 'accident' or warn_type == 'acc':
         warning_param = warning_param_acc
         warn_str = 'аварийная'
@@ -830,7 +850,3 @@ def warning_finder_ease(log: dict,
         return pd.DataFrame.from_dict(ease_dict_trimmed, orient='index', columns=cols_t)
     else:
         return str(f'Периоды непрерывной сигнализации (минимум {min_values_for_print} подряд) не выявлены')
-
-
-
-

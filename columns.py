@@ -1,7 +1,4 @@
-import os
-
 import pandas as pd
-
 import analyzer
 import devices
 import sadzax
@@ -157,6 +154,7 @@ def columns_analyzer(device_type: str ='nkvv',
             for a_key in devices.kiv.data_search_name:
                 # if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key and 'ф.' or 'Дата' in str(result_dict[i][0]):
                 if sadzax.Trimmer.left(source_dict[i][0], len(a_key)) == a_key:
+                    # noinspection PyBroadException
                     try:
                         source_dict[i][4] = devices.kiv.data_search_name[a_key][0]
                         source_dict[i][5] = devices.kiv.data_search_name[a_key][1]

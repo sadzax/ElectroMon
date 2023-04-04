@@ -1,18 +1,14 @@
-import matplotlib.pyplot as plt
 import sys
 import io
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from reportlab.lib import utils
 from reportlab.lib.units import mm
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Image, PageTemplate, Frame
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfgen import canvas
-from matplotlib.backends.backend_pdf import PdfPages
-from matplotlib.backends.backend_agg import FigureCanvasAgg
+
 
 pdfmetrics.registerFont(TTFont('Verdana', 'misc/Verdana.ttf'))
 styles = getSampleStyleSheet()
@@ -26,12 +22,12 @@ style_regular.wordWrap = 'CJK'
 style_regular.fontName = 'Verdana'
 style_regular.fontSize = 8
 style_regular.alignment = 0
-style_title = styles["Heading2"]
+style_title = styles["Heading3"]
 style_title.wordWrap = 'CJK'
 style_title.fontName = 'Verdana'
 style_title.fontSize = 10
 style_title.alignment = 1
-style_title2 = styles["Heading2"]
+style_title2 = styles["Heading1"]
 style_title2.wordWrap = 'CJK'
 style_title2.fontName = 'Verdana'
 style_title2.fontSize = 14
@@ -63,13 +59,14 @@ class MyDocTemplate(SimpleDocTemplate):
             ),
         ])
 
-    def add_page_number(self, canvas, doc):
+    @staticmethod
+    def add_page_number(canvas):
         page_num = canvas.getPageNumber()
-        PAGE_NUM_POS_X = PAGE_WIDTH - 40 * mm
-        PAGE_NUM_POS_Y = 15 * mm
+        page_num_pos_x = PAGE_WIDTH - 40 * mm
+        page_num_pos_y = 15 * mm
         canvas.saveState()
         canvas.setFont('Verdana', 8)
-        canvas.drawString(PAGE_NUM_POS_X, PAGE_NUM_POS_Y, f'Стр. {page_num}')
+        canvas.drawString(page_num_pos_x, page_num_pos_y, f'Стр. {page_num}')
         canvas.restoreState()
 
 
@@ -97,13 +94,12 @@ def capture_func(func, *args, **kwargs):
     return capture
 
 
+# noinspection PyPep8Naming
 def capture_off_pic(buffer, width=160, height=160, hAlign='CENTER'):
     if height is None:
-        img = utils.ImageReader(buffer)
         iw, ih = buffer.getSize()
         aspect = ih / float(iw)
         height = (width * aspect)
-    a = plt.savefig(buffer, format='png')
     buffer.seek(0)
     return [Image(buffer, width=width*mm, height=height*mm, hAlign=hAlign)]
 
@@ -125,6 +121,10 @@ def capture_off_pic(buffer, width=160, height=160, hAlign='CENTER'):
 
 
 class PDF:
+    def __init__(self):
+        self.columns = None
+        self.values = None
+
     def builder(self, filename='output.pdf'):
         if isinstance(self, list) is True:
             doc = MyDocTemplate(filename)
@@ -144,13 +144,15 @@ class PDF:
         else:
             build_list.append([self])
 
-    def table_from_df(self, title='', style_body=style_body, style_title=style_title,
-                      colWidths: list = [80, 40, 40, 65, 60, 120, 130]):
-
-        title = Paragraph(str(title), style=style_title)
-        the_end = Paragraph(str(' \n \n'), style=style_title)
+    # noinspection PyPep8Naming
+    def table_from_df(self, title='', style_of_body=style_body, style_of_title=style_title,
+                      colWidths: list = None):
+        if colWidths is None:
+            colWidths = [80, 40, 40, 65, 60, 120, 130]
+        title = Paragraph(str(title), style=style_of_title)
+        the_end = Paragraph(str(' \n \n'), style=style_of_title)
         if self is None:
-            message = Paragraph(f' \n Ошибок не выявлено', style=style_body)
+            message = Paragraph(f' \n Ошибок не выявлено', style=style_of_body)
             return [title, message, the_end]
         elif type(self) is str:
             message = Paragraph(self, style=style_regular)
@@ -160,7 +162,7 @@ class PDF:
             for row in [list(self.columns)] + self.values.tolist():
                 new_row = []
                 for item in row:
-                    p = Paragraph(str(item), style=style_body)
+                    p = Paragraph(str(item), style=style_of_body)
                     new_row.append(p)
                 table_data.append(new_row)
             table = Table(table_data, colWidths=colWidths)

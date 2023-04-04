@@ -18,17 +18,17 @@ sadzax.Out.clear_future_warning()
 
 
 #  ______________________________________ OBTAINING DATA _________________________________________
-# device_type = prints.device_picking()
-device_type = 'mon'
+device_type = prints.device_picking()
+# device_type = 'mon'
 dev = device_type
 # prints.file_picking(dev)
-data = devices.Pkl.load(dev)
-# data = analyzer.stack_data(dev)
+# data = devices.Pkl.load(dev)
+data = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
-# data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
-# data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
+data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
+data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 # devices.Pkl.save(device_type=device_type, data=data)
 
 
@@ -50,7 +50,7 @@ frontend.PDF.add_to_build_list(build_temp, build_list)
 cols_df = columns.columns_df(dev, cols)
 capture = cols_df
 build_temp = frontend.PDF.table_from_df(capture, title='Список данных файла с раскладкой для анализа',
-                                        style_body=frontend.style_body, style_title=frontend.style_title,
+                                        style_of_body=frontend.style_body, style_of_title=frontend.style_title,
                                         colWidths=[80, 40, 40, 65, 60, 120, 130])
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
@@ -63,7 +63,7 @@ frontend.PDF.add_to_build_list(build_temp, build_list)
 values_time_analyzer = analyzer.values_time_analyzer(dev, data, time_sequence_min=1, inaccuracy_sec=3)
 capture = values_time_analyzer
 build_temp = frontend.PDF.table_from_df(capture, title='Анализ периодичности и неразрывности измерений',
-                                        style_body=frontend.style_body, style_title=frontend.style_title,
+                                        style_of_body=frontend.style_body, style_of_title=frontend.style_title,
                                         colWidths=[70, 60, 40, 60, 40, 100])
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
@@ -77,9 +77,13 @@ total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=
 total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
 capture = total_nan_counter_ease
 build_temp = frontend.PDF.table_from_df(capture, title='Анализ периодов массовой некорректности измерений',
-                                        style_body=frontend.style_body, style_title=frontend.style_title,
+                                        style_of_body=frontend.style_body, style_of_title=frontend.style_title,
                                         colWidths=[70, 60, 40, 60, 40, 100])
 frontend.PDF.add_to_build_list(build_temp, build_list)
+
+#  Step 2 lines after submodule
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
 
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
@@ -98,8 +102,11 @@ build_temp = frontend.PDF.text(capture, frontend.style_title)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
 #  Average values operative function
-def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=build_list, width=80, height=65,
+# noinspection PyPep8Naming
+def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=80, height=65,
                              hAlign='CENTER', abs_parameter=True):
+    if build_list is None:
+        build_list = build_list
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
     build_temp = frontend.PDF.text(capture, frontend.style_regular)
     frontend.PDF.add_to_build_list(build_temp, build_list)
@@ -115,10 +122,7 @@ capturer_for_PDF_average('Ia', abs_parameter=False)
 capturer_for_PDF_average('Ir', abs_parameter=False)
 capturer_for_PDF_average('U', abs_parameter=False)
 
-#  Step 3 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+#  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
@@ -132,8 +136,11 @@ build_temp = frontend.PDF.text(capture, frontend.style_regular)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
 #  Correlation with and air operative function
-def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=build_list, width=140, height=100,
+# noinspection PyPep8Naming
+def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, width=140, height=100,
                                      hAlign='RIGHT'):
+    if build_list is None:
+        build_list = build_list
     buffer = frontend.capture_on_pic()
     plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'],
                            device_type=device_type, data=data, cols=cols,
@@ -174,10 +181,10 @@ for k in devices.links(device_type)[10]:
     status = sadzax.question(
         f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
         f" \n Eсли нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
-    warnings_codes_temporal_list = ['acc']
+    warnings_codes_temporal_list = {'acc': 'аварийной'}
     if status == 'n':
-        warnings_codes_temporal_list = ['war', 'acc']
-    for warn_code in warnings_codes_temporal_list:
+        warnings_codes_temporal_list = {'war': 'предупредительной', 'acc': 'аварийной'}
+    for warn_code, warn_code_str in warnings_codes_temporal_list.items():
         capture = frontend.capture_func(prints.warning_printer, dev, warning_finder, warn_code,
                                         warning_param_war=w0, warning_param_acc=w1)
         build_temp = frontend.PDF.text(capture, frontend.style_regular)
@@ -193,14 +200,26 @@ for k in devices.links(device_type)[10]:
         build_temp = frontend.PDF.table_from_df(capture, title=f'Таблица периодов непрерывной сигнализации'
                                                                f' (минимум {min_values_for_print} сигнальных'
                                                                f' замеров подряд)',
-                                                style_body=frontend.style_body, style_title=frontend.style_title,
+                                                style_of_body=frontend.style_body, style_of_title=frontend.style_title,
                                                 colWidths=[180, 110, 110, 70])
         frontend.PDF.add_to_build_list(build_temp, build_list)
 
+        warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data, warn_code, w0, w1)
+        buffer = frontend.capture_on_pic()
+        plots.scatter(df=warning_finder_merge, device_type=dev, title=f'График {warn_code_str} сигнализации')
+        build_temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(build_temp, build_list)
+
+#  Step 2 lines after submodule
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
 #  ______________________________________ DATA ENG. ______________________________________________
+# noinspection PyPep8Naming
 def capturer_for_PDF_main_graph(ex, title='', device_type=device_type, data=data, cols=cols,
-                                build_list=build_list, width=205, height=95, hAlign='CENTER'):
+                                build_list=None, width=205, height=95, hAlign='CENTER'):
+    if build_list is None:
+        build_list = build_list
     buffer = frontend.capture_on_pic()
     prints.print_flat_graph(input_y=[ex], device_type=device_type, data=data, cols=cols, title=title)
     build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
@@ -224,6 +243,8 @@ for k in main_graph_params:
     key = k + '_HV'
     title = main_graph_params[k] + ' со стороны ВН'
     capturer_for_PDF_main_graph(key, title)
+
+#  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
@@ -235,6 +256,8 @@ for k in main_graph_params:
     key = k + '_MV'
     title = main_graph_params[k] + ' со стороны СН'
     capturer_for_PDF_main_graph(key, title)
+
+#  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
