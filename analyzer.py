@@ -419,6 +419,38 @@ def values_time_slicer(device_type: str = 'kiv',
     return data_result
 
 
+#  2.x.x.
+def time_period_choose(data: pd.core = None, device_type: str = None):
+    if data is None:
+        data = get_data(device_type=device_type)
+    the_time_column = columns.time_column(device_type)
+    #  Sort data by time of meausure and reset indexes
+    data = data.sort_values(by=the_time_column)
+    data = data.reset_index(drop=True)
+    #
+    if pd.to_datetime(data[the_time_column][0]).strftime('%y') \
+            == pd.to_datetime(data[the_time_column][data.shape[0]-1]).strftime('%y'):
+        #  Same Year
+        pass
+    else:
+        start = sadzax.Enter.date(format='%d.%m.%y',
+                                  input_descripton=f'Введите начало периода',
+                                  arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                  arg_max_capacity=10,
+                                  arg_error='Некорректная дата, введите в формате "31.03.22"')
+        pd.to_datetime(start).strftime('')
+
+
+
+
+# pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y'),
+# pd.to_datetime(str(df[a_row])).strftime('%H.%M'),
+# pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y'),
+# pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M'),
+
+# Срез данных № 1. Всего 302305 записей с 21.06.22 12:30 по 17.01.23 11:06
+
+
 #  2.3.1. Counting the nan_strings:
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,

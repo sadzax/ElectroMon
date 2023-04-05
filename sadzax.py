@@ -1,12 +1,18 @@
 import math
+import pandas as pd
 from typing import List
 
 
 class Enter(object):
     stack_eng = 'qwertyuiopasdfghjklzxcvbnm'
     stack_rus = 'йцукенгшщзхъфывапролджэячсмитьбю'
-    stack_sym = '1234567890-_!~'
-    allowed_symbs_default = [x for x in stack_eng] + [x for x in stack_rus] + [x for x in stack_sym]
+    stack_sym = '-_!~'
+    stack_dig = '0123456789'
+    allowed_symbs_default = [x for x in stack_eng] + [x for x in stack_rus] + [x for x in stack_sym] + \
+                            [x for x in stack_dig]
+    allowed_symbs_dates = [x for x in stack_dig] + [x for x in ' .,:;-/_*`~|']
+
+
 
     @staticmethod
     def mapped_ints(self):
@@ -89,6 +95,36 @@ class Enter(object):
                 print(arg_error)
                 continue
 
+
+    def date(input_descripton, arg_error=None, arg_min=None, arg_max=None, arg_isnt_in_list=None,
+             arg_must_be: list = None, arg_max_capacity: int = None, replacing_symbol='.',
+             format='%d.%m.%y'):
+        while True:
+            try:
+                i = str(input(input_descripton + f'\nКорректный формат {format}'))
+                if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False \
+                        or Enter.arg_isnt_in_list_f(i, arg_isnt_in_list) is False \
+                        or Enter.arg_must_be(i, arg_must_be) is False or len(i) > arg_max_capacity:
+                    print(arg_error)
+                    continue
+                replace_list = ['.', ',', ':', ';', '-', '/', ' ', '_', '*', '`', '~', '|']
+                for char in replace_list:
+                    i = i.replace(char, replacing_symbol)
+                i = pd.to_datetime(i).strftime(format)
+                return i
+            except:
+                print(arg_error)
+                continue
+
+
+    @staticmethod
+    def mapped_dates(self):
+        replace = [',', ':', ';', '-', '/', ' ', '_', '*', '`', '~', '|']
+        enter = str(input(self))
+        for char in replace:
+            enter = enter.replace(char, '.')
+        return enter
+
     def arg_must_be(i, arg):
         if arg is not None:
             if isinstance(arg, (list, tuple)):
@@ -100,6 +136,7 @@ class Enter(object):
                         break
                 else:
                     a = True
+                return a
             elif i != arg:
                 return False
         else:

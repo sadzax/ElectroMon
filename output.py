@@ -101,9 +101,10 @@ capture = f'Анализ распределения значений'
 build_temp = frontend.PDF.text(capture, frontend.style_title)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
+
 #  Average values operative function
 # noinspection PyPep8Naming
-def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=80, height=65,
+def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=120, height=100,
                              hAlign='CENTER', abs_parameter=True):
     if build_list is None:
         build_list = build_list
@@ -114,6 +115,7 @@ def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=80
     plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
     build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(build_temp, build_list)
+
 
 #  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
 capturer_for_PDF_average(ex1)
@@ -135,9 +137,10 @@ capture = f'(чем более явная корреляция, тем боль�
 build_temp = frontend.PDF.text(capture, frontend.style_regular)
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
+
 #  Correlation with and air operative function
 # noinspection PyPep8Naming
-def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, width=140, height=100,
+def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, width=140, height=110,
                                      hAlign='RIGHT'):
     if build_list is None:
         build_list = build_list
@@ -147,6 +150,7 @@ def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, 
                            title=f"Анализ корреляции данных {ex1} от температуры воздуха")
     build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(build_temp, build_list)
+
 
 #  Correlation of [∆C, ∆tg, Ia, Ir, U] and temperature with a plot added as an object for reportlab/PD
 capturer_for_PDF_air_correlation(ex1)
@@ -214,16 +218,9 @@ for k in devices.links(device_type)[10]:
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
+
 #  ______________________________________ DATA ENG. ______________________________________________
-# noinspection PyPep8Naming
-def capturer_for_PDF_main_graph(ex, title='', device_type=device_type, data=data, cols=cols,
-                                build_list=None, width=205, height=95, hAlign='CENTER'):
-    if build_list is None:
-        build_list = build_list
-    buffer = frontend.capture_on_pic()
-    prints.print_flat_graph(input_y=[ex], device_type=device_type, data=data, cols=cols, title=title)
-    build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
+
 
 main_graph_params = {
     'U': 'График изменения значений напряжений',
@@ -235,31 +232,19 @@ main_graph_params = {
     '∆C': 'График изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
 }
 
-#  Adding the heading of the HV-submodule as an object for reportlab/PD
-capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С со стороны высокого напряжения'
-build_temp = frontend.PDF.text(capture, frontend.style_title2)
-frontend.PDF.add_to_build_list(build_temp, build_list)
-for k in main_graph_params:
-    key = k + '_HV'
-    title = main_graph_params[k] + ' со стороны ВН'
-    capturer_for_PDF_main_graph(key, title)
-
-#  Step 2 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-
-#  Adding the heading of the MV-submodule as an object for reportlab/PD
-capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С со стороны среднего напряжения'
-build_temp = frontend.PDF.text(capture, frontend.style_title2)
-frontend.PDF.add_to_build_list(build_temp, build_list)
-for k in main_graph_params:
-    key = k + '_MV'
-    title = main_graph_params[k] + ' со стороны СН'
-    capturer_for_PDF_main_graph(key, title)
-
-#  Step 2 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+for code_key, code_desc in {'_HV': ' со стороны высокого напряжения',
+                            '_MV': ' со стороны среднего напряжения'}.items():
+    capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С{code_desc}'
+    build_temp = frontend.PDF.text(capture, frontend.style_title2)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
+    for key, desc in main_graph_params.items():
+        input_y = key + code_key
+        title = desc + code_desc
+        buffer = frontend.capture_on_pic()
+        prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
+        build_temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(build_temp, build_list)
+        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
 
 
 #  ______________________________________ OUTPUT IN PDF __________________________________________

@@ -56,6 +56,10 @@ total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
 print(total_nan_counter_ease)
 
 
+#  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
+
+
+
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
 prints.info('Анализ трендов и средних показателей')
 
@@ -121,12 +125,10 @@ main_graph_params = {
     '∆C': 'График изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
 }
 
-for k in main_graph_params:
-    key = k + '_HV'
-    title = main_graph_params[k] + ' со стороны ВН'
-    prints.print_flat_graph(input_y=[key], device_type=dev, data=data, cols=cols, title=title)
-
-for k in main_graph_params:
-    key = k + '_MV'
-    title = main_graph_params[k] + ' со стороны СН'
-    prints.print_flat_graph(input_y=[key], device_type=dev, data=data, cols=cols, title=title)
+for code_key, code_desc in {'_HV': ' со стороны высокого напряжения',
+                            '_MV': ' со стороны среднего напряжения'}.items():
+    prints.info(f'Анализ значений параметров высоковольтных вводов в фазах А, В и С{code_desc}')
+    for key, desc in main_graph_params.items():
+        input_y = key + code_key
+        title = desc + code_desc
+        prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
