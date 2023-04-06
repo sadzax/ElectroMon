@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Warnings and accidents added to runner - added to PDF" />
+    <list default="true" id="2eb8e3dd-64e7-4a20-afec-ad5d8bd1bee2" name="Changes" comment="Time periods func.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -219,13 +221,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1669107879681</updated>
-    </task>
-    <task id="LOCAL-00120" summary="total nan counter easing">
-      <created>1678201166291</created>
-      <option name="number" value="00120" />
-      <option name="presentableId" value="LOCAL-00120" />
-      <option name="project" value="LOCAL" />
-      <updated>1678201166291</updated>
     </task>
     <task id="LOCAL-00121" summary="total nan counter easing">
       <created>1678245735724</created>
@@ -563,7 +558,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680552881355</updated>
     </task>
-    <option name="localTasksCounter" value="169" />
+    <task id="LOCAL-00169" summary="Time periods func.">
+      <created>1680731271610</created>
+      <option name="number" value="00169" />
+      <option name="presentableId" value="LOCAL-00169" />
+      <option name="project" value="LOCAL" />
+      <updated>1680731271610</updated>
+    </task>
+    <option name="localTasksCounter" value="170" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -578,7 +580,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="kiv done" />
     <MESSAGE value="SettingwithCopyWarning solved" />
     <MESSAGE value="Devices classes" />
     <MESSAGE value="Monitoring-db added" />
@@ -603,7 +604,8 @@
     <MESSAGE value="Documentation update" />
     <MESSAGE value="Warnings and accidents added to runner" />
     <MESSAGE value="Warnings and accidents added to runner - added to PDF" />
-    <option name="LAST_COMMIT_MESSAGE" value="Warnings and accidents added to runner - added to PDF" />
+    <MESSAGE value="Time periods func." />
+    <option name="LAST_COMMIT_MESSAGE" value="Time periods func." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

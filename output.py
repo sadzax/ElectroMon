@@ -54,10 +54,22 @@ build_temp = frontend.PDF.table_from_df(capture, title='Список данны�
                                         colWidths=[80, 40, 40, 65, 60, 120, 130])
 frontend.PDF.add_to_build_list(build_temp, build_list)
 
+#  Returning total counter of measures and their period
+prints.total_log_counter(dev, data)
+prints.total_periods(dev, data)
+
 #  Returning total counter of measures and adding it as an object for reportlab/PDF
-capture = frontend.capture_func(prints.total_log_counter, dev, data)
-build_temp = frontend.PDF.text(capture, frontend.style_title)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+status = sadzax.question(
+        f"\n Хотите задать конкретный период анализа между двумя датами?"
+        f"\n Eсли нет - то будут проанализированы все доступные периоды замеров\n", yes='y')
+if status == 'y':
+    data = analyzer.time_period_choose(data, dev)
+    capture = frontend.capture_func(prints.total_log_counter, dev, data)
+    build_temp = frontend.PDF.text(capture, frontend.style_title)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
+    capture = frontend.capture_func(prints.total_periods, dev, data)
+    build_temp = frontend.PDF.text(capture, frontend.style_title)
+    frontend.PDF.add_to_build_list(build_temp, build_list)
 
 #  Analyzing time measures for sequence errors and adding the table of it as an object for reportlab/PDF
 values_time_analyzer = analyzer.values_time_analyzer(dev, data, time_sequence_min=1, inaccuracy_sec=3)

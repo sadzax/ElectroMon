@@ -37,8 +37,19 @@ data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
 prints.info('Анализ неразрывности замеров и их корректности')
 
-#  Returning total counter of measures
+#  Returning total counter of measures and their period
 prints.total_log_counter(dev, data)
+prints.total_periods(dev, data)
+
+#  Asking for a period to choose
+status = sadzax.question(
+        f"\n Хотите задать конкретный период анализа между двумя датами?"
+        f"\n Eсли нет - то будут проанализированы все доступные периоды замеров\n", yes='y')
+if status == 'y':
+    data = analyzer.time_period_choose(data, dev)
+    prints.total_log_counter(dev, data)
+    prints.total_periods(dev, data)
+
 
 #  Analyzing time measures for sequence errors
 values_time_analyzer = analyzer.values_time_analyzer(dev, data, time_sequence_min=1, inaccuracy_sec=3)
@@ -53,11 +64,8 @@ data = prints.values_time_slicer(dev, data, log=values_time_slicer)
 total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=30.0)
 prints.total_nan_counter(dev, data, false_data_percentage=30.0, log=total_nan_counter)
 total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
-print(total_nan_counter_ease)
-
-
-#  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
-
+if total_nan_counter_ease != None:
+    print(total_nan_counter_ease)
 
 
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________

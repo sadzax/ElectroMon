@@ -96,12 +96,13 @@ class Enter(object):
                 continue
 
 
-    def date(input_descripton, arg_error=None, arg_min=None, arg_max=None, arg_isnt_in_list=None,
+    def date(input_descripton='', arg_error=None, arg_min=None, arg_max=None, arg_isnt_in_list=None,
              arg_must_be: list = None, arg_max_capacity: int = None, replacing_symbol='.',
-             format='%d.%m.%y'):
+             format='%d.%m.%y', dayfirst: bool = True, convert_to_pd: bool = True, return_timestamp: bool = True,
+             one_year_status: bool = False, one_year: str = None):
         while True:
             try:
-                i = str(input(input_descripton + f'\nКорректный формат {format}'))
+                i = str(input(input_descripton))
                 if Enter.arg_min_f(i, arg_min) is False or Enter.arg_max_f(i, arg_max) is False \
                         or Enter.arg_isnt_in_list_f(i, arg_isnt_in_list) is False \
                         or Enter.arg_must_be(i, arg_must_be) is False or len(i) > arg_max_capacity:
@@ -110,8 +111,15 @@ class Enter(object):
                 replace_list = ['.', ',', ':', ';', '-', '/', ' ', '_', '*', '`', '~', '|']
                 for char in replace_list:
                     i = i.replace(char, replacing_symbol)
-                i = pd.to_datetime(i).strftime(format)
-                return i
+                if one_year_status is True:
+                    i = i + replacing_symbol + one_year
+                if convert_to_pd is True:
+                    if return_timestamp is True:
+                        return pd.to_datetime(i, dayfirst=dayfirst)
+                    else:
+                        return pd.to_datetime(i, dayfirst=dayfirst).strftime(format)
+                else:
+                    return i
             except:
                 print(arg_error)
                 continue

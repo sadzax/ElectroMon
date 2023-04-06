@@ -10,7 +10,6 @@ import sadzax
 
 
 #  ____________ 1. DATA PROCESSING ________________________________________________
-
 #  1.0. Importing data
 def get_data(device_type: str = 'kiv',
              file: str = None,
@@ -155,7 +154,7 @@ def stack_data(device_type: str = 'mon',
                 #  Store a new iterated data in a temp. variable
                 iterated_data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
                 data = pd.concat([data, iterated_data])
-    the_time_column = columns.time_column(device_type)
+    the_time_column = columns.time_column(device_type=device_type, data=data)
     #  Sort data by time of meausure
     data = data.sort_values(by=the_time_column)
     print('Консолидация данных завершена')
@@ -261,9 +260,8 @@ def set_dtypes(device_type: str = 'mon',
     return data
 
 
-#  ____________ 1. BASIC TIME ANALYZING AND SLICING _______________________________
-
-#  2.0. Count the strings
+#  ____________ 2. BASIC TIME ANALYZING AND SLICING _______________________________
+#  2.0.0. Count the strings
 def total_log_counter(device_type: str = 'nkvv',
                       data: pd.core = None):
     """
@@ -282,6 +280,19 @@ def total_log_counter(device_type: str = 'nkvv',
     if data is None:
         data = get_data(device_type=device_type.lower())
     return data.shape[0]
+
+
+#  2.0.1. Count the periods
+def total_periods(device_type: str = 'mon',
+                  data: pd.core = None):
+    if data is None:
+        data = get_data(device_type=device_type.lower())
+    the_time_column = columns.time_column(device_type=device_type, data=data)
+    data = data.sort_values(by=the_time_column)
+    data = data.reset_index(drop=True)
+    data_date_start = pd.to_datetime(data[the_time_column][0])
+    data_date_end = pd.to_datetime(data[the_time_column][data.shape[0] - 1])
+    return [data_date_start, data_date_end]
 
 
 #  2.1. Analysis of time of measurements
@@ -381,74 +392,133 @@ def values_time_slicer(device_type: str = 'kiv',
     if time_column is None:
         time_column = columns.time_column(device_type=device_type, data=data)
     data_result = {}
-    if time_analyzer is None:
-        time_analyzer = values_time_analyzer(device_type=device_type, data=data)
-    indexes_for_slicing = [-1]
-    for i in range(time_analyzer.shape[0]):
-        if time_analyzer.iloc[i, len(time_analyzer.columns) - 1] > datetime.timedelta(minutes=minutes_slice_mode):
-            indexes_for_slicing.append(time_analyzer.iloc[i, 0])
-    indexes_for_slicing.append(int(data.shape[0]))
-    data_slices_list = []
-    for k in range(len(indexes_for_slicing)-1):
-        data_slices_list.append(data.iloc[indexes_for_slicing[k]+1:indexes_for_slicing[k+1]])
-    data_slices = {k: [v] for k, v in enumerate(data_slices_list)}
-    for i in range(len(data_slices)):
-        time_array = data_slices[i][0][time_column].values
-        if data_slices[i][0].shape[0] > 0:
-            data_slices[i].append(min(time_array))
-            data_slices[i].append(max(time_array))
+    try:
+        if time_analyzer is None:
+            time_analyzer = values_time_analyzer(device_type=device_type, data=data)
+        indexes_for_slicing = [-1]
+        for i in range(time_analyzer.shape[0]):
+            if time_analyzer.iloc[i, len(time_analyzer.columns) - 1] > datetime.timedelta(minutes=minutes_slice_mode):
+                indexes_for_slicing.append(time_analyzer.iloc[i, 0])
+        indexes_for_slicing.append(int(data.shape[0]))
+        data_slices_list = []
+        for k in range(len(indexes_for_slicing)-1):
+            data_slices_list.append(data.iloc[indexes_for_slicing[k]+1:indexes_for_slicing[k+1]])
+        data_slices = {k: [v] for k, v in enumerate(data_slices_list)}
+        for i in range(len(data_slices)):
+            time_array = data_slices[i][0][time_column].values
+            if data_slices[i][0].shape[0] > 0:
+                data_slices[i].append(min(time_array))
+                data_slices[i].append(max(time_array))
+            else:
+                data_slices[i].append(np.datetime64('NaT'))
+                data_slices[i].append(np.datetime64('NaT'))
+            data_slices[i].append(data_slices[i][0].shape[0])
+        #  Questioning about necessity of cycle-end to save appended elements in dictionary list
+        for i in range(len(data_slices)):
+            if data_slices[i][0].shape[0] > min_values_required:
+                str_min = pd.to_datetime(str(data_slices[i][1])).strftime('%d.%m.%Y %H:%M')
+                str_max = pd.to_datetime(str(data_slices[i][2])).strftime('%d.%m.%Y %H:%M')
+                str_quantity = data_slices[i][3]
+                data_slices[i].append(f'Всего {str_quantity} записей с {str_min} по {str_max}')
+            else:
+                data_slices[i].append(f'Не включается в анализ')
+        if full_param is False:
+            for i in data_slices.keys():
+                if data_slices[i][3] >= min_values_required:
+                    data_result[i] = data_slices[i]
         else:
-            data_slices[i].append(np.datetime64('NaT'))
-            data_slices[i].append(np.datetime64('NaT'))
-        data_slices[i].append(data_slices[i][0].shape[0])
-    #  Questioning about necessity of cycle-end to save appended elements in dictionary list
-    for i in range(len(data_slices)):
-        if data_slices[i][0].shape[0] > min_values_required:
-            str_min = pd.to_datetime(str(data_slices[i][1])).strftime('%d.%m.%y %H:%M')
-            str_max = pd.to_datetime(str(data_slices[i][2])).strftime('%d.%m.%y %H:%M')
-            str_quantity = data_slices[i][3]
-            data_slices[i].append(f'Всего {str_quantity} записей с {str_min} по {str_max}')
-        else:
-            data_slices[i].append(f'Не включается в анализ')
-    if full_param is False:
-        for i in data_slices.keys():
-            if data_slices[i][3] >= min_values_required:
-                data_result[i] = data_slices[i]
-    else:
-        data_result = data_slices
+            data_result = data_slices
+    #  In case of not-founding any gaps in measurements
+    except AttributeError:
+        pass
     return data_result
 
 
 #  2.x.x.
-def time_period_choose(data: pd.core = None, device_type: str = None):
+def time_period_choose(data: pd.core = None, device_type: str = 'mon', format: str = None):
     if data is None:
         data = get_data(device_type=device_type)
-    the_time_column = columns.time_column(device_type)
+    if format is None:
+        format = '%d.%m.%Y'
+    the_time_column = columns.time_column(device_type=device_type, data=data)
     #  Sort data by time of meausure and reset indexes
     data = data.sort_values(by=the_time_column)
     data = data.reset_index(drop=True)
-    #
-    if pd.to_datetime(data[the_time_column][0]).strftime('%y') \
-            == pd.to_datetime(data[the_time_column][data.shape[0]-1]).strftime('%y'):
-        #  Same Year
-        pass
+    #  Get the start and the end of whole period
+    data_date_start = pd.to_datetime(data[the_time_column][0])
+    data_date_end = pd.to_datetime(data[the_time_column][data.shape[0] - 1])
+    print(f"Доступен период данных с {data_date_start.strftime(format)} по {data_date_end.strftime(format)}")
+    #  Same Year
+    if data_date_start.strftime('%Y') == data_date_end.strftime('%Y'):
+        print(f'Доступны данные только в рамках {data_date_end.strftime("%Y")} года,'
+              f' при задании периодов использовуйте связку "день-месяц"')
+        user_start = sadzax.Enter.date(format='%d.%m',
+                                       input_descripton=f'Введите дату начала конкретизированного периода: ',
+                                       arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                       arg_max_capacity=6,
+                                       arg_error=f'Некорректная дата, введите в формате "%d.%m", например, "31.03"',
+                                       dayfirst=True,
+                                       convert_to_pd=True,
+                                       return_timestamp=True,
+                                       one_year_status=True,
+                                       one_year=data_date_end.strftime("%Y"))
+        if user_start < data_date_start:
+            print(f"Задана дата начала периода раньше первой доступной даты,"
+                  f" началом периода назначена первая доступная дата {data_date_start.strftime(format)}")
+            user_start = data_date_start
+        user_end = sadzax.Enter.date(format='%d.%m',
+                                     input_descripton=f'Введите дату конца конкретизированного периода: ',
+                                     arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                     arg_max_capacity=6,
+                                     arg_error=f'Некорректная дата, введите в формате "%d.%m", например, "31.03"',
+                                     dayfirst=True,
+                                     convert_to_pd=True,
+                                     return_timestamp=True,
+                                     one_year_status=True,
+                                     one_year=data_date_end.strftime("%Y"))
+        if user_end > data_date_end:
+            print(f"Задана дата конца периода позже последней доступной даты,"
+                  f" концом периода назначена последня доступная дата {data_date_end.strftime(format)}")
+            user_end = data_date_end
     else:
-        start = sadzax.Enter.date(format='%d.%m.%y',
-                                  input_descripton=f'Введите начало периода',
-                                  arg_must_be=sadzax.Enter.allowed_symbs_dates,
-                                  arg_max_capacity=10,
-                                  arg_error='Некорректная дата, введите в формате "31.03.22"')
-        pd.to_datetime(start).strftime('')
-
-
-
-
-# pd.to_datetime(str(df[a_row])).strftime('%d.%m.%y'),
-# pd.to_datetime(str(df[a_row])).strftime('%H.%M'),
-# pd.to_datetime(str(df[a_row + 1])).strftime('%d.%m.%y'),
-# pd.to_datetime(str(df[a_row + 1])).strftime('%H.%M'),
-
-# Срез данных № 1. Всего 302305 записей с 21.06.22 12:30 по 17.01.23 11:06
+        #  Ask user to enter dates for picking a period
+        user_start = sadzax.Enter.date(format=format,
+                                       input_descripton=f'Введите дату начала конкретизированного периода: ',
+                                       arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                       arg_max_capacity=10,
+                                       arg_error=f'Некорректная дата, введите в формате {format}, например, "31.03.22"',
+                                       dayfirst=True,
+                                       convert_to_pd=True,
+                                       return_timestamp=True)
+        if user_start < data_date_start:
+            print(f"Задана дата начала периода раньше первой доступной даты,"
+                  f" началом периода назначена первая доступная дата {data_date_start.strftime(format)}")
+            user_start = data_date_start
+        user_end = sadzax.Enter.date(format=format,
+                                     input_descripton=f'Введите дату конца конкретизированного периода: ',
+                                     arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                     arg_max_capacity=10,
+                                     arg_error=f'Некорректная дата, введите в формате {format}, например, "31.03.22"',
+                                     dayfirst=True,
+                                     convert_to_pd=True,
+                                     return_timestamp=True)
+        if user_end > data_date_end:
+            print(f"Задана дата конца периода позже последней доступной даты,"
+                  f" концом периода назначена последня доступная дата {data_date_end.strftime(format)}")
+            user_end = data_date_end
+    if user_end < user_start:
+        print(f"Задана дата конца периода, предшествующая дате начала, произведена перемена их местами")
+        #  Switch the start and the end with adding 23:59:59 to end date
+        temp = user_end
+        user_end = user_start + datetime.timedelta(hours=23, minutes=59, seconds=59)
+        user_start = temp
+    else:
+        #  Adding 23:59:59 to end date because the date by default is set to 00.00 time
+        user_end = user_end + datetime.timedelta(hours=23, minutes=59, seconds=59)
+    data = data[data[the_time_column] >= user_start].iloc[:]
+    data = data[data[the_time_column] <= user_end].iloc[:]
+    data = data.reset_index(drop=True)
+    return data
 
 
 #  2.3.1. Counting the nan_strings:

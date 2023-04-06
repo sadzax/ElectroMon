@@ -3,6 +3,7 @@ import analyzer
 import devices
 import plots
 import sadzax
+import columns
 
 
 def info(the_string):
@@ -56,20 +57,36 @@ def file_picking(device_type='kiv'):
 
 
 def total_log_counter(device_type, data):
+    if data is None:
+        data = analyzer.get_data(device_type=device_type.lower())
     info('Подсчёт общего количества записей')
     log_total = analyzer.total_log_counter(device_type=device_type, data=data)
     print(f'Общее число записей в журнале измерений составило {log_total}')
+
+
+def total_periods(device_type, data, format=None):
+    if data is None:
+        data = analyzer.get_data(device_type=device_type.lower())
+    if format is None:
+        format = '%d.%m.%y'
+    log = analyzer.total_periods(device_type, data)
+    print(f"Записи в журнале измерений зафиксированы с {log[0].strftime(format)} "
+          f"по {log[1].strftime(format)}")
 
 
 def values_time_analyzer(device_type, data, log: pd.core = None):
     info('Анализ периодичности и неразрывности измерений')
     if log is None:
         log = analyzer.values_time_analyzer(device_type=device_type, data=data)
-    if log.shape[0] == 0:
+    try:
+        if log.shape[0] == 0:
+            print(f'Периоды измерений не нарушены')
+        else:
+            print(f'Выявлено {log.shape[0]} нарушений периодов измерений')
+            print(sadzax.question('Хотите вывести подробные данные?', yes=log, no=''))
+    #  NoneType of log after import means that there are no errors
+    except AttributeError:
         print(f'Периоды измерений не нарушены')
-    else:
-        print(f'Выявлено {log.shape[0]} нарушений периодов измерений')
-        print(sadzax.question('Хотите вывести подробные данные?', yes=log, no=''))
 
 
 # noinspection PyBroadException
@@ -78,14 +95,14 @@ def values_time_slicer(device_type, data, log: dict = None):
     if log is None:
         log = analyzer.values_time_slicer(device_type=device_type, data=data)
     # error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
-    w1 = sadzax.Rus.cases(len(log), 'найден', 'найдены', 'найдены')
+    w1 = sadzax.Rus.cases(len(log), 'найден', 'найдены', 'найдено')
     w2 = sadzax.Rus.cases(len(log), 'срез', 'среза', 'срезов')
     print(f"По заданным параметрам {w1} {len(log)} {w2} данных")
     k = [i for i in log.keys()]
     for i in log:
         print(f"Срез данных № {k.index(i)+1}. " + log[i][4])
     if len(log) < 1:
-        print(f"Ошибка источника периодов")
+        print(f"Разрывы в периодах для анализа не выявлены")
         return data
     elif len(log) == 1:
         print(f"Срез данных принят к анализу")

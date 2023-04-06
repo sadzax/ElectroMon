@@ -24,6 +24,7 @@
 - - - [Data import](#data-import)
 - - - [Replace data](#replace-data)
 - - - [Counter](#counter)
+- - - [Periods](#periods)
 - - - [Timestamp analyzing](#timestamp-analyzing)
 
 &nbsp;
@@ -280,6 +281,11 @@ It's recommended to pass variable `data` and return it as a `data` variable as w
 `total_log_counter()` is a simple function that takes a device type and a pandas DataFrame as input 
 and returns the total number of logs in the DataFrame. 
 If no DataFrame is provided, the function calls `get_data()` to obtain one.
+
+### Periods
+
+`total_periods()` check for received data to return the start and the end of the measures. 
+You can pass format of the data by `format=` argument
 
 ### Timestamp analyzing
 
