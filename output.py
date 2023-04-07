@@ -206,7 +206,7 @@ for k in devices.links(device_type)[10]:
         build_temp = frontend.PDF.text(capture, frontend.style_regular)
         frontend.PDF.add_to_build_list(build_temp, build_list)
         #  Setting minimal amout of values to be printed in a table
-        min_values_for_print = 5
+        min_values_for_print = 10
         #  Easing the main operated data to form a DataFrame
         warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
                                                            warning_param_war=w0, warning_param_acc=w1,

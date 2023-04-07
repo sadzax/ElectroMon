@@ -123,35 +123,39 @@ def scatter(input_x: list = None,
             color=None,
             area=None):
     """
-    Mostly designed to get dataframes from analyzer.warning_finder_merge function
+    Designed to get dataframes from analyzer.warning_finder_merge function
     """
-    if df is None:
-        df = analyzer.get_data(device_type=device_type)
-    if cols_inside is None:
-        cols_inside = columns.columns_analyzer(device_type=device_type, list_for_columns=list(df.columns))
-    if input_x is None:
-        input_x = [columns.time_column(device_type=device_type, data=df)]
-    if input_y is None:
-        input_y = []
-        for a_column in list(df.columns):
-            if a_column in input_x:
-                pass
+    #  If there are only datetime and '+' and '-' warnings - don't scatter it
+    if df.shape[1] < 4:
+        pass
+    else:
+        if df is None:
+            df = analyzer.get_data(device_type=device_type)
+        if cols_inside is None:
+            cols_inside = columns.columns_analyzer(device_type=device_type, list_for_columns=list(df.columns))
+        if input_x is None:
+            input_x = [columns.time_column(device_type=device_type, data=df)]
+        if input_y is None:
+            input_y = []
+            for a_column in list(df.columns):
+                if a_column in input_x:
+                    pass
+                else:
+                    input_y.append(a_column)
+        fig, axs = plt.subplots(figsize=(size_x, size_y))
+        axs.grid(axis='both', color='gray', linestyle='--')
+        plt.title(title)
+        df_x = analyzer.data_filter(input_x, cols=cols_inside, data=df)
+        plt.xlabel(str(df_x.columns[0]))
+        df_y = analyzer.data_filter(input_y, cols=cols_inside, data=df)
+        plt.ylabel('Значения по (' + ', '.join(input_y) + ')')
+        legend = []
+        for y_name in [col for col in df_y.columns]:
+            x = df_x[df_x.columns[0]].tolist()
+            y = df_y[y_name].tolist()
+            if y_name.find('отриц.') != -1 or y_name.find('полож.') != -1:
+                axs.scatter(x, y, c='k', marker='.', s=2)
             else:
-                input_y.append(a_column)
-    fig, axs = plt.subplots(figsize=(size_x, size_y))
-    axs.grid(axis='both', color='gray', linestyle='--')
-    plt.title(title)
-    df_x = analyzer.data_filter(input_x, cols=cols_inside, data=df)
-    plt.xlabel(str(df_x.columns[0]))
-    df_y = analyzer.data_filter(input_y, cols=cols_inside, data=df)
-    plt.ylabel('Значения по (' + ', '.join(input_y) + ')')
-    legend = []
-    for y_name in [col for col in df_y.columns]:
-        x = df_x[df_x.columns[0]].tolist()
-        y = df_y[y_name].tolist()
-        if y_name.find('отриц.') != -1 or y_name.find('полож.') != -1:
-            axs.scatter(x, y, c='k', marker='.', s=2)
-        else:
-            axs.scatter(x, y, c=color, s=area)
-            legend.append(y_name)
-    plt.legend(legend)
+                axs.scatter(x, y, c=color, s=area)
+                legend.append(y_name)
+        plt.legend(legend)

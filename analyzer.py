@@ -10,7 +10,7 @@ import sadzax
 
 
 #  ____________ 1. DATA PROCESSING ________________________________________________
-#  1.0. Importing data
+#  1.0.0. Importing data
 def get_data(device_type: str = 'kiv',
              file: str = None,
              sep: str = None,
@@ -213,6 +213,7 @@ def pass_the_nan(device_type: str = 'nkvv',
     return data
 
 
+#  1.2. Set data types
 def set_dtypes(device_type: str = 'mon',
                data: pd.core = None,
                cols: dict = None,
@@ -274,7 +275,6 @@ def total_log_counter(device_type: str = 'nkvv',
     data (pd.core): a pandas DataFrame containing the logs. Default is None.
 
     Returns:
-
     An integer representing the total number of logs in the DataFrame.
     """
     if data is None:
@@ -285,6 +285,32 @@ def total_log_counter(device_type: str = 'nkvv',
 #  2.0.1. Count the periods
 def total_periods(device_type: str = 'mon',
                   data: pd.core = None):
+    """
+    Compute the start and end dates of a time series data, given a device type and a data set.
+
+    Parameters:
+    -----------
+    device_type : str, optional
+        A string that represents the type of device, by default 'mon'.
+    data : pandas.core.frame.DataFrame, optional
+        A pandas DataFrame that contains the time series data, by default None.
+
+    Returns:
+    --------
+    List[pd.Timestamp]
+        A list containing two pandas Timestamp objects, representing the start and end dates of the time series.
+
+    Raises:
+    -------
+    ValueError
+        If the device type is not supported or the data set is empty.
+
+    Examples:
+    ---------
+    >>> data = pd.DataFrame({'date': pd.date_range(start='2020-01-01', end='2020-12-31'), 'value': range(366)})
+    >>> total_periods(data=data)
+    [Timestamp('2020-01-01 00:00:00'), Timestamp('2020-12-31 00:00:00')]
+    """
     if data is None:
         data = get_data(device_type=device_type.lower())
     the_time_column = columns.time_column(device_type=device_type, data=data)
@@ -386,11 +412,32 @@ def values_time_slicer(device_type: str = 'kiv',
                        min_values_required: int = 300,
                        time_column: str = None,
                        full_param: bool = False):
+    """
+    Slices the data based on time intervals, and returns a dictionary containing information about sliced data.
+
+    Parameters:
+    -----------
+    :param device_type (str): A string representing the type of device. Default is 'kiv'.
+    :param data (pd.core): A Pandas DataFrame containing the data. Default is None.
+    :param time_analyzer (pd.core): A Pandas DataFrame containing the analyzed data. Default is None.
+    :param minutes_slice_mode (int): An integer representing the number of minutes to slice the data by.
+                                            Default is 1439.
+    :param min_values_required (int): An integer representing the minimum number of values required for the slice to be
+                                            included in the analysis. Default is 300.
+    :param time_column (str): A string representing the name of the column containing the time data. Default is None.
+    :param full_param (bool): A boolean representing whether to return the full parameter set. Default is False.
+
+    Returns:
+    --------
+    - data_result (dict): A dictionary containing information about the sliced data.
+    """
+    #  Convert device_type to lowercase
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
     if time_column is None:
         time_column = columns.time_column(device_type=device_type, data=data)
+    #  Initialize empty dictionary to store sliced data
     data_result = {}
     try:
         if time_analyzer is None:
@@ -399,6 +446,7 @@ def values_time_slicer(device_type: str = 'kiv',
         for i in range(time_analyzer.shape[0]):
             if time_analyzer.iloc[i, len(time_analyzer.columns) - 1] > datetime.timedelta(minutes=minutes_slice_mode):
                 indexes_for_slicing.append(time_analyzer.iloc[i, 0])
+        #  Initialize list to store indexes for slicing
         indexes_for_slicing.append(int(data.shape[0]))
         data_slices_list = []
         for k in range(len(indexes_for_slicing)-1):
@@ -434,8 +482,34 @@ def values_time_slicer(device_type: str = 'kiv',
     return data_result
 
 
-#  2.x.x.
+#  2.2.2. Selection of the time period
 def time_period_choose(data: pd.core = None, device_type: str = 'mon', format: str = None):
+    """
+    The function time_period_choose is designed to enable a user to select a time period of interest within a given dataset.
+    It takes three arguments, data, device_type, and format.    If no data argument is passed, the function calls the get_data function with the device_type argument, to get the dataset of interest.
+    If no format argument is passed, the default format of '%d.%m.%Y' is used.
+    The function sorts the dataset by the time of measurement and resets the indexes.
+    It then calculates the start and end dates of the dataset, prints them, and prompts the user to enter a specific time period of interest.
+    If the start and end dates are in the same year, the function prompts the user to enter a specific time period of interest, but within that year, using the "day-month" pair format.
+    If the start and end dates are not in the same year, the function prompts the user to enter a time period of interest using the format argument.
+    The function checks that the user's input dates are within the available range of dates in the dataset.
+    If the user enters an invalid date, the function will prompt the user to enter a valid date.
+    If the user enters a start date that is earlier than the first available date, the function will use the first available date as the start date.
+    If the user enters an end date that is later than the last available date, the function will use the last available date as the end date.
+    If the user enters an end date that is earlier than the start date, the function will switch the start and end dates and add 23 hours, 59 minutes, and 59 seconds to the end date, to ensure that the end date is inclusive.
+    Finally, the function returns the start and end dates as pandas Timestamp objects.
+
+    Parameters:
+    -----------
+    :param data: data is a pandas dataframe containing the dataset of interest,
+    :param device_type: device_type specifies the type of device used to collect the data
+    :param format: format is a string that represents the format of the date
+
+    Returns:
+    --------
+    :return: pandas.core.frame.DataFrame - A DataFrame as a copy (not a view) of the passed data to the function
+    """
+
     if data is None:
         data = get_data(device_type=device_type)
     if format is None:

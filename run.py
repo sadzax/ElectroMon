@@ -113,7 +113,7 @@ for k in devices.links(device_type)[10]:
         warnings_codes_temporal_list = {'war': 'предупредительной', 'acc': 'аварийной'}
     for warn_code, warn_code_str in warnings_codes_temporal_list.items():
         prints.warning_printer(dev, warning_finder, warn_code, warning_param_war=w0, warning_param_acc=w1)
-        warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
+        warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code, min_values_for_print=10,
                                                            warning_param_war=w0, warning_param_acc=w1)
         print(warning_finder_ease)
         #  Scattering

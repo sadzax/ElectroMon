@@ -285,7 +285,7 @@ If no DataFrame is provided, the function calls `get_data()` to obtain one.
 ### Periods
 
 `total_periods()` check for received data to return the start and the end of the measures. 
-You can pass format of the data by `format=` argument
+You can pass format of the data by `format=` argument. 
 
 ### Timestamp analyzing
 
