@@ -27,6 +27,7 @@
 - - - [Timestamp analyzing](#timestamp-analyzing)
 - - - [Periods](#periods)
 - - - [Nans](#nans)
+- - - [Filtering](#filtering)
 
 &nbsp;
 
