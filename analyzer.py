@@ -307,8 +307,8 @@ def total_periods(device_type: str = 'mon',
 
     Examples:
     ---------
-    >>> data = pd.DataFrame({'date': pd.date_range(start='2020-01-01', end='2020-12-31'), 'value': range(366)})
-    >>> total_periods(data=data)
+    data = pd.DataFrame({'date': pd.date_range(start='2020-01-01', end='2020-12-31'), 'value': range(366)})
+    total_periods(data=data)
     [Timestamp('2020-01-01 00:00:00'), Timestamp('2020-12-31 00:00:00')]
     """
     if data is None:
@@ -321,7 +321,7 @@ def total_periods(device_type: str = 'mon',
     return [data_date_start, data_date_end]
 
 
-#  2.1. Analysis of time of measurements
+#  2.1.0. Analysis of time of measurements
 def values_time_analyzer(device_type: str = 'nkvv',
                          data: pd.core = None,
                          time_sequence_min: int = 1,
@@ -404,7 +404,7 @@ def values_time_analyzer(device_type: str = 'nkvv',
         return None
 
 
-#  2.2.1. Slice time of measurements for big gaps
+#  2.1.1. Slice time of measurements for big gaps
 def values_time_slicer(device_type: str = 'kiv',
                        data: pd.core = None,
                        time_analyzer: pd.core = None,
@@ -482,7 +482,7 @@ def values_time_slicer(device_type: str = 'kiv',
     return data_result
 
 
-#  2.2.2. Selection of the time period
+#  2.2. Selection of the time period
 def time_period_choose(data: pd.core = None, device_type: str = 'mon', format: str = None):
     """
     The function time_period_choose is designed to enable a user to select a time period of interest within a given dataset.
@@ -509,7 +509,6 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', format: s
     --------
     :return: pandas.core.frame.DataFrame - A DataFrame as a copy (not a view) of the passed data to the function
     """
-
     if data is None:
         data = get_data(device_type=device_type)
     if format is None:
@@ -599,6 +598,27 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', format: s
 def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
                       false_data_percentage: float = 33.0):
+    """
+    Analyzes the percentage of NaN values in each row of the input data and returns a DataFrame
+    that shows the time periods where the percentage of NaN values exceeds a specified threshold.
+
+    Args:
+        device_type (str, optional): The type of device for which the data is collected. Defaults to 'nkvv'.
+        data (pandas DataFrame, optional): The input data containing the measurements. If not specified,
+            the function will use the `get_data()` function to obtain the data for the specified device.
+        false_data_percentage (float, optional): The threshold percentage above which a row is considered as containing
+            false data due to excessive NaN values. Defaults to 33.0.
+
+    Returns:
+        pandas DataFrame: A view of the cleaned input DataFrame that shows the time periods where the percentage of
+        NaN values exceeds the specified threshold. The returned DataFrame contains the following columns:
+        - 'Время замера' (time_column): The time of measurement for each row.
+        - '% сбоя данных в момент замера': The percentage of NaN values in each row.
+        - 'Дата': The date of each measurement in the format DD.MM.YY.
+        - 'Время': The time of each measurement in the format HH.MM.
+        - 'alarm': A Boolean column indicating whether the percentage of NaN values in the row exceeds the specified
+          threshold (True) or not (False).
+    """
     #  Set the device & unmutable data
     device_type = device_type.lower()
     if data is None:
@@ -694,6 +714,18 @@ def data_filter(filter_list: list,
                 device_type: str = 'nkvv',
                 data: pd.core = None,
                 cols: dict = None):
+    """
+    Filter a Pandas DataFrame by a list of column names.
+
+    Parameters:
+        filter_list (list): A list of strings representing the names of the columns to filter.
+        device_type (str): A string representing the device type to fetch data from (default 'nkvv').
+        data (pd.core.frame.DataFrame): A Pandas DataFrame to filter (default None).
+        cols (dict): A dictionary of column names and their positions (default None).
+
+    Returns:
+        pd.core.frame.DataFrame: A new Pandas DataFrame that only contains the columns that match the filter list.
+    """
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)

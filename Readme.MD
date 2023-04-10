@@ -24,8 +24,9 @@
 - - - [Data import](#data-import)
 - - - [Replace data](#replace-data)
 - - - [Counter](#counter)
-- - - [Periods](#periods)
 - - - [Timestamp analyzing](#timestamp-analyzing)
+- - - [Periods](#periods)
+- - - [Nans](#nans)
 
 &nbsp;
 
@@ -282,8 +283,6 @@ It's recommended to pass variable `data` and return it as a `data` variable as w
 and returns the total number of logs in the DataFrame. 
 If no DataFrame is provided, the function calls `get_data()` to obtain one.
 
-### Periods
-
 `total_periods()` check for received data to return the start and the end of the measures. 
 You can pass format of the data by `format=` argument. 
 
@@ -292,4 +291,31 @@ You can pass format of the data by `format=` argument.
 `values_time_analyzer()` analyzes the time gaps between consecutive rows in a given time column of a 
 Pandas DataFrame and returns a DataFrame with information about any gaps that exceed a specified duration 
 or fall outside a certain range of durations.
+
+`values_time_slicer()` slices the data based on time intervals. 
+Returns a dictionary containing information about sliced data, every dictionary value contains 
+separate pandas DataFrame. Data is separated by the big time gaps, f.e. if there are measures 
+in quite different periods of time. Default time-gap parameter for slicing is 1439 minutes (a day).
+
+### Periods
+`time_period_choose()` is designed to enable a user to select a time period of interest within a given dataset.
+It then calculates the start and end dates of the dataset, prints them, and prompts the user to enter a specific time period of interest.
+The function sorts the dataset by the time of measurement and resets the indexes.
+
+### Nans
+`total_nan_counter()` analyzes the percentage of NaN values in each row of the input data and returns 
+a pandas DataFrame that shows the time periods where the percentage of NaN values exceeds a specified threshold.
+Default `false_data_percentage` is set to 33.0.
+Map of the typical errors of the devices measurements can be found in 
+[devices.py](devices.py) 
+properties and slightly described in
+[Attributes](#attributes)
+
+If there are too many NaN values in each row in a database 
+`total_nan_counter_ease()` can be used to stack continuous periods of NaN values in measure database.
+
+### Filtering
+`data_filter()` returns a new DataFrame that only contains the columns that match the filter list.
+Filter a Pandas DataFrame by a list of column names but also can be given codes of measurers or shortnames
+and practically anything from [columns.py](columns.py) / [Main columns analyzer](#main-columns-analyzer)
 
