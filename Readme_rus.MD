@@ -1,29 +1,29 @@
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Contents
-- [Description](#-description)
+- [Описание](#-описание)
 
 
-- [Implementation](#-implementation)
+- [Реализация](#-реализация)
 
 
-- [Requirements and peculiarities](#-requirements-and-peculiarities)
+- [Требования](#-требования)
 
 
-- [Installation](#-installation)
+- [Установка](#-установка)
 
 
-- [App Structure](#-app-structure)
+- [Структура](#-структура)
 
 
-- - [Device initialisation](#-device-initialisation-devicespy)
-- - - [Measurers](#measurers)
-- - - [Attributes](#attributes)
-- - - [Sources](#sources)
-- - - [Links](#links)
-- - - [Quick save/load](#quick-saveload)
+- - [Инициализатор устройств](#-инициализатор-устройств-devicespy)
+- - - [Замеры](#замеры)
+- - - [Свойства](#свойства)
+- - - [Источники](#источники)
+- - - [Ссылки](#ссылки)
+- - - [Быстрое сохранение и загрузка](#быстрое-сохранение-и-загрузка)
 
 
-- - [Columns processing](#-columns-processing-columnspy)
-- - - [Main columns analyzer](#main-columns-analyzer)
+- - [Обработка столбцов](#-обработка-столбцов-columnspy)
+- - - [Анализатор столбцов](#анализатор-столбцов)
 - - - [Defining the time column](#defining-the-time-column)
 
 
@@ -46,64 +46,67 @@
 
 &nbsp;
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Description
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Описание
 
-**ElectroMon** is the app that monitors high-voltage parameters. 
-It uses data uploaded from devices that make minute-by-minute measurements 
-in power plants, transformers and other electrical appliances.
-
-&nbsp;
-
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Implementation
-Backend is written in 
-**Python** using pandas and numpy.
-Graphs, plots and presentations are provided by 
-**Jupyter Notebook**  using matplotlib and reportlab.
+**ElectroMon**  - это приложение для мониторинга параметров высокого напряжения.
+Оно использует данные, загруженные с устройств, которые производят поминутные замеры на электростанциях, трансформаторах и других электрических устройствах.
 
 &nbsp;
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Requirements and peculiarities
-Requires some Python additional classic libs, all of which can be downloaded via `pip install`:
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Реализация
+Backend написан на языке 
+**Python** 
+с использованием библиотек **pandas** и **numpy**.
+Графики, диаграммы и выводы в печатный вид создаются с помощью 
+**Jupyter Notebook** 
+с использованием библиотек **matplotlib** и **reportlab**.
 
-Check 
+&nbsp;
+
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Требования
+Требуются дополнительные "классические" библиотеки для Python, все из которых можно загрузить с помощью `pip install`:
+
+Требования по библиотекам перечислены в 
 [requirements.txt](requirements.txt) 
-in root directory for a list of required libraries
+в корневой директории.
 
-The actual devices are applied with usage of cyrillic characters. 
-Encoding and translation features should be considered.
-
-&nbsp;
-
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Installation
-
-
+Фактические устройства используются с использованием кириллических символов. 
+Необходимо учитывать особенности кодирования и перевода в программном коде.
 
 &nbsp;
 
-# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; App Structure
-## &nbsp;&nbsp; Device initialisation ([devices.py](devices.py))
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Установка
 
-### Measurers
-ElectroMon bases on actual physical devices-measurers
 
-&nbsp;&nbsp; There is a list of them:
-- ``nkvv`` - Device for continuous monitoring and protection of high-voltage inputs<details><summary>cyrillic</summary>**Устройство непрерывного контроля и защиты высоковольтных вводов**</details>
-- ``kiv`` - Input isolation monitoring device <details><summary>cyrillic</summary>**Устройство контроля изоляции вводов**</details>
-- ``monitoring`` - Monitoring of devices for continuous monitoring and protection of high-voltage inputs <details><summary>cyrillic</summary>**Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов**</details>
 
-### Attributes 
+&nbsp;
 
+# &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Структура
+## &nbsp;&nbsp; Инициализатор устройств ([devices.py](devices.py))
+
+### Замеры
+ElectroMon получает данные от фактических физических устройств, снимающих показания.
+
+&nbsp;&nbsp; Список доступных устройств и их короткие коды, используемые в программе:
+- ``nkvv`` - **Устройство непрерывного контроля и защиты высоковольтных вводов**
+- ``kiv`` - **Устройство контроля изоляции вводов**
+- ``monitoring`` - **Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов**
+
+### Свойства 
+
+Файл
 [Devices](devices.py) 
-mostly store and return attributes for further processing.
-Module consist of methods setting properties and statuses of device, such as:
-- name of the device
-- default folder and files for uploads of data
-- type of data source, used delimiters, splitters etc.
-- columns used for setting values of measurements and their decoding map 
-- typical errors of the devices measurements
-- warning- and accident- values for a measurement-types 
-- misc. info
-<details><summary>Example of device initialisation</summary>
+хранит и возвращает атрибуты для последующей обработки.
+Модуль содержит методы установки свойств и статусов устройства, таких как:
+
+- имя устройства
+- папка и файлы по умолчанию для загрузки данных
+- тип источника данных, используемые разделители
+- столбцы, используемые для установки значений измерений и их карты декодирования
+- прописанные типичные ошибки измерений устройств
+- значения предупредительных и аварийных сигналов для определённых типов измерений
+- и т.д.
+<details><summary>Пример инициализатора</summary>
 
     self.name = 'nkvv'
     self.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
@@ -122,14 +125,14 @@ Module consist of methods setting properties and statuses of device, such as:
                                                 'voltage_difference': 0.0}
 </details>
 
-### Sources
+### Источники
 
-Data source located in `upload/` and should refer to the requirements 
-of the chosen device described in [devices.py](devices.py) file in class `Device`
-with init-properties such as `self.file_name_starts` or `self.file_name_ends` of device-objects
-In case of adding another file-type/patterns these properties should be updated.
+Исходные данные располагаются в папке `upload/` и должны соответствовать требованиям, описанным в файле 
+[devices.py](devices.py) в классе `Device`, 
+включая инициализирующие свойства, такие как `self.file_name_starts` или `self.file_name_ends` объектов-устройств. 
+При добавлении нового типа файлов/шаблонов эти свойства следует обновлять.
 
-<details><summary>Example of upload files</summary>
+<details><summary>Пример выгруженных с устройств файлов</summary>
 
     'upload/kiv/MeasJ a284 #572665920 30-12-2022.xlsx' 
     'upload/mon/22_06/21217004.I' 
@@ -143,13 +146,12 @@ In case of adding another file-type/patterns these properties should be updated.
     'upload/nkvv/DB_i.csv;  
 </details>
 
-### Links
+### Ссылки
 
-`links()` method contains main properties of a devices returned as a list. 
-The method can be enlarged with new properties, but the order of the list 
-**must** never be rearranged because its indexes are used in analytical functions. 
+Функция `links()` содержит основные свойства устройств, возвращаемые в виде списка. 
+Метод можно расширить новыми свойствами, но порядок списка не должен изменяться, так как его индексы используются в аналитических функциях.
 
-<details><summary>Current links-list and indexes of the properties</summary>
+<details><summary>Текущий список ссылок для получения данных по устройству через функцию</summary>
 
             self.name,  # 0
             self.file,  # 1
@@ -164,25 +166,25 @@ The method can be enlarged with new properties, but the order of the list
             self.warning_map  # 10
 </details>
 
-### Quick save/load
+### Быстрое сохранение и загрузка
 
-Saved cache of data for a device can be stored in a `.pkl` format in `save/` directory 
-for further fast upload.
+Сохраненный кэш данных для устройства может быть сохранен в формате `.pkl` в директории `save/` для дальнейшей быстрой загрузки.
 
-Use class `Pkl` and `save()` or `load()` method in [devices](devices.py)
-<details><summary>Example of fast save & load </summary>
-You can save the processing data with  
+Используйте класс `Pkl` и методы `save()` или `load()` в [devices](devices.py)
+
+<details><summary>Пример быстрого сохранения и загрузки данных </summary>
+Сохранение оперируемых данных устройства контроля и изоляции вводов:
 
     data = devices.Pkl.save(device_type='kiv', data=data)
 
-And then upload it with
+Загрузка этих данных:
 
     data = devices.Pkl.load(device_type='kiv')
 </details>
 
-## &nbsp;&nbsp; Columns processing ([columns.py](columns.py)) 
+## &nbsp;&nbsp; Обработка столбцов ([columns.py](columns.py)) 
 
-### Main columns analyzer
+### Анализатор столбцов
 
 Based on [devices](devices.py) attributes
 `columns_analyzer()`

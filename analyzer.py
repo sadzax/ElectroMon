@@ -11,30 +11,30 @@ import sadzax
 
 #  ____________ 1. DATA PROCESSING ________________________________________________
 #  1.0.0. Importing data
-def get_data(device_type: str = 'kiv',
+def get_data(device_type: str = 'mon',
              file: str = None,
              sep: str = None,
              encoding: str = None,
              parse_dates: list = None,
              raw_param: bool = False):
     """
-                plan/note: Need to switch the func. to classes of devices ---
     Returns data from work files. 
     There should be at least one suitable uploaded file in the upload directory of the device.
     The selected files are then concatenated to form a single dataframe. 
     The data won't be sorted by the time of measurement.
 
-    Parameters:
-    device_type (str): Type of device for which data is being analyzed.
-    file (str): Name of the file to be analyzed. If not specified, a suitable file is chosen from the device's upload 
-                directory.
-    sep (str): Delimiter to be used for parsing the file. If not specified, the default delimiter for the device is used.
-    encoding (str): Encoding to be used for reading the file. If not specified, the default encoding for the device is used.
-    parse_dates (list): List of column names to be parsed as dates. If not specified, no columns are parsed as dates.
-    raw_param (bool): Whether to return raw data without any pre-processing. Default is False.
+        Parameters:
+        -----------
+    :param device_type (str): Type of device for which data is being analyzed.
+    :param file (str): Name of the file to be analyzed. If not specified, a suitable file is chosen from the device's upload directory.
+    :param sep (str): Delimiter to be used for parsing the file. If not specified, the default delimiter for the device is used.
+    :param encoding (str): Encoding to be used for reading the file. If not specified, the default encoding for the device is used.
+    :param parse_dates (list): List of column names to be parsed as dates. If not specified, no columns are parsed as dates.
+    :param raw_param (bool): Whether to return raw data without any pre-processing. Default is False.
 
-    Returns:
-    pd.DataFrame: A consolidated dataframe containing data from all the selected files.
+        Returns:
+        -----------
+    :return pd.DataFrame: A consolidated dataframe containing data from all the selected files.
     """
     data = pd.DataFrame.empty
     device_type = device_type.lower()
@@ -103,23 +103,23 @@ def stack_data(device_type: str = 'mon',
     """
     Stacks data in case of using multiple files for creating an uninterrupted dataflow.
 
-    This function can be used instead of `get_data()` function. There should be at least one suitable
-    uploaded file in the upload directory of the device. If only one file is available,
-    that file is picked for analysis. If multiple files are available, the function prompts the user
-    to choose the files to be consolidated. The selected files are then
-    concatenated to form a single dataframe. The data is sorted by the time of measurement.
+    This function can be used instead of `get_data()` function. There should be at least one suitable uploaded file in the upload directory of the device.
+    If only one file is available, that file is picked for analysis.
+    If multiple files are available, the function prompts the user to choose the files to be consolidated.
+    The selected files are then concatenated to form a single dataframe. The data is sorted by the time of measurement.
 
-    Parameters:
-    device_type (str): Type of device for which data is being analyzed.
-    file (str): Name of the file to be analyzed. If not specified, a suitable file is chosen from the device's upload 
-                directory.
-    sep (str): Delimiter to be used for parsing the file. If not specified, the default delimiter for the device is used.
-    encoding (str): Encoding to be used for reading the file. If not specified, the default encoding for the device is used.
-    parse_dates (list): List of column names to be parsed as dates. If not specified, no columns are parsed as dates.
-    raw_param (bool): Whether to return raw data without any pre-processing. Default is False.
+        Parameters:
+        -----------
+    :param device_type (str): Type of device for which data is being analyzed.
+    :param file (str): Name of the file to be analyzed. If not specified, a suitable file is chosen from the device's upload directory.
+    :param sep (str): Delimiter to be used for parsing the file. If not specified, the default delimiter for the device is used.
+    :param encoding (str): Encoding to be used for reading the file. If not specified, the default encoding for the device is used.
+    :param parse_dates (list): List of column names to be parsed as dates. If not specified, no columns are parsed as dates.
+    :param raw_param (bool): Whether to return raw data without any pre-processing. Default is False.
 
-    Returns:
-    pd.DataFrame: A consolidated dataframe containing data from all the selected files.
+        Returns:
+        -----------
+    :return pd.DataFrame: A consolidated dataframe containing data from all the selected files.
     """
     device_type = device_type.lower()
     files_list = devices.links(device_type)[5]
@@ -162,28 +162,24 @@ def stack_data(device_type: str = 'mon',
 
 
 #  1.1. Exclude false measures
-def pass_the_nan(device_type: str = 'nkvv',
+def pass_the_nan(device_type: str = 'mon',
                  data: pd.core = None,
                  cols: dict = None,
                  default_dict_for_replacement: dict = None):
     """
     Replaces specified values in a DataFrame with NaN values.
 
-    Parameters:
-    device_type (str): The type of device being analyzed.
-    data (pd.core): The DataFrame to be processed. If None, it will be obtained
-                    using get_data() with the specified device_type.
-    cols (dict): The dictionary of columns to be analyzed. If None, it will be
-                 obtained using columns.columns_analyzer() with the specified
-                 device_type.
-    default_dict_for_replacement (dict): The dictionary containing the values
-                                         to be replaced with NaN values. If None,
-                                         the default value will be obtained
-                                         using devices.links() with the specified
-                                         device_type.
+        Parameters:
+        -----------
+    :param device_type (str): The type of device being analyzed.
+    :param data (pd.core): The DataFrame to be processed. If None, it will be obtained using get_data() with the specified device_type.
+    :param cols (dict): The dictionary of columns to be analyzed. If None, it will be obtained using columns.columns_analyzer() with the specified device_type.
+    :param default_dict_for_replacement (dict): The dictionary containing the values to be replaced with NaN values.
+                                                If None, the default value will be obtained using devices.links() with the specified device_type.
 
-    Returns:
-    pd.core: The processed DataFrame with specified values replaced by NaN.
+        Returns:
+        -----------
+    :return pd.core: The processed DataFrame with specified values replaced by NaN.
     """
     device_type = device_type.lower()
     if data is None:
@@ -221,20 +217,17 @@ def set_dtypes(device_type: str = 'mon',
     """
     Sets the data types for specified columns in a DataFrame.
 
-    Parameters:
-    device_type (str): The type of device being analyzed.
-    data (pd.core): The DataFrame to be processed. If None, it will be obtained
-                    using get_data() with the specified device_type.
-    cols (dict): The dictionary of columns to be analyzed. If None, it will be
-                 obtained using columns.columns_analyzer() with the specified
-                 device_type.
-    default_dict_for_dtypes (dict): The dictionary containing the data types
-                                    for each column. If None, the default value
-                                    will be obtained using devices.links() with
-                                    the specified device_type.
+        Parameters:
+        -----------
+    :param device_type (str): The type of device being analyzed.
+    :param data (pd.core): The DataFrame to be processed. If None, it will be obtained using get_data() with the specified device_type.
+    :param cols (dict): The dictionary of columns to be analyzed. If None, it will be obtained using columns.columns_analyzer() with the specified device_type.
+    :param default_dict_for_dtypes (dict): The dictionary containing the data types for each column.
+                                           If None, the default value will be obtained using devices.links() with the specified device_type.
 
-    Returns:
-    pd.core: The processed DataFrame with specified data types for columns.
+        Returns:
+        -----------
+    :return pd.core: The processed DataFrame with specified data types for columns.
     """
     device_type = device_type.lower()
     if data is None:
@@ -263,19 +256,21 @@ def set_dtypes(device_type: str = 'mon',
 
 #  ____________ 2. BASIC TIME ANALYZING AND SLICING _______________________________
 #  2.0.0. Count the strings
-def total_log_counter(device_type: str = 'nkvv',
-                      data: pd.core = None):
+def total_counter(device_type: str = 'mon',
+                  data: pd.core = None):
     """
-    The total_log_counter function takes a device type and a pandas DataFrame as input
+    The total_counter function takes a device type and a pandas DataFrame as input
     and returns the total number of logs in the DataFrame. If no DataFrame is provided,
     the function calls the get_data function to obtain one.
 
-    Parameters:
-    device_type (str): a string indicating the type of device from which the logs were obtained.
-    data (pd.core): a pandas DataFrame containing the logs. Default is None.
+        Parameters:
+        -----------
+    :param device_type (str): a string indicating the type of device from which the logs were obtained.
+    :param data (pd.core): a pandas DataFrame containing the logs. Default is None.
 
-    Returns:
-    An integer representing the total number of logs in the DataFrame.
+        Returns:
+        -----------
+    :return An integer representing the total number of logs in the DataFrame.
     """
     if data is None:
         data = get_data(device_type=device_type.lower())
@@ -288,28 +283,14 @@ def total_periods(device_type: str = 'mon',
     """
     Compute the start and end dates of a time series data, given a device type and a data set.
 
-    Parameters:
-    -----------
-    device_type : str, optional
-        A string that represents the type of device, by default 'mon'.
-    data : pandas.core.frame.DataFrame, optional
-        A pandas DataFrame that contains the time series data, by default None.
+        Parameters:
+        -----------
+    :param device_type (str): A string that represents the type of device, by default 'mon'.
+    :param data (pandas.core.frame.DataFrame): A pandas DataFrame that contains the time series data, by default None.
 
-    Returns:
-    --------
-    List[pd.Timestamp]
-        A list containing two pandas Timestamp objects, representing the start and end dates of the time series.
-
-    Raises:
-    -------
-    ValueError
-        If the device type is not supported or the data set is empty.
-
-    Examples:
-    ---------
-    data = pd.DataFrame({'date': pd.date_range(start='2020-01-01', end='2020-12-31'), 'value': range(366)})
-    total_periods(data=data)
-    [Timestamp('2020-01-01 00:00:00'), Timestamp('2020-12-31 00:00:00')]
+        Returns:
+        --------
+    :return a list containing two pandas Timestamp objects, representing the start and end dates of the time series.
     """
     if data is None:
         data = get_data(device_type=device_type.lower())
@@ -322,7 +303,7 @@ def total_periods(device_type: str = 'mon',
 
 
 #  2.1.0. Analysis of time of measurements
-def values_time_analyzer(device_type: str = 'nkvv',
+def values_time_analyzer(device_type: str = 'mon',
                          data: pd.core = None,
                          time_sequence_min: int = 1,
                          inaccuracy_sec: int = 3,
@@ -334,30 +315,28 @@ def values_time_analyzer(device_type: str = 'nkvv',
     Analyzes the time gaps between consecutive rows in a given time column of a Pandas DataFrame and returns a DataFrame
     with information about any gaps that exceed a specified duration or fall outside a certain range of durations.
 
-    Parameters:
-    -----------
-    device_type : str, default 'nkvv'
+        Parameters:
+        -----------
+    :param device_type : str, default 'mon'
         The type of device for which to retrieve the data.
-    data : pandas.core.frame.DataFrame, optional
+    :param data : pandas.core.frame.DataFrame, optional
         The DataFrame containing the data to analyze. If None, the data will be retrieved using the `get_data()` function.
-    time_sequence_min : int, default 1
+    :param time_sequence_min : int, default 1
         The minimum duration (in minutes) that a time sequence should last.
-    inaccuracy_sec : int, default 3
+    :param inaccuracy_sec : int, default 3
         The maximum allowed deviation (in seconds) from the expected time sequence duration.
-    gap_const_day : int, default 1440
+    :param gap_const_day : int, default 1440
         The minimum duration (in minutes) for which to report gaps in the DataFrame, if `exact_gap` is False.
-    gap_const_hour : int, default 60
+    :param gap_const_hour : int, default 60
         The minimum duration (in minutes) for which to report gaps in the DataFrame, if `exact_gap` is False.
-    time_column : str, optional
-        The name of the time column to analyze. If None, the column will be determined automatically based on the device
-        type and the available columns in the DataFrame.
-    exact_gap : bool, default True
-        Whether to report gaps in the DataFrame with the exact duration or with a duration rounded to the nearest day,
-        hour, or minute, depending on their size.
+    :param time_column : str, optional
+        The name of the time column to analyze. If None, the column will be determined automatically based on the device type and the available columns in the DataFrame.
+    :param exact_gap : bool, default True
+        Whether to report gaps in the DataFrame with the exact duration or with a duration rounded to the nearest day, hour, or minute, depending on their size.
 
-    Returns:
-    --------
-    pandas.core.frame.DataFrame or None
+        Returns:
+        --------
+    :return pandas.core.frame.DataFrame or None
         A DataFrame with information about any gaps that exceed a specified duration or fall outside a certain range
         of durations, or None if no such gaps were found. The DataFrame contains the following columns:
         - "Строка в БД" (Database row): the index of the row in the DataFrame where the gap starts.
@@ -405,7 +384,7 @@ def values_time_analyzer(device_type: str = 'nkvv',
 
 
 #  2.1.1. Slice time of measurements for big gaps
-def values_time_slicer(device_type: str = 'kiv',
+def values_time_slicer(device_type: str = 'mon',
                        data: pd.core = None,
                        time_analyzer: pd.core = None,
                        minutes_slice_mode: int = 1439,
@@ -415,21 +394,19 @@ def values_time_slicer(device_type: str = 'kiv',
     """
     Slices the data based on time intervals, and returns a dictionary containing information about sliced data.
 
-    Parameters:
-    -----------
-    :param device_type (str): A string representing the type of device. Default is 'kiv'.
+        Parameters:
+        -----------
+    :param device_type (str): A string representing the type of device. Default is 'mon'.
     :param data (pd.core): A Pandas DataFrame containing the data. Default is None.
     :param time_analyzer (pd.core): A Pandas DataFrame containing the analyzed data. Default is None.
-    :param minutes_slice_mode (int): An integer representing the number of minutes to slice the data by.
-                                            Default is 1439.
-    :param min_values_required (int): An integer representing the minimum number of values required for the slice to be
-                                            included in the analysis. Default is 300.
+    :param minutes_slice_mode (int): An integer representing the number of minutes to slice the data by. Default is 1439.
+    :param min_values_required (int): An integer representing the minimum number of values required for the slice to be included in the analysis. Default is 300.
     :param time_column (str): A string representing the name of the column containing the time data. Default is None.
     :param full_param (bool): A boolean representing whether to return the full parameter set. Default is False.
 
-    Returns:
-    --------
-    - data_result (dict): A dictionary containing information about the sliced data.
+        Returns:
+        --------
+    :return data_result (dict): A dictionary containing information about the sliced data.
     """
     #  Convert device_type to lowercase
     device_type = device_type.lower()
@@ -499,15 +476,15 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', format: s
     If the user enters an end date that is earlier than the start date, the function will switch the start and end dates and add 23 hours, 59 minutes, and 59 seconds to the end date, to ensure that the end date is inclusive.
     Finally, the function returns the start and end dates as pandas Timestamp objects.
 
-    Parameters:
-    -----------
+        Parameters:
+        -----------
     :param data: data is a pandas dataframe containing the dataset of interest,
     :param device_type: device_type specifies the type of device used to collect the data
     :param format: format is a string that represents the format of the date
 
-    Returns:
-    --------
-    :return: pandas.core.frame.DataFrame - A DataFrame as a copy (not a view) of the passed data to the function
+        Returns:
+        --------
+    :return pandas.core.frame.DataFrame - A DataFrame as a copy (not a view) of the passed data to the function
     """
     if data is None:
         data = get_data(device_type=device_type)
@@ -599,25 +576,25 @@ def total_nan_counter(device_type='nkvv',
                       data: pd.core = None,
                       false_data_percentage: float = 33.0):
     """
-    Analyzes the percentage of NaN values in each row of the input data and returns a DataFrame
-    that shows the time periods where the percentage of NaN values exceeds a specified threshold.
+    Analyzes the percentage of NaN values in each row of the input data and returns a DataFrame that shows the time periods where the percentage of NaN values exceeds a specified threshold.
 
-    Args:
-        device_type (str, optional): The type of device for which the data is collected. Defaults to 'nkvv'.
-        data (pandas DataFrame, optional): The input data containing the measurements. If not specified,
-            the function will use the `get_data()` function to obtain the data for the specified device.
-        false_data_percentage (float, optional): The threshold percentage above which a row is considered as containing
-            false data due to excessive NaN values. Defaults to 33.0.
+        Parameters:
+        -----------
+    :param device_type (str, optional): The type of device for which the data is collected. Defaults to 'nkvv'.
+    :param data (pandas DataFrame, optional): The input data containing the measurements.
+                                              If not specified, the function will use the `get_data()` function to obtain the data for the specified device.
+    :param false_data_percentage (float, optional): The threshold percentage above which a row is considered
+                                                    as containing false data due to excessive NaN values. Defaults to 33.0.
 
-    Returns:
-        pandas DataFrame: A view of the cleaned input DataFrame that shows the time periods where the percentage of
-        NaN values exceeds the specified threshold. The returned DataFrame contains the following columns:
-        - 'Время замера' (time_column): The time of measurement for each row.
-        - '% сбоя данных в момент замера': The percentage of NaN values in each row.
-        - 'Дата': The date of each measurement in the format DD.MM.YY.
-        - 'Время': The time of each measurement in the format HH.MM.
-        - 'alarm': A Boolean column indicating whether the percentage of NaN values in the row exceeds the specified
-          threshold (True) or not (False).
+        Returns:
+        -----------
+    :return pandas DataFrame: A view of the cleaned input DataFrame that shows the time periods where the percentage of NaN values exceeds the specified threshold.
+    The returned DataFrame contains the following columns:
+    - 'Время замера' (time_column): The time of measurement for each row.
+    - '% сбоя данных в момент замера': The percentage of NaN values in each row.
+    - 'Дата': The date of each measurement in the format DD.MM.YY.
+    - 'Время': The time of each measurement in the format HH.MM.
+    - 'alarm': A Boolean column indicating whether the percentage of NaN values in the row exceeds the specified threshold (True) or not (False).
     """
     #  Set the device & unmutable data
     device_type = device_type.lower()
@@ -659,10 +636,21 @@ def total_nan_counter(device_type='nkvv',
 # 2.3.2. Stacking selected false measures in continious periods
 def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_sec: int = 3):
     """
-    This function eases 'total_nan_counter'  function result and returns the periods of false measurements
-    Useful for passing to printing to PDF-file because false measurements are mostly stack into a continuous period
-    Must take a Pandas dataframe out of 'total_nan_counter' function result as a first argument
-    Returns dataframe with 3 columns (Start of the period - End of the period - Quantity of false measurements)
+    The function total_nan_counter_ease eases the result of the total_nan_counter function by returning the periods of false measurements.
+    The function takes a Pandas dataframe out of the total_nan_counter function result as the first argument and returns a dataframe with 3 columns:
+    Start of the period, End of the period, and Quantity of false measurements.
+    The function has two optional arguments: time_sequence_min, which is the minimum time sequence in minutes, and inaccuracy_sec, which is the inaccuracy in seconds.
+    These arguments are used to set the delta check column and to filter the delta check with False value as the borders of periods of false measurements.
+
+        Parameters:
+        -----------
+    :param df: Pandas dataframe
+    :param time_sequence_min: Minimum time sequence in minutes (default=1)
+    :param inaccuracy_sec: Inaccuracy in seconds (default=3)
+
+        Returns:
+        -----------
+    :return: Pandas dataframe with 3 columns: Start of the period, End of the period, and Quantity of false measurements
     """
     #  Take a total_nan_counter func result as a base
     df = df.reset_index(drop=True)
@@ -717,14 +705,16 @@ def data_filter(filter_list: list,
     """
     Filter a Pandas DataFrame by a list of column names.
 
-    Parameters:
-        filter_list (list): A list of strings representing the names of the columns to filter.
-        device_type (str): A string representing the device type to fetch data from (default 'nkvv').
-        data (pd.core.frame.DataFrame): A Pandas DataFrame to filter (default None).
-        cols (dict): A dictionary of column names and their positions (default None).
+        Parameters:
+        -----------
+    :param filter_list (list): A list of strings representing the names of the columns to filter.
+    :param device_type (str): A string representing the device type to fetch data from (default 'nkvv').
+    :param data (pd.core.frame.DataFrame): A Pandas DataFrame to filter (default None).
+    :param cols (dict): A dictionary of column names and their positions (default None).
 
-    Returns:
-        pd.core.frame.DataFrame: A new Pandas DataFrame that only contains the columns that match the filter list.
+        Returns:
+        -----------
+    :return pd.core.frame.DataFrame: A new Pandas DataFrame that only contains the columns that match the filter list.
     """
     device_type = device_type.lower()
     if data is None:
@@ -749,13 +739,32 @@ def data_filter(filter_list: list,
 
 # 4.1. Main averager
 def data_average_finder(filter_list: list = None,
-                        device_type: str = 'nkvv',
+                        device_type: str = 'mon',
                         data: pd.core = None,
                         cols: dict = None,
                         abs_parameter: bool = True,
                         unite_parameter: bool = False,
                         round_parameter: int = 3,
                         list_of_non_math: list = None):
+    """
+    This function filters and calculates the average value of a specified list of columns in a given dataset.
+    It returns a dictionary with column names as keys and their corresponding average value as values.
+
+        Parameters:
+        -----------
+    :param filter_list (list): A list of column names to filter and calculate average values from (default ['∆tg_MV'])
+    :param device_type (str): A string representing the device type to get data for (default 'mon')
+    :param data (pd.core): A pandas dataframe containing the data to filter and calculate averages from (default None)
+    :param cols (dict): A dictionary containing information about the columns of the dataset (default None)
+    :param abs_parameter (bool): A boolean indicating whether or not to calculate averages using absolute values (default True)
+    :param unite_parameter (bool): A boolean indicating whether or not to unite all filtered columns and calculate average value for them together (default False)
+    :param round_parameter (int): An integer representing the number of decimal places to round the calculated average values (default 3)
+    :param list_of_non_math (list): A list of strings representing prefixes of column names to exclude from calculations (default None)
+
+        Returns:
+        -----------
+    :return dict: A dictionary with column names as keys and their corresponding average value as values
+    """
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -765,15 +774,6 @@ def data_average_finder(filter_list: list = None,
         list_of_non_math = devices.links(device_type)[4]
     if filter_list is None:
         filter_list = ['∆tg_MV']
-    # else:
-    #     df = data_filter(filter_list, cols=cols, data=data)
-    #     func_columns_list = list(df.columns)
-    #     for k in list_of_non_math:
-    #         for i in range(df.shape[1]):
-    #             if func_columns_list[i].startswith(k) is True:
-    #                 break
-    #     else:
-    #         filter_list.append('time')
     df = data_filter(filter_list, cols=cols, data=data)
     func_columns_list = list(df.columns)
     func_result_prev = []
@@ -804,11 +804,32 @@ def data_average_finder(filter_list: list = None,
 
 #  4.2. Search for distributions
 def data_distribution_finder(filter_list: list,
-                             device_type: str = 'nkvv',
+                             device_type: str = 'mon',
                              data: pd.core = None,
                              cols: dict = None,
                              unite_parameter: bool = False,
                              list_of_non_math: list = None):
+    """
+    Analyzes the distribution of values in the specified columns of the data.
+
+        Parameters:
+        -----------
+    :param filter_list (list): A list of column names to be analyzed.
+    :param device_type (str): The device type of the data. Defaults to 'mon'.
+    :param data (pandas.core.frame.DataFrame): The data to be analyzed. If None, the data will be obtained with the 'get_data' function using the specified device_type.
+    :param cols (dict): A dictionary with information about the columns of the data.
+                        If None, the information will be obtained with the 'columns_analyzer' function using the specified device_type.
+    :param unite_parameter (bool): A flag indicating whether the distribution of all specified columns should be combined into one result. Defaults to False.
+                                   If True, the result will be a DataFrame with the combined distributions.
+                                   If False, the result will be a dictionary with a distribution for each column.
+    :param list_of_non_math (list): A list of strings that are prefixes of column names that should be excluded from the analysis. Defaults to None.
+
+        Returns:
+        -----------
+    :return A dictionary with the distribution of values in the specified columns of the data.
+            If unite_parameter is False, the dictionary will have a distribution for each specified column.
+            If unite_parameter is True, the dictionary will have a single key 'Overall distribution: ' and the value will be a DataFrame with the combined distribution.
+    """
     device_type = device_type.lower()
     if data is None:
         data = get_data(device_type=device_type)
@@ -824,7 +845,7 @@ def data_distribution_finder(filter_list: list,
         for k in list_of_non_math:
             if func_columns_list[i].startswith(k) is True:
                 break
-        else:  # For-Else - ?
+        else:
             if unite_parameter is False:
                 func_result[func_columns_list[i]] = data[func_columns_list[i]].value_counts(normalize=True,
                                                                                             sort=True)
@@ -842,8 +863,29 @@ def data_correlation(filter_list1: list = None,
                      data: pd.core = None,
                      cols: dict = None):
     """
-    Returns dictionary of { Corr.Params : [ Sequence of correlation]  }
-    100% strict correlation is a x=y type of a graph
+    Calculates the correlation between columns of two filtered dataframes and returns a dictionary
+    with the correlation parameters as keys and the corresponding sequence of correlation values as values.
+
+        Parameters:
+        -----------
+    :param filter_list1 : list, optional
+        A list of filters to be applied to the data columns for the first dataframe.
+    :param filter_list2 : list, optional
+        A list of filters to be applied to the data columns for the second dataframe.
+    :param device_type : str, optional
+        A string specifying the device type. Default is 'nkvv'.
+    :param data : pandas.core.frame.DataFrame, optional
+        A pandas dataframe. Default is None.
+    :param cols : dict, optional
+        A dictionary of the device's column names. Default is None.
+
+        Returns:
+        --------
+    :return A dictionary containing the correlation parameters as keys and the corresponding sequence of correlation values as values.
+
+        Notes:
+        ------
+    100% strict correlation is a "x=y"-type of graph with ~45 dgrs. angle.
     """
     device_type = device_type.lower()
     if data is None:
@@ -878,7 +920,7 @@ def data_correlation(filter_list1: list = None,
     return func_result
 
 
-#  4.4. Warning Notes
+#  4.4.0. Warning Notes
 def warning_finder(filter_list: list = None,
                    device_type: str = 'nkvv',
                    data: pd.core = None,
@@ -888,8 +930,25 @@ def warning_finder(filter_list: list = None,
                    abs_parameter: bool = True,
                    list_of_non_math: list = None):
     """
-    passesult = df_t.loc[(df_t[cols_list[a_column_index]] >= warning_amount) |
-    'datetime'
+    Finds time intervals when certain parameters exceed specified warning or accident threshold values.
+
+        Parameters:
+        -----------
+    :param filter_list (list, optional): List of column names to filter data by. If None, defaults to ['time', '∆tg_HV'].
+    :param device_type (str, optional): Type of device to get data for. Defaults to 'nkvv'.
+    :param data (pd.core, optional): Dataframe to use for analysis. If None, loads data using get_data() function.
+    :param cols (dict, optional): Dictionary of column names to use for filtering data. If None, analyzes column names using columns_analyzer() function.
+    :param warning_param_war (float, optional): Warning parameter value for warning type events. Defaults to 1.0.
+    :param warning_param_acc (float, optional): Warning parameter value for accident type events. Defaults to 1.5.
+    :param abs_parameter (bool, optional): If True, uses absolute value of warning parameter to detect events. Defaults to True.
+    :param list_of_non_math (list, optional): List of non-mathematical column names. If None, loads from devices.links() function for the specified device type.
+
+    Returns:
+    -----------
+    :return dict: Dictionary of dataframes, where keys are column names and values are lists of two dataframes. 
+                  The first dataframe contains time intervals when the parameter exceeds the warning threshold, 
+                  and the second dataframe contains time intervals when the parameter exceeds the accident threshold. 
+                  The time intervals are stored in the 'time' column of the dataframes.
     """
     device_type = device_type.lower()
     if list_of_non_math is None:
@@ -941,12 +1000,37 @@ def warning_finder(filter_list: list = None,
     return func_result
 
 
+#  4.4.1. Warning Notes - Merging
 def warning_finder_merge(log: dict,
                          device_type: str = 'mon',
                          data: pd.core = None,
                          warn_type: str = 'acc',
                          warning_param_war: float = 1.0,
                          warning_param_acc: float = 1.5):
+    """
+    Merges the dataframes in the input dictionary `log` and adds columns for warning parameters based on the given `warn_type` and threshold values.
+    Returns the resulting merged dataframe.
+
+        Parameters:
+        -----------
+    :param log : dict
+        A dictionary containing a set of dataframes.
+    :param device_type : str, optional
+        A string indicating the type of device used for measurements. Default is 'mon'.
+    :param data : pd.core, optional
+        A pandas dataframe of data. Default is None.
+    :param warn_type : str, optional
+        A string indicating the type of warning, either 'warning' or 'war' for a warning signal or 'accident' or 'acc' for an accident signal. Default is 'acc'.
+    :param warning_param_war : float, optional
+        A float value indicating the warning threshold for a warning signal. Default is 1.0.
+    :param warning_param_acc : float, optional
+        A float value indicating the warning threshold for an accident signal. Default is 1.5.
+
+        Returns:
+        --------
+    :return df : pd.core
+        A pandas dataframe of merged dataframes with added columns for warning parameters based on the given `warn_type` and threshold values.
+    """
     if data is None:
         data = get_data(device_type=device_type)
     datetime_name = columns.time_column(device_type=device_type, data=data)
@@ -978,6 +1062,7 @@ def warning_finder_merge(log: dict,
     return df
 
 
+#  4.4.2. Warning Notes - Merge - Ease
 def warning_finder_ease(log: dict,
                         device_type: str = 'mon',
                         warn_type: str = 'accident',
@@ -986,6 +1071,29 @@ def warning_finder_ease(log: dict,
                         min_values_for_print: int = 5,
                         time_sequence_min: int = 1,
                         inaccuracy_sec: int = 3):
+    """
+    The warning_finder_ease function takes in a dictionary log and several optional arguments to filter and process the data in log in order to identify warning or accident events.
+    It returns a Pandas DataFrame summarizing the identified events.
+
+        Parameters:
+        -----------
+    :param log (dict): A dictionary containing measurements of different parameters, including a datetime column. The data is expected to be in the form of a Pandas DataFrame.
+    :param device_type (str, default='mon'): A string indicating the type of device used to make the measurements.
+    :param warn_type (str, default='accident'): A string indicating the type of warning to be identified.
+                                                Possible values are 'accident' or 'acc' for accident warnings, and 'warning' or 'war' for warning alerts.
+    :param warning_param_war (float, default=1.0): A float representing the warning threshold for the specified warning type, as a percentage of the maximum value for the relevant parameter.
+    :param warning_param_acc (float, default=1.5): A float representing the accident threshold for the specified warning type, as a percentage of the maximum value for the relevant parameter.
+    :param min_values_for_print (int, default=5): An integer representing the minimum number of consecutive warning measurements required to be included in the output DataFrame.
+    :param time_sequence_min (int, default=1): An integer representing the minimum time in minutes between consecutive measurements for them to be considered as part of the same warning event.
+    :param inaccuracy_sec (int, default=3): An integer representing the maximum difference in seconds allowed between
+                                            consecutive measurements for them to be considered as part of the same warning event.
+
+        Returns:
+        -----------
+    :return A Pandas DataFrame summarizing the identified warning or accident events, including the parameter name,
+            start and end times, and the number of consecutive measurements that were part of the same event.
+            If no events were identified, a string is returned instead.
+    """
     #  warning_finder func. returns two dataframes for every key-measurer, ind.0 = warnings, ind.1 = accident
     log_list_i = 0
     warn_str = 'предупредительная'

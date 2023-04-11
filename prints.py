@@ -60,7 +60,7 @@ def total_log_counter(device_type, data):
     if data is None:
         data = analyzer.get_data(device_type=device_type.lower())
     info('Подсчёт общего количества записей')
-    log_total = analyzer.total_log_counter(device_type=device_type, data=data)
+    log_total = analyzer.total_counter(device_type=device_type, data=data)
     print(f'Общее число записей в журнале измерений составило {log_total}')
 
 
