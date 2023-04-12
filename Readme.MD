@@ -1,48 +1,33 @@
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Contents
-- [Description](#-description)
-
-
-- [Implementation](#-implementation)
-
-
-- [Requirements and peculiarities](#-requirements-and-peculiarities)
-
-
-- [Installation](#-installation)
-
-
-- [App Structure](#-app-structure)
-
-
-- - [Device initialisation](#-device-initialisation-devicespy)
-- - - [Measurers](#measurers)
-- - - [Attributes](#attributes)
-- - - [Sources](#sources)
-- - - [Links](#links)
-- - - [Quick save/load](#quick-saveload)
-
-
-- - [Columns processing](#-columns-processing-columnspy)
-- - - [Main columns analyzer](#main-columns-analyzer)
-- - - [Defining the time column](#defining-the-time-column)
-
-
-- - [Analyzers and processors](#-analyzers-and-processors-analyzerpy)
-- - - [Data import](#data-import)
-- - - [Replace data](#replace-data)
-- - - [Counter](#counter)
-- - - [Timestamp analyzing](#timestamp-analyzing)
-- - - [Periods](#periods)
-- - - [Nans](#nans)
-- - - [Filtering](#filtering)
-- - - [Averages](#averages)
-- - - [Distributions](#distributions)
-- - - [Correlations](#correlations)
-- - - [Warnings](#warnings)
-
-- - [Other modules](#-other-modules)
-
-- [Runner](#-runner)
+- [       Contents](#-contents)
+- [       Description](#-description)
+- [       Implementation](#-implementation)
+- [       Requirements and peculiarities](#-requirements-and-peculiarities)
+- [       Installation](#-installation)
+- [       App Structure](#-app-structure)
+  - [   Device initialisation (devices.py)](#-device-initialisation-devicespy)
+    - [Measurers](#measurers)
+    - [Attributes](#attributes)
+    - [Sources](#sources)
+    - [Links](#links)
+    - [Quick save/load](#quick-saveload)
+  - [   Columns processing (columns.py)](#-columns-processing-columnspy)
+    - [Main columns analyzer](#main-columns-analyzer)
+    - [Defining the time column](#defining-the-time-column)
+  - [   Analyzers and processors (analyzer.py)](#-analyzers-and-processors-analyzerpy)
+    - [Data import](#data-import)
+    - [Replace data](#replace-data)
+    - [Counter](#counter)
+    - [Timestamp analyzing](#timestamp-analyzing)
+    - [Periods](#periods)
+    - [Nans](#nans)
+    - [Filtering](#filtering)
+    - [Averages](#averages)
+    - [Distributions](#distributions)
+    - [Correlations](#correlations)
+    - [Warnings](#warnings)
+  - [   Other Modules](#-other-modules)
+- [       Runner](#-runner)
 
 &nbsp;
 
@@ -92,7 +77,6 @@ ElectroMon bases on actual physical devices-measurers
 - ``monitoring`` - Monitoring of devices for continuous monitoring and protection of high-voltage inputs <details><summary>cyrillic</summary>**Мониторинг устройств непрерывного контроля и защиты высоковольтных вводов**</details>
 
 ### Attributes 
-
 [Devices](devices.py) 
 mostly store and return attributes for further processing.
 Module consist of methods setting properties and statuses of device, such as:
@@ -103,6 +87,9 @@ Module consist of methods setting properties and statuses of device, such as:
 - typical errors of the devices measurements
 - warning- and accident- values for a measurement-types 
 - misc. info
+
+It's recommended to use `dev` or `device_type` variable for setting a device code (f.e. `'mon'` or `'kiv'`)
+
 <details><summary>Example of device initialisation</summary>
 
     self.name = 'nkvv'
@@ -120,10 +107,10 @@ Module consist of methods setting properties and statuses of device, such as:
                                                 'c_delta': -10.0,
                                                 'c_deviation': 0.0,
                                                 'voltage_difference': 0.0}
+    self.warning_map = {'∆tg': [1.0, 1.5], '∆C': [3.0, 5.0]}
 </details>
 
 ### Sources
-
 Data source located in `upload/` and should refer to the requirements 
 of the chosen device described in [devices.py](devices.py) file in class `Device`
 with init-properties such as `self.file_name_starts` or `self.file_name_ends` of device-objects
@@ -144,7 +131,6 @@ In case of adding another file-type/patterns these properties should be updated.
 </details>
 
 ### Links
-
 `links()` method contains main properties of a devices returned as a list. 
 The method can be enlarged with new properties, but the order of the list 
 **must** never be rearranged because its indexes are used in analytical functions. 
@@ -165,7 +151,6 @@ The method can be enlarged with new properties, but the order of the list
 </details>
 
 ### Quick save/load
-
 Saved cache of data for a device can be stored in a `.pkl` format in `save/` directory 
 for further fast upload.
 
@@ -183,7 +168,6 @@ And then upload it with
 ## &nbsp;&nbsp; Columns processing ([columns.py](columns.py)) 
 
 ### Main columns analyzer
-
 Based on [devices](devices.py) attributes
 `columns_analyzer()`
 processes data columns into Python dictionary with enumerated keys (can be used as indexes too) 
@@ -198,6 +182,10 @@ and values as list of parameters:
 
 [Columns](columns.py) are set to cover column's parameters across as many viewpoints as possible 
 in order to increase efficiency of analytical functions.
+
+Besides of that 
+`columns_analyzer()`
+creates some new columns sometimes, f.e. it creates column with concatinating of measures date and time columns for `'mon'` device
 
 <details><summary>Example of columns dictionary</summary>
 
@@ -261,7 +249,7 @@ and the main time column (with the fixed time of the measurement) must be first 
 ## &nbsp;&nbsp; Analyzers and processors ([analyzer.py](analyzer.py))
 
 ### Data import
-The import is based on work-files (described in [Sources](#Sources)).
+The import is based on work-files (described in [Sources](#Sources)) with a `get_data()` function.
 In case of using a multiple files for creating an uninterrupted dataflow `stack_data()` function should be used.
 Stacking data from different files also automatically sorted by ascending timestamps of the measurement.
 Data import functions returns pandas DataFrame. It is recommended to set a `data` as a variable to store this result.
@@ -301,7 +289,6 @@ property
 It's recommended to pass variable `data` and return it as a `data` variable as well for these functions 
 
 ### Counter
-
 `total_counter()` is a simple function that takes a device type and a pandas DataFrame as input 
 and returns the total number of logs in the DataFrame. 
 If no DataFrame is provided, the function calls `get_data()` to obtain one.
@@ -310,15 +297,18 @@ If no DataFrame is provided, the function calls `get_data()` to obtain one.
 You can pass format of the data by `format=` argument. 
 
 ### Timestamp analyzing
-
 `values_time_analyzer()` analyzes the time gaps between consecutive rows in a given time column of a 
 Pandas DataFrame and returns a DataFrame with information about any gaps that exceed a specified duration 
 or fall outside a certain range of durations.
+You can pass args `time_sequence_min=` and `inaccuracy_sec=` to adjust the correct interval of measures (default is 1 minute) 
+and allowed inaccuracy to be ignored for every next measure (default is 3 seconds).
 
 `values_time_slicer()` slices the data based on time intervals. 
 Returns a dictionary containing information about sliced data, every dictionary value contains 
 separate pandas DataFrame. Data is separated by the big time gaps, f.e. if there are measures 
-in quite different periods of time. DefauSlt time-gap parameter for slicing is 1439 minutes (a day).
+in quite different periods of time. 
+Time-gap parameter for slicing set by argument `minutes_slice_mode=`. Default is 1440 (a day)
+Default values counter for forming a slice set by argument `min_values_required=`. Default is 150.
 
 ### Periods
 `time_period_choose()` is designed to enable a user to select a time period of interest within a given dataset.
@@ -328,12 +318,12 @@ The function sorts the dataset by the time of measurement and resets the indexes
 ### Nans
 `total_nan_counter()` analyzes the percentage of NaN values in each row of the input data and returns 
 a pandas DataFrame that shows the time periods where the percentage of NaN values exceeds a specified threshold.
-Default 
-`false_data_percentage` 
+Default argument 
+`false_data_percentage=` 
 set to 33.0 means that measurements in the particular moment is too uncertain if more than 1/3 of measures are errors
 Map of the typical errors of the devices measurements can be found in 
 [devices.py](devices.py) 
-as a `self.default_dict_for_replacement_to_nan` property. They are slightly described in
+as a `self.default_dict_for_replacement_to_nan` property of the device objec. They are slightly described in
 [Attributes](#attributes)
 
 If there are too many NaN values in each row in a database 
@@ -359,7 +349,7 @@ If you plot this data, f.e. 100% strict correlation would like "x=y" type of gra
 
 ### Warnings
 `warning_finder()` is the basic function for analyzing warnings. 
-It finds time intervals when certain parameters exceed specified warning or accident threshold values.
+It finds time intervals when certain parameters exceed specified warning or accident threshold values set by arguments `warning_param_war=` and `warning_param_acc=`.
 Default warning or accident threshold values set in 
 [devices.py](devices.py) 
 for each device in a `self.warning_map` property. They are slightly described in
@@ -370,7 +360,7 @@ The next step for analyzing of warnings would be using
 that merges the dataframes in the input dictionary 
 `log` 
 and adds columns for warning parameters based on the given 
-`warn_type` 
+`warn_type=` 
 and threshold values. 
 It returns the resulting merged dataframe. 
 
