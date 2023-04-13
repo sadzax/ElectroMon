@@ -28,6 +28,8 @@
     - [Warnings](#warnings)
   - [   Other Modules](#-other-modules)
 - [       Runner](#-runner)
+  - [   Run](#-run)
+  - [   Print a PDF](#-print-a-pdf)
 
 &nbsp;
 
@@ -60,8 +62,30 @@ Encoding and translation features should be considered.
 &nbsp;
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Installation
+The app is stored @ [GitHub](https://github.com/sadzax/ElectroMon).
 
+1. Install [Python v.3.7.+](https://www.python.org/downloads/) 
 
+2. If you are familiar with Git choose a directory on your local machine and clone git repo there via 
+`git clone https://github.com/sadzax/ElectroMon.git`
+
+If you don't have Git installed download a project in ZIP-Archive by 
+[a direct link from GitHub](https://github.com/sadzax/ElectroMon/archive/refs/heads/master.zip) 
+and unzip it on your local machine
+
+3. Download required libraries from [requirements.txt](requirements.txt) via `pip install` as describes in [Requirements](#-requirements-and-peculiarities)
+(<details><summary>Example</summary>
+run `pip install pandas` from command-line
+</details>)
+
+4. Put files uploaded from devices files to internal directory of the app 
+`/upload/` depending on the type of device 
+(<details><summary>Example</summary>
+Copy `UPLOAD001.I` file in `c:\users\user\downloads\ElectroMon-master\upload\mon\` for a device 
+"Monitoring of devices for continuous monitoring and protection of high-voltage inputs"
+</details>)
+
+Run the application according to [Runner](#-runner) instructions
 
 &nbsp;
 
@@ -111,7 +135,7 @@ It's recommended to use `dev` or `device_type` variable for setting a device cod
 </details>
 
 ### Sources
-Data source located in `upload/` and should refer to the requirements 
+Data source located in `/upload/` and should refer to the requirements 
 of the chosen device described in [devices.py](devices.py) file in class `Device`
 with init-properties such as `self.file_name_starts` or `self.file_name_ends` of device-objects
 In case of adding another file-type/patterns these properties should be updated.
@@ -372,16 +396,21 @@ warning or accident events.
 
 ## &nbsp;&nbsp; Other Modules
 
-([prints.py](prints.py))
+([prints.py](prints.py)) contains scripts for printing messages to user and launching functions from other modules. 
+It frames the execution of functions with descriptions and textual information.
 
-([plots.py](plots.py))
+([plots.py](plots.py)) draws graphs, histograms, 
 
-([frontend.py](frontend.py))
+([frontend.py](frontend.py)) consists of scripts setting fonts, styles, margins, page-numbering, templates, capturing outputs, texts, graphs, plots and tables.
 
-([sadzax.py](sadzax.py))
+([sadzax.py](sadzax.py)) contains technical scripts for processing inputs, questioning user, transforming of dates and strings, checking for correct formats, declensing by cases in Russian and so on.
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Runner
 
-([run.py](run.py))
+## &nbsp;&nbsp; Run
+([run.py](run.py)) can be launched with a Python interpreter from a command-line from the app directory.
+(<details><summary>Example</summary>`python c:\users\user\desktop\electromon\run.py`</details>)
+For full information including graphs and plots Jupyter Notebook is preferable.
 
-([output.py](output.py))
+## &nbsp;&nbsp; Print a PDF
+([output.py](output.py)) does the same as described in [Run](#-run) but in the end of the processing data it asks you for the name of the file that will be saved in the root directory of the project as a document with a `.pdf` extension.
