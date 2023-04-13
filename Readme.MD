@@ -405,11 +405,14 @@ It frames the execution of functions with descriptions and textual information.
 
 [sadzax.py](sadzax.py) contains technical scripts for processing inputs, questioning user, transforming of dates and strings, checking for correct formats, declensing by cases in Russian and so on.
 
+&nbsp;
+
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Runner
 
 ## &nbsp;&nbsp; Run
 [run.py](run.py) can be launched with a Python interpreter from a command-line from the app directory.
-(<details><summary>Example</summary>`python c:\users\user\desktop\electromon\run.py`</details>)
+<details><summary>Example</summary>`python c:\users\user\desktop\electromon\run.py`</details>
+
 For full information including graphs and plots Jupyter Notebook is preferable.
 
 ## &nbsp;&nbsp; Print a PDF
