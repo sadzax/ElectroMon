@@ -74,16 +74,16 @@ If you don't have Git installed download a project in ZIP-Archive by
 and unzip it on your local machine
 
 3. Download required libraries from [requirements.txt](requirements.txt) via `pip install` as describes in [Requirements](#-requirements-and-peculiarities)
-(<details><summary>Example</summary>
+<details><summary>Example</summary>
 run `pip install pandas` from command-line
-</details>)
+</details>
 
 4. Put files uploaded from devices files to internal directory of the app 
 `/upload/` depending on the type of device 
-(<details><summary>Example</summary>
+<details><summary>Example</summary>
 Copy `UPLOAD001.I` file in `c:\users\user\downloads\ElectroMon-master\upload\mon\` for a device 
 "Monitoring of devices for continuous monitoring and protection of high-voltage inputs"
-</details>)
+</details>
 
 Run the application according to [Runner](#-runner) instructions
 
