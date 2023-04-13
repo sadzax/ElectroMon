@@ -396,21 +396,21 @@ warning or accident events.
 
 ## &nbsp;&nbsp; Other Modules
 
-([prints.py](prints.py)) contains scripts for printing messages to user and launching functions from other modules. 
+[prints.py](prints.py) contains scripts for printing messages to user and launching functions from other modules. 
 It frames the execution of functions with descriptions and textual information.
 
-([plots.py](plots.py)) draws graphs, histograms, 
+[plots.py](plots.py) draws graphs, histograms, 
 
-([frontend.py](frontend.py)) consists of scripts setting fonts, styles, margins, page-numbering, templates, capturing outputs, texts, graphs, plots and tables.
+[frontend.py](frontend.py) consists of scripts setting fonts, styles, margins, page-numbering, templates, capturing outputs, texts, graphs, plots and tables.
 
-([sadzax.py](sadzax.py)) contains technical scripts for processing inputs, questioning user, transforming of dates and strings, checking for correct formats, declensing by cases in Russian and so on.
+[sadzax.py](sadzax.py) contains technical scripts for processing inputs, questioning user, transforming of dates and strings, checking for correct formats, declensing by cases in Russian and so on.
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Runner
 
 ## &nbsp;&nbsp; Run
-([run.py](run.py)) can be launched with a Python interpreter from a command-line from the app directory.
+[run.py](run.py) can be launched with a Python interpreter from a command-line from the app directory.
 (<details><summary>Example</summary>`python c:\users\user\desktop\electromon\run.py`</details>)
 For full information including graphs and plots Jupyter Notebook is preferable.
 
 ## &nbsp;&nbsp; Print a PDF
-([output.py](output.py)) does the same as described in [Run](#-run) but in the end of the processing data it asks you for the name of the file that will be saved in the root directory of the project as a document with a `.pdf` extension.
+[output.py](output.py) does the same as described in [Run](#-run) but in the end of the processing data it asks you for the name of the file that will be saved in the root directory of the project as a document with a `.pdf` extension.
