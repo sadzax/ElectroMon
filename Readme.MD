@@ -74,13 +74,17 @@ If you don't have Git installed download a project in ZIP-Archive by
 and unzip it on your local machine
 
 3. Download required libraries from [requirements.txt](requirements.txt) via `pip install` as describes in [Requirements](#-requirements-and-peculiarities)
+
 <details><summary>Example</summary>
+
 run `pip install pandas` from command-line
 </details>
 
 4. Put files uploaded from devices files to internal directory of the app 
 `/upload/` depending on the type of device 
+
 <details><summary>Example</summary>
+
 Copy `UPLOAD001.I` file in `c:\users\user\downloads\ElectroMon-master\upload\mon\` for a device 
 "Monitoring of devices for continuous monitoring and protection of high-voltage inputs"
 </details>
@@ -411,9 +415,16 @@ It frames the execution of functions with descriptions and textual information.
 
 ## &nbsp;&nbsp; Run
 [run.py](run.py) can be launched with a Python interpreter from a command-line from the app directory.
-<details><summary>Example</summary>`python c:\users\user\desktop\electromon\run.py`</details>
 
-For full information including graphs and plots Jupyter Notebook is preferable.
+<details><summary>Example</summary>
+
+`python c:\users\user\downloads\ElectroMon-master\\run.py`
+</details>
+
+For full information including graphs and plots [Jupyter Notebook](https://jupyter.org/) is preferable.
 
 ## &nbsp;&nbsp; Print a PDF
-[output.py](output.py) does the same as described in [Run](#-run) but in the end of the processing data it asks you for the name of the file that will be saved in the root directory of the project as a document with a `.pdf` extension.
+[output.py](output.py) does the same as described in 
+[Run](#-run) 
+but in the end of the processing data it asks you for the name of the file that will be saved 
+in the root directory of the project as a document with a `.pdf` extension.
