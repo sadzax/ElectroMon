@@ -422,6 +422,7 @@ It frames the execution of functions with descriptions and textual information.
 </details>
 
 For full information including graphs and plots [Jupyter Notebook](https://jupyter.org/) is preferable.
+Here's [installation guide](https://jupyter.org/install)
 
 ## &nbsp;&nbsp; Print a PDF
 [output.py](output.py) does the same as described in 
