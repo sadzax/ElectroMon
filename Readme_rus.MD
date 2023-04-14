@@ -78,15 +78,14 @@
 
 3. Скачайте требуемые библиотеки их [requirements.txt](requirements.txt) через `pip install` (см. [Требования](#-требования))
 <details><summary>Пример</summary>
-Запустите
-    
- `pip install pandas`
-в командной строке
+
+Запустите `pip install pandas` в командной строке
 </details>
 
 4. Скопируйте выгруженные с устройств файлы во внутреннюю директорию проекта
 `/upload/` в зависимости от типа анализируемого устройства
 <details><summary>Например</summary>
+
 Скопируйте файл `UPLOAD001.I` в `c:\users\user\downloads\ElectroMon-master\upload\mon\` для устройства
 Мониторинга непрерывного контроля высоковольтных вводов
 </details>
