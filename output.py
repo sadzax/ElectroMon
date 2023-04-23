@@ -205,8 +205,8 @@ for k in devices.links(device_type)[10]:
                                         warning_param_war=w0, warning_param_acc=w1)
         temp = frontend.PDF.text(capture, frontend.style_regular)
         frontend.PDF.add_to_build_list(temp, story)
-        #  Setting minimal amout of values to be printed in a table
-        min_values_for_print = 10
+        #  Setting minimal amount of values to be printed in a table
+        min_values_for_print = 60
         #  Easing the main operated data to form a DataFrame
         warning_finder_ease = analyzer.warning_finder_ease(warning_finder, dev, warn_code,
                                                            warning_param_war=w0, warning_param_acc=w1,
@@ -262,4 +262,9 @@ for code_key, code_desc in {'_HV': ' со стороны высокого нап
 name_file_by_user = sadzax.Enter.str('Введите имя файла для сохранения: ',
                                      arg_must_be=sadzax.Enter.allowed_symbs_default, arg_max_capacity=24,
                                      arg_error='Некорректное имя для файла')
-frontend.PDF.builder(story, filename=name_file_by_user + '.pdf')
+#  Filename String
+fst0 = analyzer.total_periods(dev, data)[0].strftime(format='%y%m%d')
+fst1 = analyzer.total_periods(dev, data)[1].strftime(format='%y%m%d')
+
+frontend.PDF.builder(story,
+                     filename = 'EM_report_' + dev + '_' + fst1 + '_' + fst0 + ' - ' + name_file_by_user + '.pdf')

@@ -659,7 +659,7 @@ def total_nan_counter_ease(df: pd.core, time_sequence_min: int = 1, inaccuracy_s
     else:
         #  Insert a subtraction result column and a column that checks for delta set by *args
         df.insert(5, 'delta_sec', df.iloc[:, 0].diff().astype('timedelta64[s]'))
-        df.insert(6, 'delta_check', df['delta_sec'] < time_sequence_min*60 + inaccuracy_sec)
+        df.insert(6, 'delta_check', df['delta_sec'].dt.seconds < time_sequence_min*60 + inaccuracy_sec)
         #  Sets 'delta_check' of first row to False as a default start period of false measurements
         df.iloc[0, 6] = False
         #  Filters 'delta_check' with 'False' value as a borders of periods of false measurements
