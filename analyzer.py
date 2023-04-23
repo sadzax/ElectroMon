@@ -1072,7 +1072,8 @@ def warning_finder_ease(log: dict,
                         time_sequence_min: int = 1,
                         inaccuracy_sec: int = 3):
     """
-    The warning_finder_ease function takes in a dictionary log and several optional arguments to filter and process the data in log in order to identify warning or accident events.
+    The warning_finder_ease function takes in a dictionary log and several optional arguments to filter and process
+    the data in log in order to identify warning or accident events (in a row)
     It returns a Pandas DataFrame summarizing the identified events.
 
         Parameters:
@@ -1116,7 +1117,7 @@ def warning_finder_ease(log: dict,
             if log[key][int(log_list_i)].shape[0] == 0:
                 pass
             else:
-                df = log[key][log_list_i]
+                df = log[key][int(log_list_i)]
                 df = df.reset_index(drop=True)
                 datetime_index = 0
                 for i in range(df.shape[1]):
@@ -1127,7 +1128,7 @@ def warning_finder_ease(log: dict,
                 else:
                     #  Insert a subtraction result column and a column that checks for delta set by *args
                     df.insert(2, 'delta_sec', df.iloc[:, datetime_index].diff().astype('timedelta64[s]'))
-                    df.insert(3, 'delta_check', df['delta_sec'] < time_sequence_min * 60 + inaccuracy_sec)
+                    df.insert(3, 'delta_check', df['delta_sec'].dt.seconds < time_sequence_min * 60 + inaccuracy_sec)
                     #  Sets 'delta_check' of first row to False as a default start period of false measurements
                     df.iloc[0, 3] = False
                     #  Filters 'delta_check' with 'False' value as a borders of periods of false measurements

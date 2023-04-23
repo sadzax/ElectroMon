@@ -140,9 +140,11 @@ class PDF:
             colWidths = [80, 40, 40, 65, 60, 120, 130]
         title = Paragraph(str(title), style=style_of_title)
         the_end = Paragraph(str(' \n \n'), style=style_of_title)
+        #  For functions that return None if errors not found
         if self is None:
             message = Paragraph(f' \n Ошибок не выявлено', style=style_of_body)
             return [title, message, the_end]
+        #  For functions that return one string with a description
         elif type(self) is str:
             message = Paragraph(self, style=style_regular)
             return [message, the_end]

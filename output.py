@@ -64,12 +64,13 @@ status = sadzax.question(
         f"\n Eсли нет - то будут проанализированы все доступные периоды замеров\n", yes='y')
 if status == 'y':
     data = analyzer.time_period_choose(data, dev)
-    capture = frontend.capture_func(prints.total_log_counter, dev, data)
-    temp = frontend.PDF.text(capture, frontend.style_title)
-    frontend.PDF.add_to_build_list(temp, story)
-    capture = frontend.capture_func(prints.total_periods, dev, data)
-    temp = frontend.PDF.text(capture, frontend.style_title)
-    frontend.PDF.add_to_build_list(temp, story)
+capture = frontend.capture_func(prints.total_log_counter, dev, data)
+temp = frontend.PDF.text(capture, frontend.style_title)
+frontend.PDF.add_to_build_list(temp, story)
+capture = frontend.capture_func(prints.total_periods, dev, data)
+temp = frontend.PDF.text(capture, frontend.style_title)
+frontend.PDF.add_to_build_list(temp, story)
+
 
 #  Analyzing time measures for sequence errors and adding the table of it as an object for reportlab/PDF
 values_time_analyzer = analyzer.values_time_analyzer(dev, data, time_sequence_min=1, inaccuracy_sec=3)
@@ -154,13 +155,12 @@ frontend.PDF.add_to_build_list(temp, story)
 def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, width=140, height=110,
                                      hAlign='RIGHT'):
     if build_list is None:
-        build_list = build_list
-    buffer = frontend.capture_on_pic()
+        build_list = story
     plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'],
                            device_type=device_type, data=data, cols=cols,
                            title=f"Анализ корреляции данных {ex1} от температуры воздуха")
-    build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
+    img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(img, build_list)
 
 
 #  Correlation of [∆C, ∆tg, Ia, Ir, U] and temperature with a plot added as an object for reportlab/PD
@@ -181,6 +181,7 @@ capture = f'Анализ срабатываний предупредительн
 temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(temp, story)
 
+#  Take the warning map for a sequence
 for k in devices.links(device_type)[10]:
     #  Set the default warning values (1 / 1.5% for delta_tangent and 3 / 5% for delta_correlation)
     w0 = devices.links(device_type)[10][k][0]
@@ -218,12 +219,12 @@ for k in devices.links(device_type)[10]:
                                           style_of_body=frontend.style_body, style_of_title=frontend.style_title,
                                           colWidths=[180, 110, 110, 70])
         frontend.PDF.add_to_build_list(temp, story)
-
         warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data, warn_code, w0, w1)
         buffer = frontend.capture_on_pic()
         plots.scatter(df=warning_finder_merge, device_type=dev, title=f'График {warn_code_str} сигнализации')
-        temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
-        frontend.PDF.add_to_build_list(temp, story)
+        img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(img, story)
+
 
 #  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
@@ -251,10 +252,9 @@ for code_key, code_desc in {'_HV': ' со стороны высокого нап
     for key, desc in main_graph_params.items():
         input_y = key + code_key
         title = desc + code_desc
-        buffer = frontend.capture_on_pic()
         prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
-        temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
-        frontend.PDF.add_to_build_list(temp, story)
+        img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(img, story)
         frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
