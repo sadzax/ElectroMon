@@ -34,25 +34,25 @@ data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
 
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
 #  Setting a list for appending objects for reportlab/PDF
-build_list = []
+story = []
 
 #  Returning device name and adding it as an object for reportlab/PDF
-build_temp = frontend.PDF.text(f'Отчёт по устройству', frontend.style_title)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(f'Отчёт по устройству', frontend.style_title)
+frontend.PDF.add_to_build_list(temp, story)
 capture = devices.links(device_type)[9]
-build_temp = frontend.PDF.text(capture, frontend.style_title2)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(capture, frontend.style_title2)
+frontend.PDF.add_to_build_list(temp, story)
 
-build_temp = frontend.PDF.text(f'Анализ неразрывности замеров и их корректности', frontend.style_title2)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(f'Анализ неразрывности замеров и их корректности', frontend.style_title2)
+frontend.PDF.add_to_build_list(temp, story)
 
 #  Listing the columns and adding table of it as an object for reportlab/PDF
 cols_df = columns.columns_df(dev, cols)
 capture = cols_df
-build_temp = frontend.PDF.table_from_df(capture, title='Список данных файла с раскладкой для анализа',
-                                        style_of_body=frontend.style_body, style_of_title=frontend.style_title,
-                                        colWidths=[80, 40, 40, 65, 60, 120, 130])
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.table_from_df(capture, title='Список данных файла с раскладкой для анализа',
+                                  style_of_body=frontend.style_body, style_of_title=frontend.style_title,
+                                  colWidths=[80, 40, 40, 65, 60, 120, 130])
+frontend.PDF.add_to_build_list(temp, story)
 
 #  Returning total counter of measures and their period
 prints.total_log_counter(dev, data)
@@ -65,19 +65,19 @@ status = sadzax.question(
 if status == 'y':
     data = analyzer.time_period_choose(data, dev)
     capture = frontend.capture_func(prints.total_log_counter, dev, data)
-    build_temp = frontend.PDF.text(capture, frontend.style_title)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
+    temp = frontend.PDF.text(capture, frontend.style_title)
+    frontend.PDF.add_to_build_list(temp, story)
     capture = frontend.capture_func(prints.total_periods, dev, data)
-    build_temp = frontend.PDF.text(capture, frontend.style_title)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
+    temp = frontend.PDF.text(capture, frontend.style_title)
+    frontend.PDF.add_to_build_list(temp, story)
 
 #  Analyzing time measures for sequence errors and adding the table of it as an object for reportlab/PDF
 values_time_analyzer = analyzer.values_time_analyzer(dev, data, time_sequence_min=1, inaccuracy_sec=3)
 capture = values_time_analyzer
-build_temp = frontend.PDF.table_from_df(capture, title='Анализ периодичности и неразрывности измерений',
-                                        style_of_body=frontend.style_body, style_of_title=frontend.style_title,
-                                        colWidths=[70, 60, 40, 60, 40, 100])
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.table_from_df(capture, title='Анализ периодичности и неразрывности измерений',
+                                  style_of_body=frontend.style_body, style_of_title=frontend.style_title,
+                                  colWidths=[70, 60, 40, 60, 40, 100])
+frontend.PDF.add_to_build_list(temp, story)
 
 #  Choosing the slice of time periods (the delimiter for defining a new time slice is 1440 minutes / 1 day)
 values_time_slicer = analyzer.values_time_slicer(dev, data, values_time_analyzer,
@@ -88,14 +88,14 @@ data = prints.values_time_slicer(dev, data, log=values_time_slicer)
 total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=30.0)
 total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
 capture = total_nan_counter_ease
-build_temp = frontend.PDF.table_from_df(capture, title='Анализ периодов массовой некорректности измерений',
-                                        style_of_body=frontend.style_body, style_of_title=frontend.style_title,
-                                        colWidths=[70, 60, 40, 60, 40, 100])
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.table_from_df(capture, title='Анализ периодов массовой некорректности измерений',
+                                  style_of_body=frontend.style_body, style_of_title=frontend.style_title,
+                                  colWidths=[70, 60, 40, 60, 40, 100])
+frontend.PDF.add_to_build_list(temp, story)
 
 #  Step 2 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
@@ -105,13 +105,13 @@ ex2 = '∆tg'
 
 #  Adding the heading of the module as an object for reportlab/PD
 capture = f'Анализ трендов и средних показателей'
-build_temp = frontend.PDF.text(capture, frontend.style_title2)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(capture, frontend.style_title2)
+frontend.PDF.add_to_build_list(temp, story)
 
 #  Adding the heading of the submodule as an object for reportlab/PD
 capture = f'Анализ распределения значений'
-build_temp = frontend.PDF.text(capture, frontend.style_title)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(capture, frontend.style_title)
+frontend.PDF.add_to_build_list(temp, story)
 
 
 #  Average values operative function
@@ -119,35 +119,34 @@ frontend.PDF.add_to_build_list(build_temp, build_list)
 def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=120, height=100,
                              hAlign='CENTER', abs_parameter=True):
     if build_list is None:
-        build_list = build_list
+        build_list = story
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
-    build_temp = frontend.PDF.text(capture, frontend.style_regular)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
-    buffer = frontend.capture_on_pic()
+    temp = frontend.PDF.text(capture, frontend.style_regular)
+    frontend.PDF.add_to_build_list(temp, build_list)
     plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
-    build_temp = frontend.capture_off_pic(buffer, width=width, height=height, hAlign=hAlign)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
+    img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(img, build_list)
 
 
 #  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
-capturer_for_PDF_average(ex1)
-capturer_for_PDF_average(ex2)
-capturer_for_PDF_average('Ia', abs_parameter=False)
-capturer_for_PDF_average('Ir', abs_parameter=False)
-capturer_for_PDF_average('U', abs_parameter=False)
+capturer_for_PDF_average(ex1, build_list=story)
+capturer_for_PDF_average(ex2, build_list=story)
+capturer_for_PDF_average('Ia', abs_parameter=False, build_list=story)
+capturer_for_PDF_average('Ir', abs_parameter=False, build_list=story)
+capturer_for_PDF_average('U', abs_parameter=False, build_list=story)
 
 #  Step 2 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 #  Adding the heading of the submodule as an object for reportlab/PD
 capture = f'Анализ корреляций'
-build_temp = frontend.PDF.text(capture, frontend.style_title)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(capture, frontend.style_title)
+frontend.PDF.add_to_build_list(temp, story)
 capture = f'(чем более явная корреляция, тем больше отклонение графа от оси шагов:' \
           f' вверх для прямой корреляции, вниз - для обратной)'
-build_temp = frontend.PDF.text(capture, frontend.style_regular)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(capture, frontend.style_regular)
+frontend.PDF.add_to_build_list(temp, story)
 
 
 #  Correlation with and air operative function
@@ -172,15 +171,15 @@ capturer_for_PDF_air_correlation('Ir')
 capturer_for_PDF_air_correlation('U')
 
 #  Step 2 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
 #  ______________________________________ WARNINGS _______________________________________________
 #  Adding the heading of the module as an object for reportlab/PD
 capture = f'Анализ срабатываний предупредительной и аварийной сигнализации'
-build_temp = frontend.PDF.text(capture, frontend.style_title2)
-frontend.PDF.add_to_build_list(build_temp, build_list)
+temp = frontend.PDF.text(capture, frontend.style_title2)
+frontend.PDF.add_to_build_list(temp, story)
 
 for k in devices.links(device_type)[10]:
     #  Set the default warning values (1 / 1.5% for delta_tangent and 3 / 5% for delta_correlation)
@@ -189,8 +188,8 @@ for k in devices.links(device_type)[10]:
     #  Title
     capture = f'\nПревышение уровней {k} для срабатывания ' \
               f'предупредительной (±{w0}) или аварийной (±{w1}) сигнализации \r'
-    build_temp = frontend.PDF.text(capture, frontend.style_title)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
+    temp = frontend.PDF.text(capture, frontend.style_title)
+    frontend.PDF.add_to_build_list(temp, story)
     #  Main operation - forming a dict with a DataFrames of warning issues
     warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
     #  Setting the short/full output
@@ -203,8 +202,8 @@ for k in devices.links(device_type)[10]:
     for warn_code, warn_code_str in warnings_codes_temporal_list.items():
         capture = frontend.capture_func(prints.warning_printer, dev, warning_finder, warn_code,
                                         warning_param_war=w0, warning_param_acc=w1)
-        build_temp = frontend.PDF.text(capture, frontend.style_regular)
-        frontend.PDF.add_to_build_list(build_temp, build_list)
+        temp = frontend.PDF.text(capture, frontend.style_regular)
+        frontend.PDF.add_to_build_list(temp, story)
         #  Setting minimal amout of values to be printed in a table
         min_values_for_print = 10
         #  Easing the main operated data to form a DataFrame
@@ -213,22 +212,22 @@ for k in devices.links(device_type)[10]:
                                                            min_values_for_print=min_values_for_print)
         capture = warning_finder_ease
         #  Form table from DataFrame
-        build_temp = frontend.PDF.table_from_df(capture, title=f'Таблица периодов непрерывной сигнализации'
+        temp = frontend.PDF.table_from_df(capture, title=f'Таблица периодов непрерывной сигнализации'
                                                                f' (минимум {min_values_for_print} сигнальных'
                                                                f' замеров подряд)',
-                                                style_of_body=frontend.style_body, style_of_title=frontend.style_title,
-                                                colWidths=[180, 110, 110, 70])
-        frontend.PDF.add_to_build_list(build_temp, build_list)
+                                          style_of_body=frontend.style_body, style_of_title=frontend.style_title,
+                                          colWidths=[180, 110, 110, 70])
+        frontend.PDF.add_to_build_list(temp, story)
 
         warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data, warn_code, w0, w1)
         buffer = frontend.capture_on_pic()
         plots.scatter(df=warning_finder_merge, device_type=dev, title=f'График {warn_code_str} сигнализации')
-        build_temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
-        frontend.PDF.add_to_build_list(build_temp, build_list)
+        temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(temp, story)
 
 #  Step 2 lines after submodule
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
-frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
 #  ______________________________________ DATA ENG. ______________________________________________
@@ -247,20 +246,20 @@ main_graph_params = {
 for code_key, code_desc in {'_HV': ' со стороны высокого напряжения',
                             '_MV': ' со стороны среднего напряжения'}.items():
     capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С{code_desc}'
-    build_temp = frontend.PDF.text(capture, frontend.style_title2)
-    frontend.PDF.add_to_build_list(build_temp, build_list)
+    temp = frontend.PDF.text(capture, frontend.style_title2)
+    frontend.PDF.add_to_build_list(temp, story)
     for key, desc in main_graph_params.items():
         input_y = key + code_key
         title = desc + code_desc
         buffer = frontend.capture_on_pic()
         prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
-        build_temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
-        frontend.PDF.add_to_build_list(build_temp, build_list)
-        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), build_list)
+        temp = frontend.capture_off_pic(buffer, width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(temp, story)
+        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
 #  ______________________________________ OUTPUT IN PDF __________________________________________
 name_file_by_user = sadzax.Enter.str('Введите имя файла для сохранения: ',
                                      arg_must_be=sadzax.Enter.allowed_symbs_default, arg_max_capacity=24,
                                      arg_error='Некорректное имя для файла')
-frontend.PDF.builder(build_list, filename=name_file_by_user + '.pdf')
+frontend.PDF.builder(story, filename=name_file_by_user + '.pdf')

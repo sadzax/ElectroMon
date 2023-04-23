@@ -1,14 +1,14 @@
-import sys
 import io
+import sys
+import matplotlib.pyplot as plt
 
-from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from reportlab.lib.units import mm
+from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, PageTemplate, Frame, Image
+from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, PageTemplate, Frame, Image
 
 pdfmetrics.registerFont(TTFont('Verdana', 'misc/Verdana.ttf'))
 styles = getSampleStyleSheet()
@@ -54,8 +54,8 @@ class MyDocTemplate(SimpleDocTemplate):
                         PAGE_HEIGHT - margin_bottom - margin_top,
                         id='Normal'
                     )
-                ],
-                onPage=self.add_page_number,
+                ]#,
+                #onPage=self.add_page_number,
             ),
         ])
 
@@ -83,15 +83,24 @@ def capture_off(buffer):
     return stdout_messages
 
 
-def capture_on_pic():
-    return io.BytesIO()
-
-
 def capture_func(func, *args, **kwargs):
     buffer = capture_on()
     func(*args, **kwargs)
     capture = capture_off(buffer)
     return capture
+
+
+# noinspection PyPep8Naming
+def capture_pic(width=160, height=160, hAlign='CENTER'):
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+    return Image(buffer, width=width*mm, height=height*mm, hAlign=hAlign)
+
+
+def capture_on_pic():
+    return io.BytesIO()
 
 
 # noinspection PyPep8Naming
@@ -104,22 +113,6 @@ def capture_off_pic(buffer, width=160, height=160, hAlign='CENTER'):
     return [Image(buffer, width=width*mm, height=height*mm, hAlign=hAlign)]
 
 
-# def arch_capture_func(func, *args, **kwargs):
-#     output_buffer = io.StringIO()
-#     sys.stdout = output_buffer
-#     func(*args, **kwargs)
-#     output = output_buffer.getvalue()
-#     sys.stdout = sys.__stdout__
-#     return output
-#
-#
-# def arch_capture_off(buffer, n=1):
-#     stdout_messages = buffer.getvalue().split('\n')
-#     sys.stdout = sys.__stdout__
-#     print('\n'.join(stdout_messages[-n-1:]))
-#     return '\n'.join(stdout_messages[-n-1:])
-
-
 class PDF:
     def __init__(self):
         self.columns = None
@@ -128,12 +121,8 @@ class PDF:
     def builder(self, filename='output.pdf'):
         if isinstance(self, list) is True:
             doc = MyDocTemplate(filename)
-            doc.build(self, onFirstPage=doc.add_page_number, onLaterPages=doc.add_page_number)
-
-    # def builder(self, filename='output.pdf'):
-    #     if isinstance(self, list) is True:
-    #         doc = SimpleDocTemplate(filename, pagesize=A4)
-    #         doc.build(self)
+            # doc.build(self, onFirstPage=doc.add_page_number, onLaterPages=doc.add_page_number)
+            doc.build(self)
 
     def add_to_build_list(self, build_list: list = None):
         if build_list is None:
@@ -142,7 +131,7 @@ class PDF:
             for x in self:
                 build_list.append(x)
         else:
-            build_list.append([self])
+            build_list.append(self)
 
     # noinspection PyPep8Naming
     def table_from_df(self, title='', style_of_body=style_body, style_of_title=style_title,
