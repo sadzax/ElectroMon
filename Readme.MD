@@ -428,4 +428,4 @@ Here's [installation guide](https://jupyter.org/install)
 [output.py](output.py) does the same as described in 
 [Run](#-run) 
 but in the end of the processing data it asks you for the name of the file that will be saved 
-in the root directory of the project as a document with a `.pdf` extension.
+in `reports` directory as a document with a `.pdf` extension.

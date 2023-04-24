@@ -267,4 +267,4 @@ fst0 = analyzer.total_periods(dev, data)[0].strftime(format='%y%m%d')
 fst1 = analyzer.total_periods(dev, data)[1].strftime(format='%y%m%d')
 
 frontend.PDF.builder(story,
-                     filename = 'EM_report_' + dev + '_' + fst1 + '_' + fst0 + ' - ' + name_file_by_user + '.pdf')
+                     filename = 'reports/EM_report_' + dev + '_' + fst1 + '_' + fst0 + ' - ' + name_file_by_user + '.pdf')

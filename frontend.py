@@ -10,7 +10,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, PageTemplate, Frame, Image
 
-pdfmetrics.registerFont(TTFont('Verdana', 'misc/Verdana.ttf'))
+pdfmetrics.registerFont(TTFont('Verdana', 'misc/verdana.ttf'))
 styles = getSampleStyleSheet()
 style_body = styles["BodyText"]
 style_body.wordWrap = 'CJK'
