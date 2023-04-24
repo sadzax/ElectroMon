@@ -782,23 +782,31 @@ def data_average_finder(filter_list: list = None,
         for k in list_of_non_math:
             if func_columns_list[i].startswith(k) is True:
                 break
-        else:  # For-Else - ?
+        else:
             columns_list_of_values = df[func_columns_list[i]].tolist()
             if unite_parameter is False:
                 if abs_parameter is True:
                     values_without_nan = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
                 else:
                     values_without_nan = [x for x in columns_list_of_values if not np.isnan(x)]
-                func_result[func_columns_list[i]] = round(sum(values_without_nan)
+                try:
+                    func_result[func_columns_list[i]] = round(sum(values_without_nan)
                                                           / len(values_without_nan), round_parameter)
+                #  Find out what to do
+                except ZeroDivisionError:
+                    func_result[func_columns_list[i]] = 0.0
             else:
                 if abs_parameter is True:
                     dump = [abs(x) for x in columns_list_of_values if not np.isnan(x)]
                 else:
                     dump = [x for x in columns_list_of_values if not np.isnan(x)]
                 func_result_prev = func_result_prev + dump
-                func_result = {'Average: ': round(sum(func_result_prev)
+                try:
+                    func_result = {'Average: ': round(sum(func_result_prev)
                                                   / len(func_result_prev), round_parameter)}
+                #  Find out what to do
+                except ZeroDivisionError:
+                    func_result = {'Average: ': 0.0}
     return func_result
 
 
