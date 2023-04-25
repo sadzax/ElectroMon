@@ -1185,3 +1185,4 @@ def warning_finder_ease(log: dict,
         return pd.DataFrame.from_dict(ease_dict_trimmed, orient='index', columns=cols_t)
     else:
         return str(f'Периоды непрерывной сигнализации (минимум {min_values_for_print} подряд) не выявлены')
+
