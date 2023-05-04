@@ -231,9 +231,8 @@ def question(quest: str, yes='', no='', other=''):
     """
     answer = str(input(f'  {quest}  ')).lower()
     answer_list = {
-            'yes': ['yes', 'ye', 'yeah', 'ok', 'y', 'да', 'ага', 'ок', 'хорошо', 'давай', 'го', 'д', 'lf',
-                    'da', 'нуы'],
-            'no': ['no', 'nope', 'nah', 'n', 'нет', 'не', 'не надо', 'н', 'не-а', 'yt', 'ytn', 'тщ']}
+            'yes': ['yes', 'ye', 'yeah', 'ok', 'y', 'да', 'ага', 'ок', 'хорошо', 'давай', 'го', 'д', 'lf', 'da', 'нуы'],
+            'no': ['no', 'nope', 'nah', 'n', 'нет', 'не', 'не надо', 'н', 'не-а', 'yt', 'ytn', 'тщ', 'ne', 'net']}
     if answer in answer_list['yes']:
         return yes
     elif answer in answer_list['no']:

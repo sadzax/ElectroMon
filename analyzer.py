@@ -51,6 +51,9 @@ def get_data(device_type: str = 'mon',
                            encoding=encoding,
                            parse_dates=parse_dates,
                            dayfirst=True)
+        the_time_column = columns.time_column(device_type=device_type, data=data)
+        data[the_time_column] = pd.to_datetime(data[the_time_column], format='mixed', dayfirst=True)
+        data = data.sort_values(by=the_time_column)
     elif device_type == 'kiv':
         data_raw = pd.read_excel(file)
         if data_raw.columns[0] == ' № ' or raw_param is True:
@@ -490,7 +493,7 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', d_format:
         -----------
     :param: data: data is a pandas dataframe containing the dataset of interest,
     :param: device_type: device_type specifies the type of device used to collect the data
-    :param: format: format is a string that represents the format of the date
+    :param: d_format: format is a string that represents the format of the date
 
         Returns:
         --------

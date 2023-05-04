@@ -64,7 +64,7 @@ data = prints.values_time_slicer(dev, data, log=values_time_slicer)
 total_nan_counter = analyzer.total_nan_counter(dev, data, false_data_percentage=30.0)
 prints.total_nan_counter(dev, data, false_data_percentage=30.0, log=total_nan_counter)
 total_nan_counter_ease = analyzer.total_nan_counter_ease(total_nan_counter)
-if total_nan_counter_ease != None:
+if total_nan_counter_ease is not None:
     print(total_nan_counter_ease)
 
 
