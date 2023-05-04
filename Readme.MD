@@ -62,26 +62,19 @@ Encoding and translation features should be considered.
 &nbsp;
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Installation
+
 The app is stored @ [GitHub](https://github.com/sadzax/ElectroMon).
 
-1. Install [Python v.3.7.+](https://www.python.org/downloads/) 
-
-2. If you are familiar with Git choose a directory on your local machine and clone git repo there via 
-`git clone https://github.com/sadzax/ElectroMon.git`
-
+1. If you are familiar with Git choose a directory on your local machine and clone git repo there via 
+```bash
+git clone https://github.com/sadzax/ElectroMon.git`
+```
 If you don't have Git installed download a project in ZIP-Archive by 
-[a direct link from GitHub](https://github.com/sadzax/ElectroMon/archive/refs/heads/master.zip) 
-and unzip it on your local machine
+[a direct link from GitHub](https://github.com/sadzax/ElectroMon/archive/refs/heads/master.zip), 
+unzip it on your local machine and proceed to the points 3 and 4 of the installation documentation
 
-3. Download required libraries from [requirements.txt](requirements.txt) via `pip install` as describes in [Requirements](#-requirements-and-peculiarities)
-
-<details><summary>Example</summary>
-
-run `pip install pandas` from command-line
-</details>
-
-4. Put files uploaded from devices files to internal directory of the app 
-`/upload/` depending on the type of device 
+2. Put files uploaded from devices files to internal directory of the app 
+`/upload/` depending on the type of device
 
 <details><summary>Example</summary>
 
@@ -89,7 +82,27 @@ Copy `UPLOAD001.I` file in `c:\users\user\downloads\ElectroMon-master\upload\mon
 "Monitoring of devices for continuous monitoring and protection of high-voltage inputs"
 </details>
 
-Run the application according to [Runner](#-runner) instructions
+## &nbsp;&nbsp; For using via Python
+
+3. Install [Python v.3.7.+](https://www.python.org/downloads/) 
+
+4. Download required libraries from [requirements.txt](requirements.txt) via `pip install` 
+as described in [Requirements](#-requirements-and-peculiarities)
+
+<details><summary>Example</summary>
+
+run `pip install pandas` from command-line
+</details>
+
+You can run the application according to 
+[Runner via Python](#-run-via-python) instructions
+
+## &nbsp;&nbsp; For using via Docker
+
+3. Install [Docker](https://www.docker.com/). 
+Python interpreter and additional libs are not required. 
+
+Build the image and launch it according to [Runner via Docker](#-run-via-docker) instructions
 
 &nbsp;
 
@@ -403,7 +416,7 @@ warning or accident events.
 [prints.py](prints.py) contains scripts for printing messages to user and launching functions from other modules. 
 It frames the execution of functions with descriptions and textual information.
 
-[plots.py](plots.py) draws graphs, histograms, 
+[plots.py](plots.py) draws graphs, histograms and plots.
 
 [frontend.py](frontend.py) consists of scripts setting fonts, styles, margins, page-numbering, templates, capturing outputs, texts, graphs, plots and tables.
 
@@ -413,19 +426,50 @@ It frames the execution of functions with descriptions and textual information.
 
 # &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Runner
 
-## &nbsp;&nbsp; Run
-[run.py](run.py) can be launched with a Python interpreter from a command-line from the app directory.
+Run ElectroMon depending on the way it is installed
+
+## &nbsp;&nbsp; Run via Python
+
+Perform installation as described in installation guide 
+[steps 1-2](-installation) and [steps 3-4](-for-using-via-python)
+
+Launch file [run.py](run.py) with a Python interpreter from a command-line from the app directory.
 
 <details><summary>Example</summary>
 
 `python c:\users\user\downloads\ElectroMon-master\\run.py`
 </details>
 
-For full information including graphs and plots [Jupyter Notebook](https://jupyter.org/) is preferable.
-Here's [installation guide](https://jupyter.org/install)
+For full information display including graphs and plots [Jupyter Notebook](https://jupyter.org/) is preferable.
+Here's [installation guide](https://jupyter.org/install) for it.
 
-## &nbsp;&nbsp; Print a PDF
-[output.py](output.py) does the same as described in 
-[Run](#-run) 
+### Print a PDF
+
+Running [output.py](output.py) does the same as described above
 but in the end of the processing data it asks you for the name of the file that will be saved 
-in `reports` directory as a document with a `.pdf` extension.
+in `reports` directory as a document with a `.pdf` extension. 
+
+It doesn't require 'Jupyter Notebook' for printings graphs.
+
+<details><summary>Example</summary>
+
+`python c:\users\user\downloads\ElectroMon-master\\output.py`
+</details>
+
+## &nbsp;&nbsp; Run via Docker
+
+Perform installation as described in installation guide 
+[steps 1-2](-installation) and [step 3](-for-using-via-docker)
+
+Build the image from the app directory (f.e., `c:\users\user\downloads\ElectroMon-master\\`) 
+with following command-line:
+
+  ```bash 
+  docker build -t em . 
+  ```
+The image of the application will be built with a `em` name. 
+To launch it simply enter:
+
+  ```bash 
+  docker run -it em
+  ```
