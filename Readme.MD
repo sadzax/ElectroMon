@@ -431,7 +431,7 @@ Run ElectroMon depending on the way it is installed
 ## &nbsp;&nbsp; Run via Python
 
 Perform installation as described in installation guide 
-[steps 1-2](-installation) and [steps 3-4](-for-using-via-python)
+[steps 1-2](#-installation) and [steps 3-4](#-for-using-via-python)
 
 Launch file [run.py](run.py) with a Python interpreter from a command-line from the app directory.
 
@@ -459,7 +459,7 @@ It doesn't require 'Jupyter Notebook' for printings graphs.
 ## &nbsp;&nbsp; Run via Docker
 
 Perform installation as described in installation guide 
-[steps 1-2](-installation) and [step 3](-for-using-via-docker)
+[steps 1-2](#-installation) and [step 3](#-for-using-via-docker)
 
 Build the image from the app directory (f.e., `c:\users\user\downloads\ElectroMon-master\\`) 
 with following command-line:
