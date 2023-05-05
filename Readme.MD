@@ -65,9 +65,10 @@ Encoding and translation features should be considered.
 
 The app is stored @ [GitHub](https://github.com/sadzax/ElectroMon).
 
-1. If you are familiar with Git choose a directory on your local machine and clone git repo there via 
+1. If you are familiar with [Git](https://git-scm.com/downloads) 
+2. choose a directory on your local machine and clone git repo there with this command: 
 ```bash
-git clone https://github.com/sadzax/ElectroMon.git`
+git clone https://github.com/sadzax/ElectroMon.git
 ```
 If you don't have Git installed download a project in ZIP-Archive by 
 [a direct link from GitHub](https://github.com/sadzax/ElectroMon/archive/refs/heads/master.zip), 

@@ -66,9 +66,9 @@
 
 Приложение хранится на [GitHub](https://github.com/sadzax/ElectroMon).
 
-1. Если вы знакомы с Git, выберите каталог локального компьютера и клонируйте туда репозиторий с помощью команды
+1. Если вы знакомы с [Git](https://git-scm.com/downloads), выберите каталог локального компьютера и клонируйте туда репозиторий с помощью команды
 ```bash
-git clone https://github.com/sadzax/ElectroMon.git`
+git clone https://github.com/sadzax/ElectroMon.git
 ```
 Если у вас не установлен Git, загрузите проект в ZIP-архиве по
 [прямой ссылке с GitHub](https://github.com/sadzax/ElectroMon/archive/refs/heads/master.zip) 
