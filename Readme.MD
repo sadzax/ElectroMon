@@ -4,6 +4,8 @@
 - [       Implementation](#-implementation)
 - [       Requirements and peculiarities](#-requirements-and-peculiarities)
 - [       Installation](#-installation)
+  - [   For using via Python](#-for-using-via-python)
+  - [   For using via Docker](#-for-using-via-docker)
 - [       App Structure](#-app-structure)
   - [   Device initialisation (devices.py)](#-device-initialisation-devicespy)
     - [Measurers](#measurers)
@@ -28,8 +30,9 @@
     - [Warnings](#warnings)
   - [   Other Modules](#-other-modules)
 - [       Runner](#-runner)
-  - [   Run](#-run)
-  - [   Print a PDF](#-print-a-pdf)
+  - [   Run via Python](#-run-via-python)
+    - [Print a PDF](#print-a-pdf)
+  - [   Run via Docker](#-run-via-docker)
 
 &nbsp;
 
@@ -66,7 +69,7 @@ Encoding and translation features should be considered.
 The app is stored @ [GitHub](https://github.com/sadzax/ElectroMon).
 
 1. If you are familiar with [Git](https://git-scm.com/downloads) 
-2. choose a directory on your local machine and clone git repo there with this command: 
+choose a directory on your local machine and clone git repo there with this command: 
 ```bash
 git clone https://github.com/sadzax/ElectroMon.git
 ```
@@ -74,7 +77,7 @@ If you don't have Git installed download a project in ZIP-Archive by
 [a direct link from GitHub](https://github.com/sadzax/ElectroMon/archive/refs/heads/master.zip), 
 unzip it on your local machine and proceed to the points 3 and 4 of the installation documentation
 
-2. Put files uploaded from devices files to internal directory of the app 
+1. Put files uploaded from devices files to internal directory of the app 
 `/upload/` depending on the type of device
 
 <details><summary>Example</summary>
