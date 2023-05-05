@@ -465,6 +465,8 @@ It doesn't require 'Jupyter Notebook' for printings graphs.
 Perform installation as described in installation guide 
 [steps 1-2](#-installation) and [step 3](#-for-using-via-docker)
 
+Launch Docker [in your OS](#https://docs.docker.com/config/daemon/start/)
+
 Build the image from the app directory (f.e., `c:\users\user\downloads\ElectroMon-master\\`) 
 with following command-line:
 
