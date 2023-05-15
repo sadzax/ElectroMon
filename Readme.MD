@@ -474,6 +474,9 @@ with following command-line:
   docker build -t em . 
   ```
 The image of the application will be built with a `em` name. 
+You don't need to build the image for every further launch of the application,
+the build should be stored at your local machine. 
+
 To launch it simply enter:
 
   ```bash 
