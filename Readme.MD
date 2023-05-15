@@ -477,5 +477,7 @@ The image of the application will be built with a `em` name.
 To launch it simply enter:
 
   ```bash 
-  docker run -it em
+  docker run -it -v C:\Users\User\Desktop:/usr/src/reports em
   ```
+
+where `C:\Users\User\Desktop` is the directory of your local machine for saving report-file in PDF
