@@ -484,3 +484,7 @@ To launch it simply enter:
   ```
 
 where `C:\Users\User\Desktop` is the directory of your local machine for saving report-file in PDF
+
+## &nbsp;&nbsp; Run via EXE-file
+
+In Windows launch `em.exe`
