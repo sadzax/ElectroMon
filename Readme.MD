@@ -33,6 +33,7 @@
   - [   Run via Python](#-run-via-python)
     - [Print a PDF](#print-a-pdf)
   - [   Run via Docker](#-run-via-docker)
+  - [   Run via EXE-file](#-run-via-exe-file)
 
 &nbsp;
 
