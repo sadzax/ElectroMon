@@ -149,8 +149,10 @@ def stack_data(device_type: str = 'mon',
             print(f"Файл № {files_list.index(i) + 1}. {i}")
         try:
             #  Create a list of files for picking a specific file(s)
-            inputs = list(map(int, input(f'Введите номера файлов через пробел, которые нужно соединить для общего'
-                                         f' анализа (либо введите любой текст для соединения всех): ').split()))
+            # inputs = list(map(int, input(f'Введите номера файлов через пробел, которые нужно соединить для общего'
+            #                              f' анализа (либо введите любой текст для соединения всех): ').split()))
+            inputs = sadzax.Enter.mapped_ints(f'Введите номера файлов через пробел, которые нужно соединить для общего'
+                                              f' анализа (либо введите любой текст для соединения всех): ')
             if len(inputs) == 0:
                 inputs = list(range(len(files_list)))  # all
             #  Need to subtract 1 for bringing the 'choice'-ints to indexes

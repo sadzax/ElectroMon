@@ -12,47 +12,75 @@ class Enter(object):
                             [x for x in stack_dig]
     allowed_symbs_dates = [x for x in stack_dig] + [x for x in ' .,:;-/_*`~|']
 
-
-
     @staticmethod
     def mapped_ints(self):
         replace = [',', '.', ';']
-        enter = str(input(self))
+        enter = str(' ') + str(input(self)) + str(' ')  # brace with spacebars for extra step in trimming
+        #  Works with a dash, f.e. entering '7-10' returns 7, 8, 9, 10
+        while enter.find('-') >= 0:
+            dash_index = enter.find('-')
+            dash_border_left = ''
+            i_left = dash_index
+            while i_left >= 0:
+                if len(str(dash_border_left)) > 0 and str(enter[i_left]) not in [str(x) for x in Enter.stack_dig]:
+                    break
+                try:
+                    sym = int(enter[i_left])
+                    dash_border_left = str(sym) + str(dash_border_left)
+                    dash_border_left = int(dash_border_left)
+                except:
+                    pass
+                i_left = i_left - 1
+            dash_border_right = ''
+            for i_right in range(dash_index, len(enter)):
+                if len(str(dash_border_right)) > 0 and str(enter[i_right]) not in [str(x) for x in Enter.stack_dig]:
+                    break
+                try:
+                    sym = int(enter[i_right])
+                    dash_border_right = str(dash_border_right) + str(sym)
+                    dash_border_right = int(dash_border_right)
+                except:
+                    pass
+            enter_updated = str(enter[:i_left])
+            for every_int in range(dash_border_left, dash_border_right+1):
+                enter_updated = str(enter_updated) + str(', ') + str(every_int)
+            enter_updated = str(enter_updated) + str(', ') + str(enter[i_right:])
+            enter = enter_updated
         for char in replace:
             enter = enter.replace(char, ' ')
         ls = list(map(int, enter.split()))
         ls = [x-1 for x in ls]
         return ls
 
-    @staticmethod
-    def mapped_ints_UPDATE(self):  ## NEED TO DEBUG AND ADD DASHES
-        replace = [',', '.', ';']
-        symbs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-        txt = str(input(self))
-        while txt.find('-') >= 0:
-            i = txt.find('-')
-            head = txt[:i]
-            head_space = head[::-1].find(' ')  # doesn't work if you set a space before dash
-            if head_space < 0:
-                head_space = 0
-            head_index = len(head) - head_space
-            start = txt[head_index-1:i]
-            tail = txt[i + 1:]
-            tail_space = tail.find(' ')
-            if tail_space < 0:
-                tail_space = 0
-            tail_index = i + 1 + tail_space
-            end = txt[i + 1: tail_index+1]
-            try:
-                the_range = list(range(int(start), int(end)+1))
-                if int(end) < int(start):
-                    the_range = ' '
-            except:
-                the_range = ' '
-            txt = txt[:head_index-1] + ' ' + ' '.join(str(x) for x in the_range) + ' ' + txt[tail_index+1:] + ' '
-        for char in replace:
-            txt = txt.replace(char, ' ')
-        return list(map(int, txt.split()))
+    # @staticmethod
+    # def mapped_ints_UPDATE(self):  ## NEED TO DEBUG AND ADD DASHES
+    #     replace = [',', '.', ';']
+    #     symbs = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
+    #     txt = str(input(self))
+    #     while txt.find('-') >= 0:
+    #         i = txt.find('-')
+    #         head = txt[:i]
+    #         head_space = head[::-1].find(' ')  # doesn't work if you set a space before dash
+    #         if head_space < 0:
+    #             head_space = 0
+    #         head_index = len(head) - head_space
+    #         start = txt[head_index-1:i]
+    #         tail = txt[i + 1:]
+    #         tail_space = tail.find(' ')
+    #         if tail_space < 0:
+    #             tail_space = 0
+    #         tail_index = i + 1 + tail_space
+    #         end = txt[i + 1: tail_index+1]
+    #         try:
+    #             the_range = list(range(int(start), int(end)+1))
+    #             if int(end) < int(start):
+    #                 the_range = ' '
+    #         except:
+    #             the_range = ' '
+    #         txt = txt[:head_index-1] + ' ' + ' '.join(str(x) for x in the_range) + ' ' + txt[tail_index+1:] + ' '
+    #     for char in replace:
+    #         txt = txt.replace(char, ' ')
+    #     return list(map(int, txt.split()))
 
     def int(input_descripton, arg_error=None, arg_min=None, arg_max=None, arg_isnt=None):
         while True:
