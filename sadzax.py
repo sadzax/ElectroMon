@@ -6,10 +6,10 @@ from typing import List
 class Enter(object):
     stack_eng = 'qwertyuiopasdfghjklzxcvbnm'
     stack_rus = 'йцукенгшщзхъфывапролджэячсмитьбю'
-    stack_sym = '-_!~'
+    stack_sym = '-_!~()'
     stack_dig = '0123456789'
     allowed_symbs_default = [x for x in stack_eng] + [x for x in stack_rus] + [x for x in stack_sym] + \
-                            [x for x in stack_dig]
+                            [x for x in stack_dig] + [x for x in ' ']
     allowed_symbs_dates = [x for x in stack_dig] + [x for x in ' .,:;-/_*`~|']
 
     @staticmethod
@@ -49,7 +49,7 @@ class Enter(object):
         for char in replace:
             enter = enter.replace(char, ' ')
         ls = list(map(int, enter.split()))
-        ls = [x-1 for x in ls]
+        ls = [x for x in ls]
         return ls
 
     # @staticmethod
