@@ -94,7 +94,10 @@ def get_data(device_type: str = 'mon',
                 if a_column.startswith(an_element_of_parse_dates):
                     # 'SettingWithCopyWarning' - A value is trying to be set on a copy of a slice from a DataFrame
                     pd.options.mode.chained_assignment = 'raise'
-                    data[a_column] = pd.to_datetime(data[a_column], format='%d.%m.%Y %H:%M:%S')
+                    try:  # ADD EXCLUDE IF THERE IS A PROBLEM WITH A DATETIME FORMAT
+                        data[a_column] = pd.to_datetime(data[a_column], format='%d.%m.%Y %H:%M:%S')
+                    except ValueError:
+                        pass
                     data = data.sort_values(by=a_column)
     print('Обработка файла окончена')
     return data
@@ -133,6 +136,7 @@ def stack_data(device_type: str = 'mon',
         -----------
     :return: pd.DataFrame: A consolidated dataframe containing data from all the selected files.
     """
+    used_files = []
     device_type = device_type.lower()
     files_list = devices.links(device_type)[5]
     #  Exclusion for a single work-file
@@ -168,11 +172,12 @@ def stack_data(device_type: str = 'mon',
                 #  Store a new iterated data in a temp. variable
                 iterated_data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
                 data = pd.concat([data, iterated_data])
+            used_files.append(files_list[i])
     the_time_column = columns.time_column(device_type=device_type, data=data)
     #  Sort data by time of meausure
     data = data.sort_values(by=the_time_column)
     print('Консолидация данных завершена')
-    return data
+    return [data, used_files]
 
 
 #  1.1. Exclude false measures

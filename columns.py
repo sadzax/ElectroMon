@@ -91,8 +91,8 @@ def columns_analyzer(device_type: str ='nkvv',
                     result_dict[i].append(devices.nkvv.data_search_name[a_key][0])
                     result_dict[i].append(devices.nkvv.data_search_name[a_key][1])
             if len(result_dict[i]) < 5:
-                result_dict[i].append('no_name')
-                result_dict[i].append('no_name')
+                result_dict[i].append('-')
+                result_dict[i].append('-')
             result_dict[i].append(result_dict[i][4] + '_' + result_dict[i][3])
     elif device_type == 'mon':  # merge with nkvv, set links to device_class
         for i in range(len(result_dict)):
@@ -122,8 +122,8 @@ def columns_analyzer(device_type: str ='nkvv',
                     result_dict[i].append(devices.mon.data_search_name[a_key][0])
                     result_dict[i].append(devices.mon.data_search_name[a_key][1])
             if len(result_dict[i]) < 5:
-                result_dict[i].append('no_name')
-                result_dict[i].append('no_name')
+                result_dict[i].append('-')
+                result_dict[i].append('-')
             result_dict[i].append(result_dict[i][4] + '_' + result_dict[i][3])
     elif device_type == 'kiv':
         for i in range(len(result_dict)):
@@ -159,13 +159,13 @@ def columns_analyzer(device_type: str ='nkvv',
                         source_dict[i][4] = devices.kiv.data_search_name[a_key][0]
                         source_dict[i][5] = devices.kiv.data_search_name[a_key][1]
                     except:
-                        source_dict[i].append('no_name')
-                        source_dict[i].append('no_name')
+                        source_dict[i].append('-')
+                        source_dict[i].append('-')
                         source_dict[i][4] = devices.kiv.data_search_name[a_key][0]
                         source_dict[i][5] = devices.kiv.data_search_name[a_key][1]
             if len(source_dict[i]) < 5:
-                source_dict[i].append('no_name')
-                source_dict[i].append('no_name')
+                source_dict[i].append('-')
+                source_dict[i].append('-')
             source_dict[i].append(source_dict[i][4] + '_' + source_dict[i][3])
     return result_dict
 

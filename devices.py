@@ -208,6 +208,7 @@ mon.data_search_name = {'dtan_': ['∆tg', 'tangent_delta'],
                         'Ia_': ['Ia', 'power_active'],
                         'Ip_': ['Ir', 'power_reactive'],
                         'Freq': ['freq', 'frequency'],
+
                         'Tair': ['tair', 'temperature_of_air'],
                         'Tdev': ['tdev', 'temperature_of_device'],
                         'Tcpu': ['tcpu', 'temperature_of_cpu']}

@@ -23,7 +23,7 @@ device_type = prints.device_picking()
 dev = device_type
 # prints.file_picking(dev)
 # data = devices.Pkl.load(dev)
-data = analyzer.stack_data(dev)
+[data, used_files] = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
@@ -42,6 +42,12 @@ frontend.PDF.add_to_build_list(temp, story)
 capture = devices.links(device_type)[9]
 temp = frontend.PDF.text(capture, frontend.style_title2)
 frontend.PDF.add_to_build_list(temp, story)
+
+temp = frontend.PDF.text(f'Использованные файлы: ', frontend.style_title)
+frontend.PDF.add_to_build_list(temp, story)
+for capture in used_files:
+    temp = frontend.PDF.text(capture, frontend.style_regular)
+    frontend.PDF.add_to_build_list(temp, story)
 
 temp = frontend.PDF.text(f'Анализ неразрывности замеров и их корректности', frontend.style_title2)
 frontend.PDF.add_to_build_list(temp, story)
@@ -104,6 +110,15 @@ frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), s
 ex1 = '∆C'
 ex2 = '∆tg'
 
+#  Dict of params (True and False are setting for abs-parameter in average-func)
+trends_params = {
+    '∆tg': True,
+    '∆C': True,
+    'Ia': False,
+    'Ir': False,
+    'U': False
+}
+
 #  Adding the heading of the module as an object for reportlab/PD
 capture = f'Анализ трендов и средних показателей'
 temp = frontend.PDF.text(capture, frontend.style_title2)
@@ -130,11 +145,9 @@ def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=12
 
 
 #  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
-capturer_for_PDF_average(ex1, build_list=story)
-capturer_for_PDF_average(ex2, build_list=story)
-capturer_for_PDF_average('Ia', abs_parameter=False, build_list=story)
-capturer_for_PDF_average('Ir', abs_parameter=False, build_list=story)
-capturer_for_PDF_average('U', abs_parameter=False, build_list=story)
+for a_key in trends_params.keys():
+    for a_voltage in ['_HV', '_MV']:
+        capturer_for_PDF_average(ex=a_key+a_voltage, abs_parameter=trends_params[a_key], build_list=story)
 
 #  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
