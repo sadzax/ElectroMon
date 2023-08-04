@@ -79,15 +79,17 @@ trends_params = {
 
 for a_key in trends_params.keys():
     for a_voltage in ['_HV', '_MV']:
-        ex1 = a_key+a_voltage
-        plots.correlation_plot(filter_list1=[ex1], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
-                               title=f"Анализ корреляции данных {ex1} от температуры воздуха")
+        ex = a_key+a_voltage
+        plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
+                               title=f"Анализ корреляции данных {ex} от температуры воздуха")
 
 for a_key in trends_params.keys():
     for a_voltage in ['_HV', '_MV']:
-        ex1 = a_key+a_voltage
-        prints.average_printer(ex=ex1, data=data, cols=cols, abs_parameter=True)
-        plots.histogram([ex1], data=data, cols=cols, title=f'Распределение значений {ex1}')
+        ex = a_key+a_voltage
+        prints.average_printer(ex=ex, data=data, cols=cols, abs_parameter=True)
+        plots.histogram(value=[ex], bins=99, data=data, cols=cols, title=f'Распределение значений {ex}')
+        plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
+                        title=f'Логарифмическое распределение значений {ex}')
 
 
 #

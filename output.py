@@ -132,16 +132,33 @@ frontend.PDF.add_to_build_list(temp, story)
 
 #  Average values operative function
 # noinspection PyPep8Naming
-def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=120, height=100,
+def capturer_for_PDF_average_old(ex, data=data, cols=cols, build_list=None, width=120, height=100,
                              hAlign='CENTER', abs_parameter=True):
     if build_list is None:
         build_list = story
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
     temp = frontend.PDF.text(capture, frontend.style_regular)
     frontend.PDF.add_to_build_list(temp, build_list)
-    plots.histogram([ex], data=data, cols=cols, title=f'Распределение значений {ex}')
+    plots.histogram(value=[ex], bins=99, data=data, cols=cols, title=f'Распределение значений {ex}')
     img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
+
+
+# noinspection PyPep8Naming
+def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=240, height=100,
+                             hAlign='CENTER', abs_parameter=True):
+    if build_list is None:
+        build_list = story
+    capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
+    temp = frontend.PDF.text(capture, frontend.style_regular)
+    frontend.PDF.add_to_build_list(temp, build_list)
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    ax1 = plots.histogram(value=[ex], bins=99, data=data, cols=cols, title=f'Распределение значений {ex}')
+    ax2 = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
+                          title=f'Логарифмическое распределение значений {ex}')
+    img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(img, build_list)
+
 
 
 #  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD

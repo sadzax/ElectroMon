@@ -39,10 +39,11 @@ def flat_graph(input_x: list = None,
 
 #  Histogram for raw data and distribution data
 def histogram(value,
-              bins=333,
+              bins=99,
               device_type='nkvv',
               title='',
               data_distribution_parameter=False,
+              logarithm=False,
               cols=None,
               data: pd.core = None,
               unite_parameter=False):
@@ -52,7 +53,7 @@ def histogram(value,
         data = analyzer.get_data(device_type=device_type)
     legend = []
     if isinstance(value, str) is True:
-        data[value].hist(bins=bins)
+        data[value].hist(bins=bins, log=logarithm)
         plt.title(title)
     if isinstance(value, list) is True:
         if data_distribution_parameter is True:
@@ -60,16 +61,17 @@ def histogram(value,
                                                                   unite_parameter=unite_parameter)
             for i in data_distribution:
                 legend.append(i)
-                data_distribution[i].hist(bins=bins)
+                data_distribution[i].hist(bins=bins, log=logarithm)
         else:
             df = analyzer.data_filter(value, data=data, cols=cols)
             for i in df:
                 legend.append(i)
-                df[i].hist(bins=bins)
+                df[i].hist(bins=bins, log=logarithm)
         plt.legend(legend)
         plt.title(title)
         plt.xlabel(', '.join(value))
         plt.ylabel('Количество значений')
+        plt.savefig(title)  # Is it necessary?
 
 
 #  Correlation Plot
