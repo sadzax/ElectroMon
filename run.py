@@ -44,7 +44,7 @@ prints.total_periods(dev, data)
 #  Asking for a period to choose
 status = sadzax.question(
         f"\n Хотите задать конкретный период анализа между двумя датами?"
-        f"\n Eсли нет - то будут проанализированы все доступные периоды замеров\n", yes='y')
+        f"\n Если нет - то будут проанализированы все доступные периоды замеров\n", yes='y')
 if status == 'y':
     data = analyzer.time_period_choose(data, dev)
     prints.total_log_counter(dev, data)
@@ -128,7 +128,7 @@ for k in devices.links(device_type)[10]:
     warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
     status = sadzax.question(
         f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
-        f" \n Eсли нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
+        f" \n Если нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
     warnings_codes_temporal_list = {'acc': 'аварийной'}
     if status == 'n':
         warnings_codes_temporal_list = {'war': 'предупредительной', 'acc': 'аварийной'}
