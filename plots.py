@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import analyzer
 import columns
+import io
 
 
 #  Simple graph
@@ -71,7 +72,17 @@ def histogram(value,
         plt.title(title)
         plt.xlabel(', '.join(value))
         plt.ylabel('Количество значений')
-        plt.savefig(title)  # Is it necessary?
+        plt.show()
+        # plt.close()
+        # plt.cla()
+        # buffer = io.BytesIO()
+        # plt.savefig(buffer)
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    return buffer
+
+
 
 
 #  Correlation Plot

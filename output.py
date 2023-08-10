@@ -152,9 +152,9 @@ def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=24
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
     temp = frontend.PDF.text(capture, frontend.style_regular)
     frontend.PDF.add_to_build_list(temp, build_list)
-    fig, (ax1, ax2) = plt.subplots(1, 2)
-    ax1 = plots.histogram(value=[ex], bins=99, data=data, cols=cols, title=f'Распределение значений {ex}')
-    ax2 = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
+    fig, axes = plt.subplots(1, 2)
+    axes[0] = plots.histogram(value=[ex], bins=99, data=data, cols=cols, title=f'Распределение значений {ex}')
+    axes[1] = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
                           title=f'Логарифмическое распределение значений {ex}')
     img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
