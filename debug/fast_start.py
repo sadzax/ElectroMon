@@ -23,10 +23,15 @@ del cols_list
 
 fig, axes = plt.subplots(1, 2)
 # fig.show()
-axes[0] = plots.histogram(value=['∆C_MV'], bins=99,data=data,cols=cols, title=f'Распределение значений ∆C_MV')
+x = plots.histogram(value=['∆C_MV'], bins=99,data=data,cols=cols, title=f'Распределение значений ∆C_MV')
+# axes[0] = plots.histogram(value=['∆C_MV'], bins=99,data=data,cols=cols, title=f'Распределение значений ∆C_MV')
 # axes[0].show()
 # axes[0].plot(range(3), range(3))
-axes[1] = plots.histogram(value=['∆C_HV'], bins=99,data=data,cols=cols, title=f'Распределение значений ∆C_HV')
+# axes[1] = plots.histogram(value=['∆C_HV'], bins=99,data=data,cols=cols, title=f'Распределение значений ∆C_HV')
+y = plots.histogram(value=['∆C_HV'], bins=99,data=data,cols=cols, title=f'Распределение значений ∆C_HV')
+axes[0] = x
+axes[1] = y
+
 fig.show()
 
 fig, axes = plt.subplots(1, 2)
