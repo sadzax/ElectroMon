@@ -45,6 +45,7 @@ def histogram(value,
               title='',
               data_distribution_parameter=False,
               logarithm=False,
+              ax_param=None,
               cols=None,
               data: pd.core = None,
               unite_parameter=False):
@@ -67,22 +68,21 @@ def histogram(value,
             df = analyzer.data_filter(value, data=data, cols=cols)
             for i in df:
                 legend.append(i)
-                df[i].hist(bins=bins, log=logarithm)
+                # plt.hist(df[i], bins=bins, log=logarithm, ax=ax_param)
+                df[i].hist(bins=bins, log=logarithm, ax=ax_param)
         plt.legend(legend)
         plt.title(title)
         plt.xlabel(', '.join(value))
         plt.ylabel('Количество значений')
-        plt.show()
+        # plt.show()
         # plt.close()
         # plt.cla()
         # buffer = io.BytesIO()
         # plt.savefig(buffer)
-    buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    return buffer
-
-
+    # buffer = io.BytesIO()
+    # plt.savefig(buffer, format='png')
+    # buffer.seek(0)
+    # return buffer
 
 
 #  Correlation Plot
@@ -172,3 +172,4 @@ def scatter(input_x: list = None,
                 axs.scatter(x, y, c=color, s=area)
                 legend.append(y_name)
         plt.legend(legend)
+

@@ -71,7 +71,6 @@ if total_nan_counter_ease is not None:
 #  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
 prints.info('Анализ трендов и средних показателей')
 
-#  Defining the most usual 'ex'amples (deviation delta and tangent delta) for further correlation analyze
 trends_params = {
     '∆tg': 'Изменения значений ∆tgδ (изменение tgδ относительно начальных значений)',
     '∆C': 'Изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
@@ -82,38 +81,18 @@ for a_key in trends_params.keys():
         ex = a_key+a_voltage
         plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
                                title=f"Анализ корреляции данных {ex} от температуры воздуха")
+        plt.show()
 
 for a_key in trends_params.keys():
     for a_voltage in ['_HV', '_MV']:
         ex = a_key+a_voltage
         prints.average_printer(ex=ex, data=data, cols=cols, abs_parameter=True)
-        plots.histogram(value=[ex], bins=99, data=data, cols=cols, title=f'Распределение значений {ex}')
+        plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=False,
+                        title=f'Распределение значений {ex}')
+        plt.show()
         plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
                         title=f'Логарифмическое распределение значений {ex}')
-
-
-#
-# ex1 = '∆C'
-# ex2 = '∆tg'
-#
-# print(f'Анализ корреляций (чем более явная корреляция, тем больше отклонение графа от оси шагов:'
-#       f' вверх для прямой корреляции, вниз - для обратной)')
-#
-# #  Correlation of ∆C and temperature with a plot
-# plots.correlation_plot(filter_list1=[ex1], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
-#                        title=f"Анализ корреляции данных {ex1} от температуры воздуха")
-#
-# #  Correlation of ∆tg and temperature with a plot
-# plots.correlation_plot(filter_list1=[ex2], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
-#                        title=f"Анализ корреляции данных {ex2} от температуры воздуха")
-#
-# #  Average values of ∆C and their distribution
-# prints.average_printer(ex=ex1, data=data, cols=cols, abs_parameter=True)
-# plots.histogram([ex1], data=data, cols=cols, title=f'Распределение значений {ex1}')
-#
-# #  Average values of ∆tg  and their distribution
-# prints.average_printer(ex=ex2, data=data, cols=cols, abs_parameter=True)
-# plots.histogram([ex2], data=data, cols=cols, title=f'Распределение значений {ex2}')
+        plt.show()
 
 
 #  ______________________________________ WARNINGS AND ACCIDENTS _________________________________

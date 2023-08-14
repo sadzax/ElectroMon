@@ -145,26 +145,28 @@ def capturer_for_PDF_average_old(ex, data=data, cols=cols, build_list=None, widt
 
 
 # noinspection PyPep8Naming
-def capturer_for_PDF_average(ex, data=data, cols=cols, build_list=None, width=240, height=100,
-                             hAlign='CENTER', abs_parameter=True):
+def capturer_for_PDF_average_with_a_logarithm(ex, data=data, cols=cols, build_list=None, width=240, height=100,
+                                              hAlign='CENTER', abs_parameter=True):
     if build_list is None:
         build_list = story
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
     temp = frontend.PDF.text(capture, frontend.style_regular)
     frontend.PDF.add_to_build_list(temp, build_list)
-    fig, axes = plt.subplots(1, 2)
-    axes[0] = plots.histogram(value=[ex], bins=99, data=data, cols=cols, title=f'Распределение значений {ex}')
-    axes[1] = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
-                          title=f'Логарифмическое распределение значений {ex}')
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    plots.histogram(value=[ex], bins=99, data=data, cols=cols, ax_param=axes[0], logarithm=False,
+                    title=f'Распределение значений {ex}')
+    plots.histogram(value=[ex], bins=99, data=data, cols=cols, ax_param=axes[1], logarithm=True,
+                    title=f'Логарифмическое распределение значений {ex}')
     img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
-
 
 
 #  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
 for a_key in trends_params.keys():
     for a_voltage in ['_HV', '_MV']:
-        capturer_for_PDF_average(ex=a_key+a_voltage, abs_parameter=trends_params[a_key], build_list=story)
+        ex = a_key+a_voltage
+        capturer_for_PDF_average_with_a_logarithm(ex=ex, abs_parameter=trends_params[a_key], build_list=story)
 
 #  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
