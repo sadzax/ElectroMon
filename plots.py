@@ -36,6 +36,7 @@ def flat_graph(input_x: list = None,
         legend.append(y_name)
         axs.plot(x, y)
     plt.legend(legend)
+    return fig
 
 
 #  Histogram for raw data and distribution data
@@ -91,7 +92,8 @@ def correlation_plot(filter_list1=None,
                      device_type='nkvv',
                      title='',
                      cols=None,
-                     data: pd.core = None):
+                     data: pd.core = None,
+                     ax_param=None):
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
     if data is None:
@@ -122,6 +124,7 @@ def correlation_plot(filter_list1=None,
         legend.append(keys_list[i])
         axs.plot([i for i in range(max_len)], y)
     plt.legend(legend)
+    return fig
 
 
 #  Warning plots
@@ -172,4 +175,5 @@ def scatter(input_x: list = None,
                 axs.scatter(x, y, c=color, s=area)
                 legend.append(y_name)
         plt.legend(legend)
+        return fig
 

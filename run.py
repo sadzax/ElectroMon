@@ -119,6 +119,7 @@ for k in devices.links(device_type)[10]:
         #  Scattering
         warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data, warn_code, w0, w1)
         plots.scatter(df=warning_finder_merge, device_type=dev, title=f'График {warn_code_str} сигнализации')
+        plt.show()
 
 
 #  ______________________________________ DATA ENG. ______________________________________________
@@ -140,3 +141,4 @@ for code_key, code_desc in {'_HV': ' со стороны высокого нап
         input_y = key + code_key
         title = desc + code_desc
         prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
+        plt.show()

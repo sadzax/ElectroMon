@@ -130,10 +130,10 @@ temp = frontend.PDF.text(capture, frontend.style_title)
 frontend.PDF.add_to_build_list(temp, story)
 
 
-#  Average values operative function
+#  OLD Average values operative function (currently unused)
 # noinspection PyPep8Naming
-def capturer_for_PDF_average_old(ex, data=data, cols=cols, build_list=None, width=120, height=100,
-                             hAlign='CENTER', abs_parameter=True):
+def capturer_for_PDF_average_one_histogram(ex, data=data, cols=cols, build_list=None, width=120, height=100,
+                                           hAlign='CENTER', abs_parameter=True):
     if build_list is None:
         build_list = story
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
@@ -144,6 +144,7 @@ def capturer_for_PDF_average_old(ex, data=data, cols=cols, build_list=None, widt
     frontend.PDF.add_to_build_list(img, build_list)
 
 
+#  Average values operative function - with two graphs: simple and logarithmic
 # noinspection PyPep8Naming
 def capturer_for_PDF_average_with_a_logarithm(ex, data=data, cols=cols, build_list=None, width=240, height=100,
                                               hAlign='CENTER', abs_parameter=True):
@@ -167,13 +168,14 @@ for a_key in trends_params.keys():
     for a_voltage in ['_HV', '_MV']:
         ex = a_key+a_voltage
         capturer_for_PDF_average_with_a_logarithm(ex=ex, abs_parameter=trends_params[a_key], build_list=story)
+        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 #  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 #  Adding the heading of the submodule as an object for reportlab/PD
-capture = f'Анализ корреляций'
+capture = f'Анализ корреляций данных'
 temp = frontend.PDF.text(capture, frontend.style_title)
 frontend.PDF.add_to_build_list(temp, story)
 capture = f'(чем более явная корреляция, тем больше отклонение графа от оси шагов:' \
@@ -184,23 +186,48 @@ frontend.PDF.add_to_build_list(temp, story)
 
 #  Correlation with and air operative function
 # noinspection PyPep8Naming
-def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, width=140, height=110,
+def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, width=120, height=100,
                                      hAlign='RIGHT'):
     if build_list is None:
         build_list = story
     plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'],
                            device_type=device_type, data=data, cols=cols,
-                           title=f"Анализ корреляции данных {ex1} от температуры воздуха")
+                           title=f"Зависимость параметров {ex} от температуры воздуха")
     img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
 
 
-#  Correlation of [∆C, ∆tg, Ia, Ir, U] and temperature with a plot added as an object for reportlab/PD
-capturer_for_PDF_air_correlation(ex1)
-capturer_for_PDF_air_correlation(ex2)
-capturer_for_PDF_air_correlation('Ia')
-capturer_for_PDF_air_correlation('Ir')
-capturer_for_PDF_air_correlation('U')
+#  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
+for a_key in trends_params.keys():
+    for a_voltage in ['_HV', '_MV']:
+        ex = a_key+a_voltage
+        capturer_for_PDF_air_correlation(ex, build_list=story)
+        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+
+
+#  Correlation with and air operative function
+# noinspection PyPep8Naming
+def capturer_for_PDF_air_correlation_double_HV_and_MV(ex, data=data, cols=cols, build_list=None,
+                                                      width=240, height=100, hAlign='RIGHT'):
+    if build_list is None:
+        build_list = story
+    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+    axes[0] = plots.correlation_plot(filter_list1=[ex+'_HV'], filter_list2=['tair'],
+                           device_type=device_type, data=data, cols=cols,
+                           title=f"Зависимость параметров {ex} от температуры воздуха")
+    axes[1] = plots.correlation_plot(filter_list1=[ex+'_MV'], filter_list2=['tair'],
+                           device_type=device_type, data=data, cols=cols,
+                           title=f"Зависимость параметров {ex} от температуры воздуха")
+    img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(img, build_list)
+
+
+#  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
+for a_key in trends_params.keys():
+    ex = a_key
+    capturer_for_PDF_air_correlation_double_HV_and_MV(ex, build_list=story)
+    frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+
 
 #  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
