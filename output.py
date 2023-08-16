@@ -105,11 +105,34 @@ frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), s
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
-#  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
-#  Defining the most usual 'ex'amples (deviation delta and tangent delta) for further correlation analyze
-ex1 = '∆C'
-ex2 = '∆tg'
+#  ______________________________________ DATA ENG. ______________________________________________
 
+
+main_graph_params = {
+    'U': 'График изменения значений напряжений',
+    'Ia': 'График изменения активной составляющей токов утечек',
+    'Ir': 'График изменения реактивной составляющей токов утечек',
+    'tg': 'График изменения значений tgδ',
+    'C': 'График изменения значений емкостей С1',
+    '∆tg': 'График изменения значений ∆tgδ (изменение tgδ относительно начальных значений)',
+    '∆C': 'График изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
+}
+
+for code_key, code_desc in {'_HV': ' со стороны высокого напряжения',
+                            '_MV': ' со стороны среднего напряжения'}.items():
+    capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С{code_desc}'
+    temp = frontend.PDF.text(capture, frontend.style_title2)
+    frontend.PDF.add_to_build_list(temp, story)
+    for key, desc in main_graph_params.items():
+        input_y = key + code_key
+        title = desc + code_desc
+        prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
+        img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(img, story)
+        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+
+
+#  ______________________________________ CORRELATIONS AND AVERAGES ______________________________
 #  Dict of params (True and False are setting for abs-parameter in average-func)
 trends_params = {
     '∆tg': True,
@@ -144,22 +167,39 @@ def capturer_for_PDF_average_one_histogram(ex, data=data, cols=cols, build_list=
     frontend.PDF.add_to_build_list(img, build_list)
 
 
-#  Average values operative function - with two graphs: simple and logarithmic
+#  OLD Average values operative function - with two graphs: simple and logarithmic based on axis_param, which can
+#                                          can be found in df[x].hist documentation
 # noinspection PyPep8Naming
-def capturer_for_PDF_average_with_a_logarithm(ex, data=data, cols=cols, build_list=None, width=240, height=100,
+def capturer_for_PDF_average_with_a_loga_AXES(ex, data=data, cols=cols, build_list=None, width=240, height=100,
                                               hAlign='CENTER', abs_parameter=True):
     if build_list is None:
         build_list = story
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
     temp = frontend.PDF.text(capture, frontend.style_regular)
     frontend.PDF.add_to_build_list(temp, build_list)
-
     fig, axes = plt.subplots(1, 2, figsize=(12, 6))
     plots.histogram(value=[ex], bins=99, data=data, cols=cols, ax_param=axes[0], logarithm=False,
                     title=f'Распределение значений {ex}')
     plots.histogram(value=[ex], bins=99, data=data, cols=cols, ax_param=axes[1], logarithm=True,
                     title=f'Логарифмическое распределение значений {ex}')
     img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(img, build_list)
+
+
+#  Average values operative function - with two graphs: simple and logarithmic
+# noinspection PyPep8Naming
+def capturer_for_PDF_average_with_a_logarithm(ex, data=data, cols=cols, build_list=None, width=210, height=100,
+                                              hAlign='CENTER', abs_parameter=True):
+    if build_list is None:
+        build_list = story
+    capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
+    temp = frontend.PDF.text(capture, frontend.style_regular)
+    frontend.PDF.add_to_build_list(temp, build_list)
+    a = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=False,
+                        title=f'Распределение значений {ex}')
+    b = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
+                        title=f'Логарифмическое распределение значений {ex}')
+    img = frontend.capture_pic_two_cols(a=a, b=b, width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
 
 
@@ -184,7 +224,7 @@ temp = frontend.PDF.text(capture, frontend.style_regular)
 frontend.PDF.add_to_build_list(temp, story)
 
 
-#  Correlation with and air operative function
+#  OLD Correlation with and air operative function (currently unused)
 # noinspection PyPep8Naming
 def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, width=120, height=100,
                                      hAlign='RIGHT'):
@@ -196,37 +236,48 @@ def capturer_for_PDF_air_correlation(ex, data=data, cols=cols, build_list=None, 
     img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
 
-
-#  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
-for a_key in trends_params.keys():
-    for a_voltage in ['_HV', '_MV']:
-        ex = a_key+a_voltage
-        capturer_for_PDF_air_correlation(ex, build_list=story)
-        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+#
+# #  OLD Correlations of parameters added as an object for reportlab/PD (unused)
+# for a_key in trends_params.keys():
+#     for a_voltage in ['_HV', '_MV']:
+#         ex = a_key+a_voltage
+#         capturer_for_PDF_air_correlation(ex, build_list=story)
+#         frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+pass
 
 
 #  Correlation with and air operative function
 # noinspection PyPep8Naming
 def capturer_for_PDF_air_correlation_double_HV_and_MV(ex, data=data, cols=cols, build_list=None,
-                                                      width=240, height=100, hAlign='RIGHT'):
+                                                      width=210, height=100, hAlign='CENTER'):
     if build_list is None:
         build_list = story
-    fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-    axes[0] = plots.correlation_plot(filter_list1=[ex+'_HV'], filter_list2=['tair'],
-                           device_type=device_type, data=data, cols=cols,
-                           title=f"Зависимость параметров {ex} от температуры воздуха")
-    axes[1] = plots.correlation_plot(filter_list1=[ex+'_MV'], filter_list2=['tair'],
-                           device_type=device_type, data=data, cols=cols,
-                           title=f"Зависимость параметров {ex} от температуры воздуха")
-    img = frontend.capture_pic(width=width, height=height, hAlign=hAlign)
+    a = plots.correlation_plot(filter_list1=[ex+'_HV'], filter_list2=['tair'],
+                               device_type=device_type, data=data, cols=cols,
+                               title=f"Зависимость {ex}_HV от температуры воздуха")
+    b = plots.correlation_plot(filter_list1=[ex+'_MV'], filter_list2=['tair'],
+                               device_type=device_type, data=data, cols=cols,
+                               title=f"Зависимость {ex}_MV от температуры воздуха")
+    img = frontend.capture_pic_two_cols(a=a, b=b, width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
 
 
-#  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
+#  Correlations of parameters to air temp added as an object for reportlab/PD
 for a_key in trends_params.keys():
     ex = a_key
     capturer_for_PDF_air_correlation_double_HV_and_MV(ex, build_list=story)
     frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+
+
+#  MANUAL Correlations of tcpu and tdevice to air temp added as an object for reportlab/PD
+a = plots.correlation_plot(filter_list1=['tdev'], filter_list2=['tair'],
+                           device_type=device_type, data=data, cols=cols,
+                           title=f"Зависимость температуры устройства от температуры воздуха")
+b = plots.correlation_plot(filter_list1=['tcpu'], filter_list2=['tair'],
+                           device_type=device_type, data=data, cols=cols,
+                           title=f"Зависимость температуры процессора от температуры воздуха")
+img = frontend.capture_pic_two_cols(a=a, b=b, width=210, height=100, hAlign='CENTER')
+frontend.PDF.add_to_build_list(img, story)
 
 
 #  Step 2 lines after submodule
@@ -280,7 +331,8 @@ for k in devices.links(device_type)[10]:
         frontend.PDF.add_to_build_list(temp, story)
         warning_finder_merge = analyzer.warning_finder_merge(warning_finder, dev, data, warn_code, w0, w1)
         buffer = frontend.capture_on_pic()
-        plots.scatter(df=warning_finder_merge, device_type=dev, title=f'График {warn_code_str} сигнализации')
+        plots.scatter(df=warning_finder_merge, device_type=dev,
+                      title=f'График {warn_code_str} сигнализации', scatter_size=1)
         img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
         frontend.PDF.add_to_build_list(img, story)
 
@@ -288,33 +340,6 @@ for k in devices.links(device_type)[10]:
 #  Step 2 lines after submodule
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
-
-
-#  ______________________________________ DATA ENG. ______________________________________________
-
-
-main_graph_params = {
-    'U': 'График изменения значений напряжений',
-    'Ia': 'График изменения активной составляющей токов утечек',
-    'Ir': 'График изменения реактивной составляющей токов утечек',
-    'tg': 'График изменения значений tgδ',
-    'C': 'График изменения значений емкостей С1',
-    '∆tg': 'График изменения значений ∆tgδ (изменение tgδ относительно начальных значений)',
-    '∆C': 'График изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
-}
-
-for code_key, code_desc in {'_HV': ' со стороны высокого напряжения',
-                            '_MV': ' со стороны среднего напряжения'}.items():
-    capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С{code_desc}'
-    temp = frontend.PDF.text(capture, frontend.style_title2)
-    frontend.PDF.add_to_build_list(temp, story)
-    for key, desc in main_graph_params.items():
-        input_y = key + code_key
-        title = desc + code_desc
-        prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
-        img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
-        frontend.PDF.add_to_build_list(img, story)
-        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
 #  ______________________________________ OUTPUT IN PDF __________________________________________

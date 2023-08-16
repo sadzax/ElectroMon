@@ -93,7 +93,42 @@ def capture_func(func, *args, **kwargs):
 # noinspection PyPep8Naming
 def capture_pic(width=160, height=160, hAlign='CENTER'):
     buffer = io.BytesIO()
-    plt.savefig(buffer, format='png')
+    plt.savefig(buffer, format='png', dpi=300)
+    buffer.seek(0)
+    plt.close()
+    return Image(buffer, width=width*mm, height=height*mm, hAlign=hAlign)
+
+
+# noinspection PyPep8Naming
+def capture_pic_two_cols(a, b, width=200, height=100, hAlign='CENTER'):
+    """
+    Takes figure objects
+    Args:
+        a:
+        b:
+        width:
+        height:
+        hAlign:
+
+    Returns: Image
+    """
+    figure3 = plt.figure(figsize=(9.6, 4.8))
+    grid = figure3.add_gridspec(1, 2)
+    buffer = io.BytesIO()
+    a.savefig(buffer, format='png', dpi=300, bbox_inches='tight')
+    buffer.seek(0)
+    ax1 = figure3.add_subplot(grid[0, 0])
+    ax1.axis('off')
+    ax1.imshow(plt.imread(buffer))
+    buffer = io.BytesIO()
+    b.savefig(buffer, format='png', dpi=300, bbox_inches='tight')
+    buffer.seek(0)
+    ax2 = figure3.add_subplot(grid[0, 1])
+    ax2.axis('off')
+    ax2.imshow(plt.imread(buffer))
+    figure3.tight_layout()
+    buffer = io.BytesIO()
+    figure3.savefig(buffer, format='png', dpi=300, bbox_inches='tight')
     buffer.seek(0)
     plt.close()
     return Image(buffer, width=width*mm, height=height*mm, hAlign=hAlign)

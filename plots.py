@@ -55,6 +55,7 @@ def histogram(value,
     if data is None:
         data = analyzer.get_data(device_type=device_type)
     legend = []
+    fig, axs = plt.subplots()
     if isinstance(value, str) is True:
         data[value].hist(bins=bins, log=logarithm)
         plt.title(title)
@@ -84,6 +85,7 @@ def histogram(value,
     # plt.savefig(buffer, format='png')
     # buffer.seek(0)
     # return buffer
+    return fig
 
 
 #  Correlation Plot
@@ -136,6 +138,7 @@ def scatter(input_x: list = None,
             title: str = '',
             size_x: int = 14,
             size_y: int = 6,
+            scatter_size: float = 1,
             color=None,
             area=None):
     """
@@ -170,9 +173,9 @@ def scatter(input_x: list = None,
             x = df_x[df_x.columns[0]].tolist()
             y = df_y[y_name].tolist()
             if y_name.find('отриц.') != -1 or y_name.find('полож.') != -1:
-                axs.scatter(x, y, c='k', marker='.', s=2)
+                axs.scatter(x, y, c='k', marker='.', s=scatter_size)
             else:
-                axs.scatter(x, y, c=color, s=area)
+                axs.scatter(x, y, c=color, s=scatter_size)
                 legend.append(y_name)
         plt.legend(legend)
         return fig
