@@ -78,7 +78,7 @@ If you don't have Git installed download a project in ZIP-Archive by
 [a direct link from GitHub](https://github.com/sadzax/ElectroMon/archive/refs/heads/master.zip), 
 unzip it on your local machine and proceed to the points 3 and 4 of the installation documentation
 
-1. Put files uploaded from devices files to internal directory of the app 
+2. Put files uploaded from devices files to internal directory of the app 
 `/upload/` depending on the type of device
 
 <details><summary>Example</summary>
