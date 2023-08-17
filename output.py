@@ -270,14 +270,19 @@ for a_key in trends_params.keys():
 
 
 #  MANUAL Correlations of tcpu and tdevice to air temp added as an object for reportlab/PD
-a = plots.correlation_plot(filter_list1=['tdev'], filter_list2=['tair'],
-                           device_type=device_type, data=data, cols=cols,
-                           title=f"Зависимость температуры устройства от температуры воздуха")
-b = plots.correlation_plot(filter_list1=['tcpu'], filter_list2=['tair'],
-                           device_type=device_type, data=data, cols=cols,
-                           title=f"Зависимость температуры процессора от температуры воздуха")
-img = frontend.capture_pic_two_cols(a=a, b=b, width=210, height=100, hAlign='CENTER')
-frontend.PDF.add_to_build_list(img, story)
+#  Check for the 'Tcpu' and 'Tdevice' in cols:
+all_cols = []
+for elem in [i for i in cols.values()]:
+    all_cols = all_cols + elem
+if 'tcpu' in all_cols and 'tdev' in all_cols:
+    a = plots.correlation_plot(filter_list1=['tdev'], filter_list2=['tair'],
+                               device_type=device_type, data=data, cols=cols,
+                               title=f"Зависимость температуры устройства от температуры воздуха")
+    b = plots.correlation_plot(filter_list1=['tcpu'], filter_list2=['tair'],
+                               device_type=device_type, data=data, cols=cols,
+                               title=f"Зависимость температуры процессора от температуры воздуха")
+    img = frontend.capture_pic_two_cols(a=a, b=b, width=210, height=100, hAlign='CENTER')
+    frontend.PDF.add_to_build_list(img, story)
 
 
 #  Step 2 lines after submodule
