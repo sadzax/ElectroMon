@@ -179,4 +179,3 @@ def scatter(input_x: list = None,
                 legend.append(y_name)
         plt.legend(legend)
         return fig
-
