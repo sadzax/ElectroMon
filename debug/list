@@ -4,3 +4,6 @@ prints.values_time_slicer
 https://github.com/python-pillow/Pillow/issues/3287
 
 Page Numbering BUGGED
+
+Нет кириллицы в имени файла при сохранении
+

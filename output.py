@@ -2,6 +2,7 @@
 import datetime
 import io
 import os
+import random
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,6 +14,7 @@ import frontend
 import plots
 import prints
 import sadzax
+import random
 sadzax.Out.reconfigure_encoding()
 sadzax.Out.clear_future_warning()
 
@@ -195,10 +197,15 @@ def capturer_for_PDF_average_with_a_logarithm(ex, data=data, cols=cols, build_li
     capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
     temp = frontend.PDF.text(capture, frontend.style_regular)
     frontend.PDF.add_to_build_list(temp, build_list)
+    #  Choose random number from color list
+    specify_color_counter = random.randint(0, len(frontend.plot_colors))
+    #  Two plots - simple and logarithmic
     a = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=False,
-                        title=f'Распределение значений {ex}')
+                        title=f'Распределение значений {ex}',
+                        specify_color_counter=specify_color_counter)
     b = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
-                        title=f'Логарифмическое распределение значений {ex}')
+                        title=f'Логарифмическое распределение значений {ex}',
+                        specify_color_counter=specify_color_counter)
     img = frontend.capture_pic_two_cols(a=a, b=b, width=width, height=height, hAlign=hAlign)
     frontend.PDF.add_to_build_list(img, build_list)
 
@@ -283,6 +290,15 @@ if 'tcpu' in all_cols and 'tdev' in all_cols:
                                title=f"Зависимость температуры процессора от температуры воздуха")
     img = frontend.capture_pic_two_cols(a=a, b=b, width=210, height=100, hAlign='CENTER')
     frontend.PDF.add_to_build_list(img, story)
+
+
+capture = f'График температуры воздуха в анализируемом периоде'
+temp = frontend.PDF.text(capture, frontend.style_title2)
+frontend.PDF.add_to_build_list(temp, story)
+prints.print_flat_graph(input_y=['tair'], device_type=dev, data=data, cols=cols, title='Динамика температуры')
+img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
+frontend.PDF.add_to_build_list(img, story)
+frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
 
 
 #  Step 2 lines after submodule

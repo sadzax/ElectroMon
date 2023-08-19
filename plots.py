@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import analyzer
 import columns
+import random
 import io
+import frontend
 
 
 #  Simple graph
@@ -13,7 +15,10 @@ def flat_graph(input_x: list = None,
                cols: dict = None,
                title='',
                size_x: int = 14,
-               size_y: int = 6):
+               size_y: int = 6,
+               alpha: float = 1.0,
+               alpha_fade_out: bool = True,
+               color_switcher: bool = True):
     if data is None:
         data = analyzer.get_data(device_type=device_type)
     if cols is None:
@@ -30,11 +35,26 @@ def flat_graph(input_x: list = None,
     df_y = analyzer.data_filter(input_y, cols=cols, data=data)
     plt.ylabel(', '.join(input_y))
     legend = []
+    #  For the variety of colors in a report
+    color_counter = frontend.color_switch(rand=color_switcher)
+    color_scheme = frontend.plot_colors
     for y_name in [col for col in df_y.columns]:
+        #  Choosing the colors
+        color_counter = color_counter + 1
+        while color_counter >= len(color_scheme):
+            color_counter = color_counter - len(color_scheme)
+        #  Alpha fading with every iteration
+        if alpha_fade_out is True:
+            alpha = alpha * 0.95
+        #  Add a legend
+        legend.append(y_name)
+        #  MAIN Plotting
         x = df_x[df_x.columns[0]].tolist()
         y = df_y[y_name].tolist()
-        legend.append(y_name)
-        axs.plot(x, y)
+        axs.plot(x,
+                 y,
+                 alpha=alpha,
+                 color=color_scheme[color_counter])
     plt.legend(legend)
     return fig
 
@@ -49,29 +69,66 @@ def histogram(value,
               ax_param=None,
               cols=None,
               data: pd.core = None,
-              unite_parameter=False):
+              unite_parameter=False,
+              alpha: float = 1.0,
+              alpha_fade_out: bool = True,
+              color_switcher: bool = True,
+              specify_color_counter = None):
     if cols is None:
         cols = columns.columns_analyzer(device_type=device_type)
     if data is None:
         data = analyzer.get_data(device_type=device_type)
     legend = []
     fig, axs = plt.subplots()
+    #  For the variety of colors in a report
+    color_counter = frontend.color_switch(rand=color_switcher)
+    if isinstance(specify_color_counter, int) is True:
+        color_counter = specify_color_counter
+    color_scheme = frontend.plot_colors
+    #  Main branch
     if isinstance(value, str) is True:
         data[value].hist(bins=bins, log=logarithm)
         plt.title(title)
     if isinstance(value, list) is True:
         if data_distribution_parameter is True:
+            #  Form a dataframe to work with
             data_distribution = analyzer.data_distribution_finder(value, data=data, cols=cols,
                                                                   unite_parameter=unite_parameter)
             for i in data_distribution:
+                #  Choosing the colors
+                color_counter = color_counter + 1
+                while color_counter >= len(color_scheme):
+                    color_counter = color_counter - len(color_scheme)
+                #  Alpha fading with every iteration
+                if alpha_fade_out is True:
+                    alpha = alpha * 0.95
+                #  Add a legend
                 legend.append(i)
-                data_distribution[i].hist(bins=bins, log=logarithm)
+                #  MAIN Plotting
+                data_distribution[i].hist(bins=bins,
+                                          log=logarithm,
+                                          color=color_scheme[color_counter],
+                                          alpha=alpha)
         else:
+            #  Form a dataframe to work with
             df = analyzer.data_filter(value, data=data, cols=cols)
             for i in df:
+                #  Choosing the colors
+                color_counter = color_counter + 1
+                while color_counter >= len(color_scheme):
+                    color_counter = color_counter - len(color_scheme)
+                #  Alpha fading with every iteration
+                if alpha_fade_out is True:
+                    alpha = alpha * 0.95
+                #  Add a legend
                 legend.append(i)
                 # plt.hist(df[i], bins=bins, log=logarithm, ax=ax_param)
-                df[i].hist(bins=bins, log=logarithm, ax=ax_param)
+                #  MAIN Plotting
+                df[i].hist(bins=bins,
+                           log=logarithm,
+                           ax=ax_param,
+                           alpha=alpha,
+                           color=color_scheme[color_counter])
         plt.legend(legend)
         plt.title(title)
         plt.xlabel(', '.join(value))

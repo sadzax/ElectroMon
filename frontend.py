@@ -1,6 +1,7 @@
 import io
 import sys
 import matplotlib.pyplot as plt
+import random
 
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
@@ -34,6 +35,19 @@ style_title2.fontSize = 14
 style_title2.alignment = 1
 
 PAGE_WIDTH, PAGE_HEIGHT = A4
+
+plot_colors = ['orchid', 'sienna', 'aqua', 'tomato', 'teal', 'violet', 'blue', 'brown', 'yellowgreen', 'indigo',
+               'tan', 'coral', 'cyan', 'pink', 'crimson', 'chocolate', 'fuchsia', 'goldenrod', 'khaki', 'maroon',
+               'darkgreen', 'navy', 'magenta', 'olive', 'orangered']
+
+
+def color_switch(rand: bool = True):
+    color_scheme = plot_colors
+    if rand is True:
+        color_counter = random.randint(0, len(color_scheme))
+    else:
+        color_counter = -1
+    return color_counter
 
 
 class MyDocTemplate(SimpleDocTemplate):

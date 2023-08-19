@@ -13,6 +13,7 @@ import frontend
 import plots
 import prints
 import sadzax
+import random
 sadzax.Out.reconfigure_encoding()
 sadzax.Out.clear_future_warning()
 dev = device_type = 'mon'
@@ -29,6 +30,83 @@ trends_params = {
     'U': False
 }
 ex = '∆tg_HV'
+
+main_graph_params2 = {
+    'U': 'График изменения значений напряжений',
+    'Ia': 'График изменения активной составляющей токов утечек',
+    'Ir': 'График изменения реактивной составляющей токов утечек',
+    'tg': 'График изменения значений tgδ',
+    'C': 'График изменения значений емкостей С1',
+    '∆tg': 'График изменения значений ∆tgδ (изменение tgδ относительно начальных значений)',
+    '∆C': 'График изменения значений ∆C/C1 (изменение емкостей С1 относительно начальных значений)'
+}
+
+main_graph_params = {
+    'U': 'График изменения значений напряжений',
+}
+
+for code_key, code_desc in {'_HV': ' со стороны высокого напряжения',
+                            '_MV': ' со стороны среднего напряжения'}.items():
+    capture = f'Анализ значений параметров высоковольтных вводов в фазах А, В и С{code_desc}'
+    temp = frontend.PDF.text(capture, frontend.style_title2)
+    frontend.PDF.add_to_build_list(temp, story)
+    for key, desc in main_graph_params.items():
+        input_y = key + code_key
+        title = desc + code_desc
+        prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
+        img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
+        frontend.PDF.add_to_build_list(img, story)
+        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+
+def capturer_for_PDF_average_with_a_logarithm(ex, data=data, cols=cols, build_list=None, width=210, height=100,
+                                              hAlign='CENTER', abs_parameter=True):
+    if build_list is None:
+        build_list = story
+    capture = frontend.capture_func(prints.average_printer, ex=ex, data=data, cols=cols, abs_parameter=abs_parameter)
+    temp = frontend.PDF.text(capture, frontend.style_regular)
+    frontend.PDF.add_to_build_list(temp, build_list)
+    #  Choose random number from color list
+    specify_color_counter = random.randint(0, len(frontend.plot_colors))
+    #  Two plots - simple and logarithmic
+    a = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=False,
+                        title=f'Распределение значений {ex}',
+                        specify_color_counter=specify_color_counter)
+    b = plots.histogram(value=[ex], bins=99, data=data, cols=cols, logarithm=True,
+                        title=f'Логарифмическое распределение значений {ex}',
+                        specify_color_counter=specify_color_counter)
+    img = frontend.capture_pic_two_cols(a=a, b=b, width=width, height=height, hAlign=hAlign)
+    frontend.PDF.add_to_build_list(img, build_list)
+
+
+#  Average values of [∆C, ∆tg, Ia, Ir, U] and their distribution added as an object for reportlab/PD
+for a_key in trends_params.keys():
+    for a_voltage in ['_HV', '_MV']:
+        ex = a_key+a_voltage
+        capturer_for_PDF_average_with_a_logarithm(ex=ex, abs_parameter=trends_params[a_key], build_list=story)
+        frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)
+
+frontend.PDF.builder(story,
+                     filename='reports/EM_report_' + 'TEST' + '.pdf')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #  Take the warning map for a sequence
 for k in devices.links(device_type)[10]:
