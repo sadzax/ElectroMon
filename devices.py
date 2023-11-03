@@ -139,6 +139,53 @@ nkvv.default_dict_for_dtypes = {'∆tg': float,
                                 'tdev': float,
                                 'tcpu': float}
 
+gpp = Device('gpp')
+gpp.full_name = 'Устройство непрерывного контроля и защиты высоковольтных вводов'
+gpp.monitoring_params = {'input': 220000, 'output': 110000}
+gpp.log_types = {'measure': 'csv', 'event': 'csv'}
+gpp.file_folder = 'upload/gpp/'
+gpp.file_name_ends = {'measure': '.txt'}
+gpp.file_sep = ';'
+gpp.file_default_encoding = 'WINDOWS-1251'
+gpp.file_parse_dates = ['Дата создания записи', 'Дата сохранения в БД']
+gpp.default_dict_for_replacement_to_nan = {'power': [-300.0, 0.0],
+                                            'tg': [-10.0],
+                                            '∆tg': [-10.0],
+                                            'c_delta': [-10.0],
+                                            'c_deviation': [0.0],
+                                            'voltage_difference': [0.0]}
+gpp.data_types = {'кВ': 'voltage',
+                   'мА': 'power',
+                   ',%': 'percentage',
+                   'От': 'deviation',
+                   '°С': 'temperature',
+                   'Гц': 'frequency',
+                   'Дата': 'datetime', }
+gpp.data_search_name = {'DeltaTg': ['∆tg', 'tangent_delta'],
+                         'DeltaC_': ['∆C', 'c_delta'],
+                         'Tg_': ['tg', 'tangent'],
+                         'C_': ['C', 'c_deviation'],
+                         'Дата создания записи': ['time', 'time_of_measure'],
+                         'Дата сохранения в БД': ['save', 'time_of_saving'],
+                         'U_': ['U', 'voltage_difference'],
+                         'Ia_': ['Ia', 'power_active'],
+                         'Ir_': ['Ir', 'power_reactive'],
+                         'Freq': ['freq', 'frequency'],
+                         'Tair': ['tair', 'temperature_of_air'],
+                         'Tdev': ['tdev', 'temperature_of_device'],
+                         'Tcpu': ['tcpu', 'temperature_of_cpu']}
+gpp.default_dict_for_dtypes = {'∆tg': float,
+                                '∆C': float,
+                                'tg': float,
+                                'C': float,
+                                'U': float,
+                                'Ia': float,
+                                'Ir': float,
+                                'freq': float,
+                                'tair': float,
+                                'tdev': float,
+                                'tcpu': float}
+
 kiv = Device('kiv')
 kiv.full_name = 'Устройство контроля изоляции вводов'
 kiv.log_types = {'measure': 'xlsx', 'event': 'xlsx'}
@@ -208,7 +255,6 @@ mon.data_search_name = {'dtan_': ['∆tg', 'tangent_delta'],
                         'Ia_': ['Ia', 'power_active'],
                         'Ip_': ['Ir', 'power_reactive'],
                         'Freq': ['freq', 'frequency'],
-
                         'Tair': ['tair', 'temperature_of_air'],
                         'Tdev': ['tdev', 'temperature_of_device'],
                         'Tcpu': ['tcpu', 'temperature_of_cpu']}
@@ -224,9 +270,8 @@ mon.default_dict_for_dtypes = {'∆tg': float,
                                'tdev': float,
                                'tcpu': float}
 
-
 # Devices
-objs = [nkvv, kiv, mon]
+objs = [nkvv, kiv, mon, gpp]
 
 
 # Avoid error of func inside class and/or before obj.init.

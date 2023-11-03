@@ -36,9 +36,10 @@ style_title2.alignment = 1
 
 PAGE_WIDTH, PAGE_HEIGHT = A4
 
-plot_colors = ['orchid', 'sienna', 'aqua', 'tomato', 'teal', 'violet', 'blue', 'brown', 'yellowgreen', 'indigo',
-               'tan', 'coral', 'cyan', 'pink', 'crimson', 'chocolate', 'fuchsia', 'goldenrod', 'khaki', 'maroon',
-               'darkgreen', 'navy', 'magenta', 'olive', 'orangered']
+plot_colors = ['yellow', 'green', 'red',
+               'orchid', 'sienna', 'aqua', 'tomato', 'teal', 'violet', 'blue', 'brown', 'yellowgreen', 'indigo',
+               'tan', 'coral', 'cyan', 'pink', 'crimson', 'darkblue', 'khaki', 'chocolate', 'darkgreen', 'fuchsia',
+               'goldenrod', 'maroon', 'navy', 'magenta', 'olive', 'orangered']
 
 
 def color_switch(rand: bool = True):

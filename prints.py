@@ -200,9 +200,11 @@ def warning_printer(device_type: str = 'mon',
                 )
 
 
-def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, cols=None, title=None):
+def print_flat_graph(input_x=None, input_y=None, device_type='kiv', data=None, cols=None, title=None,
+                     color_switcher=True):
     info(title)
-    plots.flat_graph(input_x=input_x, input_y=input_y, device_type=device_type, data=data, cols=cols, title=title)
+    plots.flat_graph(input_x=input_x, input_y=input_y, device_type=device_type, data=data, cols=cols, title=title,
+                     color_switcher=color_switcher)
 
 
 def print_scatter(input_x=None, input_y=None, device_type='mon', data=None, cols=None, title=None):

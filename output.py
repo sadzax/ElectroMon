@@ -128,7 +128,8 @@ for code_key, code_desc in {'_HV': ' со стороны высокого нап
     for key, desc in main_graph_params.items():
         input_y = key + code_key
         title = desc + code_desc
-        prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title)
+        prints.print_flat_graph(input_y=[input_y], device_type=dev, data=data, cols=cols, title=title,
+                                color_switcher=False)  # 'color_switcher=False' means color will draw from 0 index, YGR
         img = frontend.capture_pic(width=205, height=95, hAlign='CENTER')
         frontend.PDF.add_to_build_list(img, story)
         frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), story)

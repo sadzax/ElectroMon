@@ -22,6 +22,8 @@ def columns_list_maker(device_type: str = 'nkvv',
         file, sep, encoding, parse_dates = devices.links(device_type)[1:5]
     if device_type == 'nkvv':
         return list(pd.read_csv(file, sep=sep, encoding=encoding))
+    elif device_type == 'gpp':
+        return pd.read_csv(file, sep=sep, encoding=encoding, header=[1]).split('     ')
     elif device_type == 'kiv':
         if data is None:
             data = analyzer.get_data(device_type=device_type)
