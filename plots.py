@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import analyzer
 import columns
-import random
-import io
+# import random
+# import io
 import frontend
 
 

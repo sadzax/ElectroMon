@@ -81,6 +81,12 @@ unzip it on your local machine and proceed to the points 3 and 4 of the installa
 2. Put files uploaded from devices files to internal directory of the app 
 `/upload/` depending on the type of device
 
+```bash 
+/upload/kiv # Input isolation monitoring device 
+/upload/mon # Monitoring of devices for continuous monitoring and protection of high-voltage inputs
+/upload/nkvv # Device for continuous monitoring and protection of high-voltage inputs
+```
+
 <details><summary>Example</summary>
 
 Copy `UPLOAD001.I` file in `c:\users\user\downloads\ElectroMon-master\upload\mon\` for a device 
@@ -425,7 +431,7 @@ It frames the execution of functions with descriptions and textual information.
 
 [frontend.py](frontend.py) consists of scripts setting fonts, styles, margins, page-numbering, templates, capturing outputs, texts, graphs, plots and tables.
 
-[sadzax.py](sadzax.py) contains technical scripts for processing inputs, questioning user, transforming of dates and strings, checking for correct formats, declensing by cases in Russian and so on.
+[services.py](services.py) contains technical scripts for processing inputs, questioning user, transforming of dates and strings, checking for correct formats, declensing by cases in Russian and so on.
 
 &nbsp;
 

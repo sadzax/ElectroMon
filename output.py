@@ -13,10 +13,10 @@ import devices
 import frontend
 import plots
 import prints
-import sadzax
+import services
 import random
-sadzax.Out.reconfigure_encoding()
-sadzax.Out.clear_future_warning()
+services.Out.reconfigure_encoding()
+services.Out.clear_future_warning()
 
 
 #  ______________________________________ OBTAINING DATA _________________________________________
@@ -67,7 +67,7 @@ prints.total_log_counter(dev, data)
 prints.total_periods(dev, data)
 
 #  Returning total counter of measures and adding it as an object for reportlab/PDF
-status = sadzax.question(
+status = services.question(
         f"\n Хотите задать конкретный период анализа между двумя датами?"
         f"\n Eсли нет - то будут проанализированы все доступные периоды замеров\n", yes='y')
 if status == 'y':
@@ -326,7 +326,7 @@ for k in devices.links(device_type)[10]:
     #  Main operation - forming a dict with a DataFrames of warning issues
     warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
     #  Setting the short/full output
-    status = sadzax.question(
+    status = services.question(
         f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
         f" \n Eсли нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
     warnings_codes_temporal_list = {'acc': 'аварийной'}
@@ -365,8 +365,8 @@ frontend.PDF.add_to_build_list(frontend.PDF.text(f' ', frontend.style_title), s
 
 
 #  ______________________________________ OUTPUT IN PDF __________________________________________
-name_file_by_user = sadzax.Enter.str('Введите имя файла для сохранения: ',
-                                     arg_must_be=sadzax.Enter.allowed_symbs_default, arg_max_capacity=24,
+name_file_by_user = services.Enter.str('Введите имя файла для сохранения: ',
+                                     arg_must_be=services.Enter.allowed_symbs_default, arg_max_capacity=24,
                                      arg_error='Некорректное имя для файла')
 #  Filename String
 fst0 = analyzer.total_periods(dev, data)[0].strftime(format='%y%m%d')

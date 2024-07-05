@@ -12,26 +12,25 @@ import devices
 import frontend
 import plots
 import prints
-import sadzax
-sadzax.Out.reconfigure_encoding()
-sadzax.Out.clear_future_warning()
+import services
+services.Out.reconfigure_encoding()
+services.Out.clear_future_warning()
 
 
 #  ______________________________________ OBTAINING DATA _________________________________________
 prints.info('Установление параметров для анализа')
 
-device_type = prints.device_picking()
+dev = prints.device_picking()
 # device_type = 'mon'
-dev = device_type
 # prints.file_picking(dev)
 # data = devices.Pkl.load(dev)
 [data, used_files] = analyzer.stack_data(dev)
 cols_list = columns.columns_list_maker(dev, data)
 cols = columns.columns_analyzer(dev, cols_list)
 del cols_list
-data = analyzer.pass_the_nan(device_type=device_type, data=data, cols=cols)  # update data_types
-data = analyzer.set_dtypes(device_type=device_type, data=data, cols=cols)
-# devices.Pkl.save(device_type=device_type, data=data)
+data = analyzer.pass_the_nan(device_type=dev, data=data, cols=cols)  # update data_types
+data = analyzer.set_dtypes(device_type=dev, data=data, cols=cols)
+# devices.Pkl.save(device_type=dev, data=data)
 
 
 #  ______________________________________ COUNTERS AND TIME ANALYZERS ____________________________
@@ -42,7 +41,7 @@ prints.total_log_counter(dev, data)
 prints.total_periods(dev, data)
 
 #  Asking for a period to choose
-status = sadzax.question(
+status = services.question(
         f"\n Хотите задать конкретный период анализа между двумя датами?"
         f"\n Если нет - то будут проанализированы все доступные периоды замеров\n", yes='y')
 if status == 'y':
@@ -79,7 +78,7 @@ trends_params = {
 for a_key in trends_params.keys():
     for a_voltage in ['_HV', '_MV']:
         ex = a_key+a_voltage
-        plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'], device_type=device_type, data=data, cols=cols,
+        plots.correlation_plot(filter_list1=[ex], filter_list2=['tair'], device_type=dev, data=data, cols=cols,
                                title=f"Анализ корреляции данных {ex} от температуры воздуха")
         plt.show()
 
@@ -98,14 +97,14 @@ for a_key in trends_params.keys():
 #  ______________________________________ WARNINGS AND ACCIDENTS _________________________________
 prints.info('Анализ срабатываний предупредительной и аварийной сигнализации')
 
-for k in devices.links(device_type)[10]:
-    w0 = devices.links(device_type)[10][k][0]
-    w1 = devices.links(device_type)[10][k][1]
+for k in devices.links(dev)[10]:
+    w0 = devices.links(dev)[10][k][0]
+    w1 = devices.links(dev)[10][k][1]
     print(
         f'\nПревышение уровней {k} для срабатывания предупредительной (±{w0}) или аварийной (±{w1}) сигнализации: \r')
     #  Main operation
     warning_finder = analyzer.warning_finder([k], dev, data, cols, w0, w1)
-    status = sadzax.question(
+    status = services.question(
         f"Вывести кратко? \n (Только срабатывания аварийной сигнализации {k} без предупредительной)"
         f" \n Если нет - то будут выведены и предупредительные, и аварийные замеры ", yes='y', no='n')
     warnings_codes_temporal_list = {'acc': 'аварийной'}

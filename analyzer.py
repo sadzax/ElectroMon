@@ -6,7 +6,7 @@ import pandas as pd
 
 import columns
 import devices
-import sadzax
+import services
 
 
 #  ____________ 1. DATA PROCESSING ________________________________________________
@@ -146,8 +146,8 @@ def stack_data(device_type: str = 'mon',
         data = get_data(device_type, file, sep, encoding, parse_dates, raw_param)
     else:
         data = pd.DataFrame.empty
-        w1 = sadzax.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
-        w2 = sadzax.Rus.cases(len(files_list), 'файл', 'файла', 'файлов')
+        w1 = services.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
+        w2 = services.Rus.cases(len(files_list), 'файл', 'файла', 'файлов')
         print(f"{w1} {len(files_list)} {w2} для соединения данных: ")
         for i in files_list:
             print(f"Файл № {files_list.index(i) + 1}. {i}")
@@ -155,7 +155,7 @@ def stack_data(device_type: str = 'mon',
             #  Create a list of files for picking a specific file(s)
             # inputs = list(map(int, input(f'Введите номера файлов через пробел, которые нужно соединить для общего'
             #                              f' анализа (либо введите любой текст для соединения всех): ').split()))
-            inputs = sadzax.Enter.mapped_ints(f'Введите номера файлов через пробел, которые нужно соединить для общего'
+            inputs = services.Enter.mapped_ints(f'Введите номера файлов через пробел, которые нужно соединить для общего'
                                               f' анализа (либо введите любой текст для соединения всех): ')
             if len(inputs) == 0:
                 inputs = list(range(len(files_list)))  # all
@@ -522,9 +522,9 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', d_format:
     if data_date_start.strftime('%Y') == data_date_end.strftime('%Y'):
         print(f'Доступны данные только в рамках {data_date_end.strftime("%Y")} года,'
               f' при задании периодов используйте связку "день-месяц"')
-        user_start = sadzax.Enter.date(format='%d.%m',
+        user_start = services.Enter.date(format='%d.%m',
                                        input_descripton=f'Введите дату начала конкретизированного периода: ',
-                                       arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                       arg_must_be=services.Enter.allowed_symbs_dates,
                                        arg_max_capacity=6,
                                        arg_error=f'Некорректная дата, введите в формате "%d.%m", например, "31.03"',
                                        dayfirst=True,
@@ -536,9 +536,9 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', d_format:
             print(f"Задана дата начала периода раньше первой доступной даты,"
                   f" началом периода назначена первая доступная дата {data_date_start.strftime(d_format)}")
             user_start = data_date_start
-        user_end = sadzax.Enter.date(format='%d.%m',
+        user_end = services.Enter.date(format='%d.%m',
                                      input_descripton=f'Введите дату конца конкретизированного периода: ',
-                                     arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                     arg_must_be=services.Enter.allowed_symbs_dates,
                                      arg_max_capacity=6,
                                      arg_error=f'Некорректная дата, введите в формате "%d.%m", например, "31.03"',
                                      dayfirst=True,
@@ -552,9 +552,9 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', d_format:
             user_end = data_date_end
     else:
         #  Ask user to enter dates for picking a period
-        user_start = sadzax.Enter.date(format=d_format,
+        user_start = services.Enter.date(format=d_format,
                                        input_descripton=f'Введите дату начала конкретизированного периода: ',
-                                       arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                       arg_must_be=services.Enter.allowed_symbs_dates,
                                        arg_max_capacity=10,
                                        arg_error=f'Некорректная дата, введите в формате {d_format}, например, "31.03.22"',
                                        dayfirst=True,
@@ -564,9 +564,9 @@ def time_period_choose(data: pd.core = None, device_type: str = 'mon', d_format:
             print(f"Задана дата начала периода раньше первой доступной даты,"
                   f" началом периода назначена первая доступная дата {data_date_start.strftime(d_format)}")
             user_start = data_date_start
-        user_end = sadzax.Enter.date(format=d_format,
+        user_end = services.Enter.date(format=d_format,
                                      input_descripton=f'Введите дату конца конкретизированного периода: ',
-                                     arg_must_be=sadzax.Enter.allowed_symbs_dates,
+                                     arg_must_be=services.Enter.allowed_symbs_dates,
                                      arg_max_capacity=10,
                                      arg_error=f'Некорректная дата, введите в формате {d_format}, например, "31.03.22"',
                                      dayfirst=True,

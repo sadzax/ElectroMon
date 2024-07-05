@@ -2,8 +2,8 @@ import pandas as pd
 import analyzer
 import devices
 import plots
-import sadzax
-import columns
+import services
+# import columns
 
 
 def info(the_string):
@@ -34,8 +34,8 @@ def device_picking():
 def file_picking(device_type='kiv'):
     error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка'
     files_list = devices.links(device_type)[5]
-    w1 = sadzax.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
-    w2 = sadzax.Rus.cases(len(files_list), 'файл', 'файла', 'файлов')
+    w1 = services.Rus.cases(len(files_list), "Доступен", "Доступно", "Доступно")
+    w2 = services.Rus.cases(len(files_list), 'файл', 'файла', 'файлов')
     print(f"{w1} {len(files_list)} {w2} для анализа: ")
     for i in files_list:
         print(f"Файл № {files_list.index(i) + 1}. {i}")
@@ -83,7 +83,7 @@ def values_time_analyzer(device_type, data, log: pd.core = None):
             print(f'Периоды измерений не нарушены')
         else:
             print(f'Выявлено {log.shape[0]} нарушений периодов измерений')
-            print(sadzax.question('Хотите вывести подробные данные?', yes=log, no=''))
+            print(services.question('Хотите вывести подробные данные?', yes=log, no=''))
     #  NoneType of log after import means that there are no errors
     except AttributeError:
         print(f'Периоды измерений не нарушены')
@@ -95,8 +95,8 @@ def values_time_slicer(device_type, data, log: dict = None):
     if log is None:
         log = analyzer.values_time_slicer(device_type=device_type, data=data)
     # error = 'Пожалуйста, введите корректное значение: цифру, соответствующую пункту из списка срезов'
-    w1 = sadzax.Rus.cases(len(log), 'найден', 'найдены', 'найдено')
-    w2 = sadzax.Rus.cases(len(log), 'срез', 'среза', 'срезов')
+    w1 = services.Rus.cases(len(log), 'найден', 'найдены', 'найдено')
+    w2 = services.Rus.cases(len(log), 'срез', 'среза', 'срезов')
     print(f"По заданным параметрам {w1} {len(log)} {w2} данных")
     k = [i for i in log.keys()]
     for i in log:
@@ -109,7 +109,7 @@ def values_time_slicer(device_type, data, log: dict = None):
         return log[0][0]
     elif len(log) > 1:
         try:
-            inputs = sadzax.Enter.mapped_ints('Введите срезы для анализа'
+            inputs = services.Enter.mapped_ints('Введите срезы для анализа'
                                               ' (либо введите любой текст для анализа всех срезов): ')
             outputs = [x for x in k if k.index(x) in inputs]
         except:
@@ -134,8 +134,8 @@ def total_nan_counter(device_type, data, false_data_percentage: float = 33.0, lo
     if log is None:
         log = analyzer.total_nan_counter(device_type=device_type, data=data,
                                          false_data_percentage=false_data_percentage)
-    w1 = sadzax.Rus.cases(log.shape[0], "Выявлен", "Выявлено", "Выявлено")
-    w2 = sadzax.Rus.cases(log.shape[0], "замер", "замера", "замеров")
+    w1 = services.Rus.cases(log.shape[0], "Выявлен", "Выявлено", "Выявлено")
+    w2 = services.Rus.cases(log.shape[0], "замер", "замера", "замеров")
     if log.shape[0] == 0:
         print(f"\n Периоды некорректных измерений не выявлены")
     else:
@@ -143,7 +143,7 @@ def total_nan_counter(device_type, data, false_data_percentage: float = 33.0, lo
               f" за один замер зафиксировано более {false_data_percentage}% некорректных данных)")
         print(f"Замеры с некорректными данными составили {round((log.shape[0] / data.shape[0]) * 100, 1)}%"
               f" от общего числа произведённых замеров")
-        print(sadzax.question('Хотите вывести примеры некорректных данных?', yes=log, no=''))
+        print(services.question('Хотите вывести примеры некорректных данных?', yes=log, no=''))
 
 
 def average_printer(ex, data, cols, abs_parameter=True):
@@ -193,7 +193,7 @@ def warning_printer(device_type: str = 'mon',
                 print(f"По {key}: срабатывания {warn_str} (±{warning_param}%) сигнализации не выявлены\n")
             else:
                 print(
-                    f"По {key}: выявлено {num} {sadzax.Rus.cases(num, 'срабатывание', 'срабатывания', 'срабатываний')} "
+                    f"По {key}: выявлено {num} {services.Rus.cases(num, 'срабатывание', 'срабатывания', 'срабатываний')} "
                     f"{warn_str} (±{warning_param}%) сигнализации."
                     f"\n Процент срабатывания {round((num / log['datetime'][log_list_i].shape[0]) * 100, 3)}%"
                     f" (от общего числа замеров)\n"
